@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">VTracker</string>
+    <string name="camera_required_title">Camera permission required</string>
+    <string name="camera_required_description">For tracking to work, the app requires camera permissions.</string>
+    <string name="camera_required_button">Request permission</string>
+    <string name="start_button">Start</string>
+    <string name="stop_button">Stop</string>
+    <string name="setting_camera_title">Camera</string>
+    <string name="setting_camera_description">Which camera to use for tracking.</string>
+    <string name="setting_camera_front">Front</string>
+    <string name="setting_camera_back">Back</string>
+    <string name="setting_runner_title">Runner</string>
+    <string name="setting_runner_description">What to run the tracking on. Keep this on GPU if no issues occur.</string>
+    <string name="settings_runner_GPU">GPU</string>
+    <string name="settings_runner_CPU">CPU</string>
+    <string name="setting_detectionconf_title">Detection confidence</string>
+    <string name="setting_detectionconf_description">How confident the tracker has to be to start tracking a face.</string>
+    <string name="setting_trackingconf_title">Tracking confidence</string>
+    <string name="setting_trackingconf_description">TODO tutorial</string>
+    <string name="setting_presenceconf_title">Presence confidence</string>
+    <string name="setting_presenceconf_desription">TODO tutorial</string>
+    <string name="settings_save">Save</string>
+    <string name="settings_discard">Discard</string>
+    <string name="settings_reset">Reset to defaults</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_category_tracking">Tracking</string>
+    <string name="settings_category_connection">Connection</string>
+    <string name="setting_targetip_title">Target address</string>
+    <string name="setting_targetip_description">The IP address of the receiver.</string>
+    <string name="setting_protocol_title">Protocol</string>
+    <string name="setting_protocol_description">What protocol to use for communicating with your receiver.</string>
+</resources>
