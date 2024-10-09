@@ -62,7 +62,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     stringResource(R.string.settings_title),
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.headlineLarge
                 )
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = {}) { Text(stringResource(R.string.settings_reset)) }
@@ -86,6 +86,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
                 current = { Text("192.168.1.10:5123") }) {}
 
             SettingsRow(
+                enabled = false,
                 title = { Text(stringResource(R.string.setting_protocol_title)) },
                 description = { Text(stringResource(R.string.setting_protocol_description)) },
                 current = { Text("VTracker") }) {}
@@ -97,11 +98,16 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             ) {
                 Icon(Icons.Default.Face, null)
                 Text(
-                    stringResource(R.string.settings_category_tracking),
+                    stringResource(R.string.settings_category_face_tracking),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
 
+            SettingsRow(
+                enabled = false,
+                title = { Text(stringResource(R.string.setting_tracking_model_title)) },
+                description = { Text(stringResource(R.string.setting_tracking_model_description)) },
+                current = { Text(stringResource(R.string.setting_tracking_model_mediapipe)) }) {}
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_camera_title)) },
                 description = { Text(stringResource(R.string.setting_camera_description)) },

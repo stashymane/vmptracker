@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.em
 @Composable
 fun SettingsRow(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     titleIcon: (@Composable () -> Unit)? = null,
     title: @Composable () -> Unit,
     description: @Composable () -> Unit,
@@ -26,7 +27,7 @@ fun SettingsRow(
     control: (@Composable () -> Unit)? = null,
     onClick: () -> Unit
 ) {
-    Surface(onClick = onClick, modifier = modifier) {
+    Surface(onClick = onClick, modifier = modifier, enabled = enabled) {
         Column(
             Modifier
                 .padding(16.dp)

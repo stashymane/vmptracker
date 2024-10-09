@@ -23,10 +23,13 @@
     <string name="settings_discard">Discard</string>
     <string name="settings_reset">Reset to defaults</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_category_tracking">Tracking</string>
+    <string name="settings_category_face_tracking">Face Tracking</string>
     <string name="settings_category_connection">Connection</string>
     <string name="setting_targetip_title">Target address</string>
     <string name="setting_targetip_description">The IP address of the receiver.</string>
     <string name="setting_protocol_title">Protocol</string>
     <string name="setting_protocol_description">What protocol to use for communicating with your receiver.</string>
+    <string name="setting_tracking_model_title">Model</string>
+    <string name="setting_tracking_model_description">Only MediaPipe is supported at the moment.</string>
+    <string name="setting_tracking_model_mediapipe">MediaPipe</string>
 </resources>
