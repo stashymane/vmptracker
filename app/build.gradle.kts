@@ -44,8 +44,9 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(libs.serialization.protobuf)
 
-    implementation(libs.camerax.camera2)
-    implementation(libs.camerax.viewfinder.compose)
+    implementation(libs.androidx.datastore)
+
+    implementation(libs.bundles.camerax)
     implementation(libs.mediapipe.vision)
 
     implementation(libs.accompanist.permissions)
