@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +46,8 @@ fun MainScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
 
     val navController = LocalNavController.current
 
+    val sidePadding = 16.dp
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize()
@@ -62,19 +65,15 @@ fun MainScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
 
         item {
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.padding(horizontal = sidePadding),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(Modifier.width(8.dp))
                 AnimatedContent(isRunning, label = "is running") {
                     when (it) {
                         true -> Text("Running", color = MaterialTheme.colorScheme.primary)
                         false -> Text("Not running", color = MaterialTheme.colorScheme.error)
                     }
                 }
-
-                Spacer(Modifier.width(32.dp))
-                Text("FPS $fps")
                 Spacer(Modifier.weight(1f))
 
                 AnimatedContent(isRunning, label = "run button") {
@@ -103,10 +102,31 @@ fun MainScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         }
 
         item {
-            Row {
+            Column(
+                modifier = Modifier.padding(horizontal = sidePadding),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Framerate")
+                    Text("$fps")
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("CPU load")
+                    Text("??%")
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("GPU load")
+                    Text("??%")
+                }
+            }
+        }
+
+        item {
+            Row(modifier = Modifier.padding(horizontal = sidePadding)) {
                 TextButton(
                     { navController.navigate(Screen.Settings) },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    enabled = !isRunning
                 ) {
                     Icon(Icons.Default.Settings, null)
                     Spacer(Modifier.width(8.dp))
