@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.serialization.protobuf)
 
     implementation(libs.androidx.datastore)
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
 
     implementation(libs.bundles.camerax)
     implementation(libs.mediapipe.vision)

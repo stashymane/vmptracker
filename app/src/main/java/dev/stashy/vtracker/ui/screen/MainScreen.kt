@@ -33,14 +33,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
+import org.koin.compose.koinInject
 
 @Composable
-fun MainScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
-    val viewmodel = viewModel<MainViewmodel>()
+fun MainScreen(
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    viewmodel: MainViewmodel = koinInject()
+) {
     val fps by viewmodel.fps.collectAsState()
     val isRunning by viewmodel.isRunning.collectAsState()
 
