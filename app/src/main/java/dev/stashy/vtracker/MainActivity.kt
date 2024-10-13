@@ -16,6 +16,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 val module = module {
     single { androidContext().dataStore }
     viewModel { MainViewmodel() }
