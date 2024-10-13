@@ -6,8 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FaceTrackerSettings(
-    val cameraId: Int = 0,
-    val delegate: Delegate = Delegate.GPU,
+    val targetAddr: String = "127.0.0.1",
+    val targetPort: Int = 5123,
+    val cameraId: Int = 1,
+    val runner: Delegate = Delegate.GPU,
     val faceDetectionConfidence: Float = 0.5f,
     val faceTrackingConfidence: Float = 0.5f,
     val facePresenceConfidence: Float = 0.5f,

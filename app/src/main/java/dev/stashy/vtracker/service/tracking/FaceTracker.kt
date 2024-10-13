@@ -1,4 +1,4 @@
-package dev.stashy.vtracker.tracking
+package dev.stashy.vtracker.service.tracking
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -28,7 +28,7 @@ class FaceTracker {
         landmarker?.close()
 
         val baseOptions = BaseOptions.builder()
-            .setDelegate(settings.delegate)
+            .setDelegate(settings.runner)
             .setModelAssetPath(task)
             .build()
 
@@ -50,6 +50,11 @@ class FaceTracker {
         }
     }
 
+    fun stop() {
+        landmarker?.close()
+        landmarker = null
+    }
+
     fun feedImage(imageProxy: ImageProxy, flip: Boolean = false) {
         val frameTime = SystemClock.uptimeMillis()
 
@@ -67,11 +72,6 @@ class FaceTracker {
         )
 
         landmarker?.detectAsync(BitmapImageBuilder(rotatedBitmap).build(), frameTime)
-    }
-
-    fun close() {
-        landmarker?.close()
-        channel.close()
     }
 
     private fun receiveResult(result: FaceLandmarkerResult, image: MPImage) {
