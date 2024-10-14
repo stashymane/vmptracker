@@ -28,9 +28,13 @@ fun ADialog(
     visible: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
     backgroundColor: Color = Color.Transparent,
     shape: CornerBasedShape = MaterialTheme.shapes.large,
+    border: BorderStroke = BorderStroke(
+        1.dp,
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+    ),
     content: @Composable () -> Unit
 ) {
     val animationSpec = spring<Float>(stiffness = Spring.StiffnessMedium)
@@ -45,11 +49,7 @@ fun ADialog(
 
     if (visible)
         BasicAlertDialog(onDismissRequest = onDismiss) {
-            Surface(
-                shape = shape,
-                color = containerColor,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
-            ) {
+            Surface(shape = shape, color = containerColor, border = border) {
                 content()
             }
         }
