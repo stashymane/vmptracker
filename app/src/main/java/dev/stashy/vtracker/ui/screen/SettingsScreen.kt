@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
@@ -45,9 +46,10 @@ import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.ui.LocalHazeStyle
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.SettingsRow
-import dev.stashy.vtracker.ui.component.dialog.CameraChoiceDialog
-import dev.stashy.vtracker.ui.component.dialog.IpAddressDialog
-import dev.stashy.vtracker.ui.component.dialog.ListDialog
+import dev.stashy.vtracker.ui.component.dialog.ADialog
+import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
+import dev.stashy.vtracker.ui.component.dialog.IpAddressDialogContent
+import dev.stashy.vtracker.ui.component.dialog.ListDialogContent
 
 @Composable
 fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
@@ -199,20 +201,40 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         }
     }
 
-    CameraChoiceDialog(
+    ADialog(
         cameraChoiceDialogVisible,
         { cameraChoiceDialogVisible = false },
-        { cameraId = it },
+        backgroundColor = Color.Transparent,
         modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
-    )
-    IpAddressDialog(ipAddressDialogVisible, { ipAddressDialogVisible = false }) { ipAddress = it }
-    ListDialog(
+    ) {
+        CameraChoiceContent(
+            { cameraChoiceDialogVisible = false },
+            { cameraId = it }
+        )
+    }
+
+    ADialog(
+        ipAddressDialogVisible, { ipAddressDialogVisible = false },
+        backgroundColor = Color.Transparent,
+        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+    ) {
+        IpAddressDialogContent({ ipAddressDialogVisible = false }) { ipAddress = it }
+    }
+
+    ADialog(
         runnerDialogVisible,
         { runnerDialogVisible = false },
-        Delegate.entries.toList(),
-        { Text("Runner") },
-        onSelect = { runner = it }) {
-        Text(it.name)
+        backgroundColor = Color.Transparent,
+        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+    ) {
+        ListDialogContent(
+            items = Delegate.entries.toList(),
+            title = { Text("Runner") },
+            onDismiss = { runnerDialogVisible = false },
+            onSelect = { runner = it }
+        ) {
+            Text(it.name)
+        }
     }
 }
 

@@ -6,6 +6,7 @@ import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalLensFacing
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,11 +27,9 @@ import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraChoiceDialog(
-    visible: Boolean,
+fun CameraChoiceContent(
     onDismiss: () -> Unit,
-    onSelect: (String) -> Unit,
-    modifier: Modifier = Modifier
+    onSelect: (String) -> Unit
 ) {
     val context = LocalContext.current
     val providerFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -41,25 +40,24 @@ fun CameraChoiceDialog(
         availableCameras.addAll(provider.availableCameraInfos)
     }
 
-    ADialog(visible, onDismiss, modifier = modifier) {
-        LazyColumn {
-            item {
-                Text(
-                    "Camera",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)
-                )
-            }
-            items(availableCameras) {
-                DropdownMenuItem(
-                    text = { Text("${it.cameraId()} (${stringResource(it.facing())})") },
-                    onClick = {
-                        onSelect(it.cameraId())
-                        onDismiss()
-                    })
-            }
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        item {
+            Text(
+                "Camera",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)
+            )
+        }
+        items(availableCameras) {
+            DropdownMenuItem(
+                text = { Text("${it.cameraId()} (${stringResource(it.facing())})") },
+                onClick = {
+                    onSelect(it.cameraId())
+                    onDismiss()
+                })
         }
     }
+
 }
 
 @androidx.annotation.OptIn(ExperimentalLensFacing::class)
@@ -79,6 +77,6 @@ fun CameraInfo.cameraId() = Camera2CameraInfo.from(this).cameraId
 @Composable
 private fun CameraChoiceDialogPreview() {
     VTrackerTheme {
-        CameraChoiceDialog(true, {}, {})
+        CameraChoiceContent({}, {})
     }
 }

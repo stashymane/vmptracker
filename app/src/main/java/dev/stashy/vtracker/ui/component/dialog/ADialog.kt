@@ -26,7 +26,7 @@ fun ADialog(
     visible: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.surfaceContainer,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(0.8f),
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
     content: @Composable () -> Unit
@@ -45,7 +45,7 @@ fun ADialog(
         BasicAlertDialog(onDismissRequest = onDismiss) {
             Surface(
                 shape = shape,
-                color = color
+                color = containerColor
             ) {
                 content()
             }

@@ -16,35 +16,33 @@ import androidx.compose.ui.unit.dp
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @Composable
-fun <T> ListDialog(
-    visible: Boolean,
-    onDismiss: () -> Unit,
+fun <T> ListDialogContent(
     items: List<T>,
     title: @Composable () -> Unit,
+    onDismiss: () -> Unit,
     onSelect: (T) -> Unit,
+    modifier: Modifier = Modifier,
     item: @Composable (T) -> Unit
 ) {
-    ADialog(visible, onDismiss) {
-        LazyColumn() {
-            item {
-                ProvideTextStyle(MaterialTheme.typography.titleLarge) {
-                    Row(modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)) {
-                        title()
-                    }
+    LazyColumn(modifier) {
+        item {
+            ProvideTextStyle(MaterialTheme.typography.titleLarge) {
+                Row(modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)) {
+                    title()
                 }
             }
+        }
 
-            items(items) {
-                Row(modifier = Modifier
-                    .clickable {
-                        onSelect(it)
-                        onDismiss()
-                    }
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .fillMaxWidth()
-                ) {
-                    item(it)
+        items(items) {
+            Row(modifier = Modifier
+                .clickable {
+                    onSelect(it)
+                    onDismiss()
                 }
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxWidth()
+            ) {
+                item(it)
             }
         }
     }
@@ -52,10 +50,10 @@ fun <T> ListDialog(
 
 @Preview
 @Composable
-private fun ListDialogPreview() {
+private fun ListDialogContentPreview() {
     val items = listOf<String>("Item 1", "Item 2", "Item 3", "Item 4")
     VTrackerTheme {
-        ListDialog(true, {}, items, { Text("Dialog preview") }, {}) {
+        ListDialogContent(items, { Text("Dialog preview") }, {}, {}) {
             Text(it)
         }
     }
