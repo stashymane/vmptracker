@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
+import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
@@ -54,7 +55,10 @@ import dev.stashy.vtracker.ui.component.dialog.ListDialogContent
 fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     val scrollState = rememberScrollState()
     val navController = LocalNavController.current
+
     val hazeState = remember { HazeState() }
+    val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surfaceDim)
+
     val surfaceGradient =
         listOf(
             MaterialTheme.colorScheme.surface.copy(0f),
@@ -203,7 +207,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     ADialog(
         cameraChoiceDialogVisible,
         { cameraChoiceDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+        modifier = Modifier.hazeChild(hazeState, hazeStyle)
     ) {
         CameraChoiceContent(
             { cameraChoiceDialogVisible = false },
@@ -213,7 +217,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
 
     ADialog(
         ipAddressDialogVisible, { ipAddressDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+        modifier = Modifier.hazeChild(hazeState, hazeStyle)
     ) {
         IpAddressDialogContent(
             { ipAddressDialogVisible = false },
@@ -224,7 +228,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     ADialog(
         runnerDialogVisible,
         { runnerDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+        modifier = Modifier.hazeChild(hazeState, hazeStyle)
     ) {
         ListDialogContent(
             items = Delegate.entries.toList(),
