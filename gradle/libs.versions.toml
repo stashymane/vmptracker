@@ -19,6 +19,7 @@ accompanist = "0.36.0"
 navigation-compose = "2.8.2"
 datastore = "1.1.1"
 koin = "4.0.0"
+haze = "0.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 
 camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
 camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
@@ -50,10 +52,9 @@ camerax-viewfinder-compose = { module = "androidx.camera:camera-viewfinder-compo
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-module" }
 serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "serialization-module" }
 
-mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
-
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,6 +1,8 @@
 package dev.stashy.vtracker.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,9 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.hazeChild
 import dev.stashy.vtracker.R
 import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.ui.component.LocalNavController
@@ -45,6 +51,13 @@ import dev.stashy.vtracker.ui.component.dialog.ListDialog
 fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     val scrollState = rememberScrollState()
     val navController = LocalNavController.current
+    val hazeState = remember { HazeState() }
+    val surfaceGradient =
+        listOf(
+            MaterialTheme.colorScheme.surface.copy(0.5f),
+            MaterialTheme.colorScheme.surface.copy(0.2f),
+            MaterialTheme.colorScheme.surface
+        )
 
     var ipAddress by remember { mutableStateOf(IpAddress("192.168.1.10", 5123)) }
 
@@ -58,106 +71,117 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     var ipAddressDialogVisible by remember { mutableStateOf(false) }
     var runnerDialogVisible by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         Modifier
             .padding(contentPadding)
             .fillMaxSize()
     ) {
-        Column(
+        Box(
             Modifier
-                .verticalScroll(scrollState)
-                .weight(1f)
+                .haze(hazeState)
+                .matchParentSize()
         ) {
-            Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    stringResource(R.string.settings_title),
-                    style = MaterialTheme.typography.headlineLarge
-                )
-                Spacer(Modifier.weight(1f))
-                TextButton(onClick = {}) { Text(stringResource(R.string.settings_reset)) }
-            }
-
-            Row(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                Modifier
+                    .verticalScroll(scrollState)
+                    .matchParentSize()
+                    .padding(bottom = 64.dp)
             ) {
-                Icon(Icons.Default.Share, null)
-                Text(
-                    stringResource(R.string.settings_category_connection),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.settings_title),
+                        style = MaterialTheme.typography.headlineLarge
+                    )
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = {}) { Text(stringResource(R.string.settings_reset)) }
+                }
 
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_targetip_title)) },
-                description = { Text(stringResource(R.string.setting_targetip_description)) },
-                current = { Text(ipAddress.toString()) }) {
-                ipAddressDialogVisible = true
-            }
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.Share, null)
+                    Text(
+                        stringResource(R.string.settings_category_connection),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
 
-            SettingsRow(
-                enabled = false,
-                title = { Text(stringResource(R.string.setting_protocol_title)) },
-                description = { Text(stringResource(R.string.setting_protocol_description)) },
-                current = { Text("VTracker") }) {}
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_targetip_title)) },
+                    description = { Text(stringResource(R.string.setting_targetip_description)) },
+                    current = { Text(ipAddress.toString()) }) {
+                    ipAddressDialogVisible = true
+                }
 
-            Row(
-                modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(Icons.Default.Face, null)
-                Text(
-                    stringResource(R.string.settings_category_face_tracking),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+                SettingsRow(
+                    enabled = false,
+                    title = { Text(stringResource(R.string.setting_protocol_title)) },
+                    description = { Text(stringResource(R.string.setting_protocol_description)) },
+                    current = { Text("VTracker") }) {}
 
-            SettingsRow(
-                enabled = false,
-                title = { Text(stringResource(R.string.setting_tracking_model_title)) },
-                description = { Text(stringResource(R.string.setting_tracking_model_description)) },
-                current = { Text(stringResource(R.string.setting_tracking_model_mediapipe)) }) {}
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_camera_title)) },
-                description = { Text(stringResource(R.string.setting_camera_description)) },
-                current = { Text(stringResource(R.string.setting_camera_back) + " 1") }) {
-                cameraChoiceDialogVisible = true
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.Default.Face, null)
+                    Text(
+                        stringResource(R.string.settings_category_face_tracking),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+
+                SettingsRow(
+                    enabled = false,
+                    title = { Text(stringResource(R.string.setting_tracking_model_title)) },
+                    description = { Text(stringResource(R.string.setting_tracking_model_description)) },
+                    current = { Text(stringResource(R.string.setting_tracking_model_mediapipe)) }) {}
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_camera_title)) },
+                    description = { Text(stringResource(R.string.setting_camera_description)) },
+                    current = { Text(stringResource(R.string.setting_camera_back) + " 1") }) {
+                    cameraChoiceDialogVisible = true
+                }
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_runner_title)) },
+                    description = { Text(stringResource(R.string.setting_runner_description)) },
+                    current = { Text(stringResource(runner.stringResource())) }) {
+                    runnerDialogVisible = true
+                }
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_detectionconf_title)) },
+                    description = { Text(stringResource(R.string.setting_detectionconf_description)) },
+                    current = { Text(detectionConfidence.toPercentage()) },
+                    control = {
+                        Slider(detectionConfidence, { detectionConfidence = it })
+                    }) {}
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_trackingconf_title)) },
+                    description = { Text(stringResource(R.string.setting_trackingconf_description)) },
+                    current = { Text(trackingConfidence.toPercentage()) },
+                    control = {
+                        Slider(trackingConfidence, { trackingConfidence = it })
+                    }) {}
+                SettingsRow(
+                    title = { Text(stringResource(R.string.setting_presenceconf_title)) },
+                    description = { Text(stringResource(R.string.setting_presenceconf_desription)) },
+                    current = { Text(presenceConfidence.toPercentage()) },
+                    control = {
+                        Slider(presenceConfidence, { presenceConfidence = it })
+                    }) {}
             }
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_runner_title)) },
-                description = { Text(stringResource(R.string.setting_runner_description)) },
-                current = { Text(stringResource(runner.stringResource())) }) {
-                runnerDialogVisible = true
-            }
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_detectionconf_title)) },
-                description = { Text(stringResource(R.string.setting_detectionconf_description)) },
-                current = { Text(detectionConfidence.toPercentage()) },
-                control = {
-                    Slider(detectionConfidence, { detectionConfidence = it })
-                }) {}
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_trackingconf_title)) },
-                description = { Text(stringResource(R.string.setting_trackingconf_description)) },
-                current = { Text(trackingConfidence.toPercentage()) },
-                control = {
-                    Slider(trackingConfidence, { trackingConfidence = it })
-                }) {}
-            SettingsRow(
-                title = { Text(stringResource(R.string.setting_presenceconf_title)) },
-                description = { Text(stringResource(R.string.setting_presenceconf_desription)) },
-                current = { Text(presenceConfidence.toPercentage()) },
-                control = {
-                    Slider(presenceConfidence, { presenceConfidence = it })
-                }) {}
         }
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
             modifier = Modifier
+                .hazeChild(hazeState)
+                .background(Brush.verticalGradient(surfaceGradient))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()
+                .align(Alignment.BottomStart)
         ) {
             TextButton({ navController.popBackStack() }) {
                 Icon(Icons.Default.Delete, null)
