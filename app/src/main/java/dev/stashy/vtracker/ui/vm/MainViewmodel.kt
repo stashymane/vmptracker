@@ -16,4 +16,11 @@ class MainViewmodel(
     fun stop() {
         tracker.value?.stop()
     }
+
+    fun toggle() {
+        if (tracker.value?.status?.value is TrackerService.Status.Running)
+            stop()
+        else
+            start()
+    }
 }

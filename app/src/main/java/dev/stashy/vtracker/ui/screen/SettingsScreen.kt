@@ -85,8 +85,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         Box(
             Modifier
                 .haze(hazeState)
-                .matchParentSize()
-        ) {
+                .matchParentSize()) {
             Column(
                 Modifier
                     .verticalScroll(scrollState)
