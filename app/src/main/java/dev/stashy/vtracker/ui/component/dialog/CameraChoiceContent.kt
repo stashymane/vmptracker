@@ -7,12 +7,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalLensFacing
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,24 +34,18 @@ fun CameraChoiceContent(
         availableCameras.addAll(provider.availableCameraInfos)
     }
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        item {
-            Text(
-                "Camera",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)
-            )
-        }
-        items(availableCameras) {
-            DropdownMenuItem(
-                text = { Text("${it.cameraId()} (${stringResource(it.facing())})") },
-                onClick = {
-                    onSelect(it.cameraId())
-                    onDismiss()
-                })
-        }
+    ListDialogContent(
+        availableCameras,
+        { Text("Camera") },
+        onDismiss,
+        {
+            onSelect(it.cameraId())
+            onDismiss()
+        },
+        Modifier.fillMaxWidth()
+    ) {
+        Text("${it.cameraId()} (${stringResource(it.facing())})")
     }
-
 }
 
 @androidx.annotation.OptIn(ExperimentalLensFacing::class)
