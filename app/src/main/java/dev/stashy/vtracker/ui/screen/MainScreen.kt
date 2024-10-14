@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.stashy.vtracker.R
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
@@ -41,7 +42,7 @@ import org.koin.compose.koinInject
 fun MainScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     viewmodel: MainViewmodel = koinInject()
-    
+
 ) {
     val navController = LocalNavController.current
     val sidePadding = 16.dp
@@ -77,11 +78,14 @@ fun MainScreen(
                         AnimatedContent(status, label = "is running") {
                             when (it) {
                                 TrackerService.Status.Running -> Text(
-                                    "Running",
+                                    stringResource(R.string.service_running),
                                     color = MaterialTheme.colorScheme.primary
                                 )
 
-                                else -> Text("Not running", color = MaterialTheme.colorScheme.error)
+                                else -> Text(
+                                    stringResource(R.string.service_notrunning),
+                                    color = MaterialTheme.colorScheme.error
+                                )
                             }
                         }
                         Spacer(Modifier.weight(1f))
@@ -94,14 +98,14 @@ fun MainScreen(
                                 ) {
                                     Icon(imageVector = Icons.Default.Close, null)
                                     Spacer(Modifier.width(8.dp))
-                                    Text(stringResource(dev.stashy.vtracker.R.string.stop_button))
+                                    Text(stringResource(R.string.stop_button))
                                 }
 
 
                                 else -> Button(viewmodel::start) {
                                     Icon(imageVector = Icons.Default.PlayArrow, null)
                                     Spacer(Modifier.width(8.dp))
-                                    Text(stringResource(dev.stashy.vtracker.R.string.start_button))
+                                    Text(stringResource(R.string.start_button))
                                 }
                             }
                         }
@@ -115,7 +119,7 @@ fun MainScreen(
                         ) {
                             Icon(Icons.Default.Settings, null)
                             Spacer(Modifier.width(8.dp))
-                            Text("Settings")
+                            Text(stringResource(R.string.settings_title))
                         }
                     }
                 }

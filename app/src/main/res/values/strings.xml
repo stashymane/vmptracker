@@ -39,4 +39,6 @@
     <string name="camera_facing_front">Front</string>
     <string name="camera_facing_external">External</string>
     <string name="camera_facing_unknown">Unknown</string>
+    <string name="service_running">Running</string>
+    <string name="service_notrunning">Not running</string>
 </resources>

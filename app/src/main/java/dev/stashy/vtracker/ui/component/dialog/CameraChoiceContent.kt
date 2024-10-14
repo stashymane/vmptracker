@@ -36,7 +36,7 @@ fun CameraChoiceContent(
 
     ListDialogContent(
         availableCameras,
-        { Text("Camera") },
+        { Text(stringResource(dev.stashy.vtracker.R.string.setting_camera_title)) },
         onDismiss,
         {
             onSelect(it.cameraId())

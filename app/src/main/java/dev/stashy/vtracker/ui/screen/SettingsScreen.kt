@@ -189,13 +189,13 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             TextButton({ navController.popBackStack() }) {
                 Icon(Icons.Default.Delete, null)
                 Spacer(Modifier.width(8.dp))
-                Text("Discard")
+                Text(stringResource(R.string.settings_discard))
             }
 
             Button({}) {
                 Icon(Icons.Default.Done, null)
                 Spacer(Modifier.width(8.dp))
-                Text("Save")
+                Text(stringResource(R.string.settings_save))
             }
         }
     }
@@ -215,7 +215,10 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         ipAddressDialogVisible, { ipAddressDialogVisible = false },
         modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
     ) {
-        IpAddressDialogContent({ ipAddressDialogVisible = false }) { ipAddress = it }
+        IpAddressDialogContent(
+            { ipAddressDialogVisible = false },
+            currentAddress = ipAddress
+        ) { ipAddress = it }
     }
 
     ADialog(
@@ -225,7 +228,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     ) {
         ListDialogContent(
             items = Delegate.entries.toList(),
-            title = { Text("Runner") },
+            title = { Text(stringResource(R.string.setting_runner_title)) },
             onDismiss = { runnerDialogVisible = false },
             onSelect = { runner = it }
         ) {
