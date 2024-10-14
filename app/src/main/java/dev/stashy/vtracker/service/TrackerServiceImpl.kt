@@ -34,9 +34,16 @@ class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by Coroutin
      * Starts the service from a received intent, and sets this up as a foreground service.
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        setupForegroundService()
+        return START_STICKY
+    }
+
+    fun setupForegroundService() {
         try {
-            val notification = NotificationCompat.Builder(this, "CHANNEL_ID")
+            val notification = NotificationCompat.Builder(this, persistentNotificationChannelId)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setContentTitle("VTracker is running")
+                .setContentText("Open the app for more details.")
                 .build()
 
             ServiceCompat.startForeground(
@@ -50,19 +57,19 @@ class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by Coroutin
         } catch (e: Exception) {
             _status.tryEmit(Status.Error(e))
         }
-
-        return START_STICKY
     }
 
     /**
      * Starts the tracking.
      */
     override fun start() {
+        setupForegroundService()
         faceTracker.start(this, FaceTrackerSettings())
         _status.tryEmit(Status.Running)
     }
 
     override fun stop() {
+        stopForeground(STOP_FOREGROUND_REMOVE)
         faceTracker.stop()
         _status.tryEmit(Status.NotRunning)
     }

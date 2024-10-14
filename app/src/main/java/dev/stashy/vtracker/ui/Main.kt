@@ -1,15 +1,15 @@
 package dev.stashy.vtracker.ui
 
 import android.Manifest
+import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberPermissionState
-import dev.stashy.vtracker.ui.screen.CameraPermissionScreen
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import dev.stashy.vtracker.ui.screen.PermissionRequestScreen
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
 import org.koin.compose.koinInject
@@ -18,22 +18,23 @@ import org.koin.compose.koinInject
 @Composable
 fun Main(mainViewmodel: MainViewmodel = koinInject()) {
     val trackerService by mainViewmodel.tracker.collectAsState()
-    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
+    val permissions = rememberMultiplePermissionsState(
+        buildList {
+            add(Manifest.permission.CAMERA)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                add(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    )
 
     VTrackerTheme {
         Surface {
             AnimatedContent(
-                cameraPermission.status,
+                permissions.allPermissionsGranted,
                 label = "permission screen"
             ) { permissionStatus ->
                 when (permissionStatus) {
-                    PermissionStatus.Granted -> {
-                        Layout()
-                    }
-
-                    else -> {
-                        CameraPermissionScreen(request = { cameraPermission.launchPermissionRequest() })
-                    }
+                    true -> Layout()
+                    else -> PermissionRequestScreen(request = { permissions.launchMultiplePermissionRequest() })
                 }
             }
         }

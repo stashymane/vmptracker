@@ -24,7 +24,7 @@ import dev.stashy.vtracker.R
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @Composable
-fun CameraPermissionScreen(modifier: Modifier = Modifier, request: () -> Unit = {}) {
+fun PermissionRequestScreen(modifier: Modifier = Modifier, request: () -> Unit = {}) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,6 +52,6 @@ fun CameraPermissionScreen(modifier: Modifier = Modifier, request: () -> Unit = 
 @Composable
 private fun CameraPermissionScreenPreview() {
     VTrackerTheme {
-        CameraPermissionScreen()
+        PermissionRequestScreen()
     }
 }

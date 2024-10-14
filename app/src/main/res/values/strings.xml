@@ -33,4 +33,6 @@
     <string name="setting_tracking_model_description">Only MediaPipe is supported at the moment.</string>
     <string name="setting_tracking_model_mediapipe">MediaPipe</string>
     <string name="starting_up">Starting up...</string>
+    <string name="notification_persistent_name">Service notification</string>
+    <string name="notification_persistent_description">Displayed when VTracker is running.</string>
 </resources>

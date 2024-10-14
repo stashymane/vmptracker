@@ -14,6 +14,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.service.TrackerServiceImpl
+import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.Main
 import dev.stashy.vtracker.ui.vm.MainViewmodel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
+        setupNotificationChannel()
         Intent(this, TrackerServiceImpl::class.java).also { intent ->
             bindService(intent, connection, BIND_AUTO_CREATE)
         }
