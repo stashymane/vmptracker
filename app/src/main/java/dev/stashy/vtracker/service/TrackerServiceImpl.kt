@@ -7,7 +7,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.camera.core.ImageProxy
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import dev.stashy.vtracker.model.FaceTrackerSettings
@@ -75,7 +74,7 @@ class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by Coroutin
     private val binder = LocalBinder()
 
     inner class LocalBinder : Binder() {
-        fun getService() = this@TrackerServiceImpl
+        fun getService(): TrackerService = this@TrackerServiceImpl
     }
 
     override fun onBind(intent: Intent?): IBinder? = binder

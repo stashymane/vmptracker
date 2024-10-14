@@ -1,17 +1,19 @@
 package dev.stashy.vtracker.ui.vm
 
 import androidx.lifecycle.ViewModel
+import dev.stashy.vtracker.service.TrackerService
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class MainViewmodel : ViewModel() {
+class MainViewmodel(
+    val tracker: MutableStateFlow<TrackerService?>
+) : ViewModel() {
     val fps = MutableStateFlow(0)
-    val isRunning = MutableStateFlow(false)
 
     fun start() {
-        isRunning.tryEmit(true)
+        tracker.value?.start()
     }
 
     fun stop() {
-        isRunning.tryEmit(false)
+        tracker.value?.stop()
     }
 }
