@@ -37,6 +37,7 @@ import com.google.mediapipe.tasks.core.Delegate
 import dev.stashy.vtracker.R
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.SettingsRow
+import dev.stashy.vtracker.ui.component.dialog.CameraChoiceDialog
 
 @Composable
 fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
@@ -48,6 +49,8 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     var detectionConfidence by remember { mutableFloatStateOf(0.5f) }
     var trackingConfidence by remember { mutableFloatStateOf(0.5f) }
     var presenceConfidence by remember { mutableFloatStateOf(0.5f) }
+
+    var cameraChoiceDialogVisible by remember { mutableStateOf(false) }
 
     Column(
         Modifier
@@ -111,7 +114,9 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_camera_title)) },
                 description = { Text(stringResource(R.string.setting_camera_description)) },
-                current = { Text(stringResource(R.string.setting_camera_back) + " 1") }) {}
+                current = { Text(stringResource(R.string.setting_camera_back) + " 1") }) {
+                cameraChoiceDialogVisible = true
+            }
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_runner_title)) },
                 description = { Text(stringResource(R.string.setting_runner_description)) },
@@ -166,6 +171,8 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             }
         }
     }
+
+    CameraChoiceDialog(cameraChoiceDialogVisible, { cameraChoiceDialogVisible = false }, {})
 }
 
 private fun Float.toPercentage() = "${(this * 100).toInt()}%"
