@@ -1,6 +1,8 @@
 package dev.stashy.vtracker.ui.component.dialog
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -25,14 +27,17 @@ fun ADialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.surfaceContainer,
+    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(0.8f),
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
     content: @Composable () -> Unit
 ) {
-    AnimatedVisibility(visible, enter = fadeIn(), exit = fadeOut()) {
+    val animationSpec = spring<Float>(stiffness = Spring.StiffnessMedium)
+
+    AnimatedVisibility(visible, enter = fadeIn(animationSpec), exit = fadeOut(animationSpec)) {
         Box(
             modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest.copy(0.8f))
+                .background(backgroundColor)
         )
     }
 
