@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
@@ -79,13 +82,14 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
 
     Box(
         Modifier
-            .padding(contentPadding)
             .fillMaxSize()
     ) {
         Box(
             Modifier
+                .padding(contentPadding)
                 .haze(hazeState)
-                .matchParentSize()) {
+                .matchParentSize()
+        ) {
             Column(
                 Modifier
                     .verticalScroll(scrollState)
@@ -185,7 +189,12 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
                 .clipToBounds()
                 .hazeChild(hazeState, LocalHazeStyle.current)
                 .background(Brush.verticalGradient(surfaceGradient))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(
+                    start = 16.dp + contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = 16.dp + contentPadding.calculateEndPadding(LocalLayoutDirection.current),
+                    top = 8.dp,
+                    bottom = 8.dp + contentPadding.calculateBottomPadding()
+                )
                 .fillMaxWidth()
                 .align(Alignment.BottomStart)
         ) {
