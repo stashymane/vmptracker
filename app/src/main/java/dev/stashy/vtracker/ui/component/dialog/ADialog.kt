@@ -14,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
@@ -22,12 +23,14 @@ import dev.stashy.vtracker.ui.theme.VTrackerTheme
 fun ADialog(
     visible: Boolean,
     onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
     content: @Composable () -> Unit
 ) {
     AnimatedVisibility(visible, enter = fadeIn(), exit = fadeOut()) {
         Box(
-            Modifier
+            modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceContainerLowest.copy(0.8f))
         )
@@ -37,7 +40,7 @@ fun ADialog(
         BasicAlertDialog(onDismissRequest = onDismiss) {
             Surface(
                 shape = shape,
-                color = MaterialTheme.colorScheme.surfaceContainer
+                color = color
             ) {
                 content()
             }

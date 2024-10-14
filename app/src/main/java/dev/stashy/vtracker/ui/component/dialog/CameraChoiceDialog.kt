@@ -26,7 +26,12 @@ import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraChoiceDialog(visible: Boolean, onDismiss: () -> Unit, onSelect: (String) -> Unit) {
+fun CameraChoiceDialog(
+    visible: Boolean,
+    onDismiss: () -> Unit,
+    onSelect: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val providerFuture = remember { ProcessCameraProvider.getInstance(context) }
     val availableCameras = remember { mutableStateListOf<CameraInfo>() }
@@ -36,7 +41,7 @@ fun CameraChoiceDialog(visible: Boolean, onDismiss: () -> Unit, onSelect: (Strin
         availableCameras.addAll(provider.availableCameraInfos)
     }
 
-    ADialog(visible, onDismiss) {
+    ADialog(visible, onDismiss, modifier = modifier) {
         LazyColumn {
             item {
                 Text(

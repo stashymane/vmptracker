@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
 import dev.stashy.vtracker.R
 import dev.stashy.vtracker.model.IpAddress
+import dev.stashy.vtracker.ui.LocalHazeStyle
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.SettingsRow
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceDialog
@@ -54,8 +56,7 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     val hazeState = remember { HazeState() }
     val surfaceGradient =
         listOf(
-            MaterialTheme.colorScheme.surface.copy(0.5f),
-            MaterialTheme.colorScheme.surface.copy(0.2f),
+            MaterialTheme.colorScheme.surface.copy(0f),
             MaterialTheme.colorScheme.surface
         )
 
@@ -177,7 +178,8 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
             modifier = Modifier
-                .hazeChild(hazeState)
+                .clipToBounds()
+                .hazeChild(hazeState, LocalHazeStyle.current)
                 .background(Brush.verticalGradient(surfaceGradient))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()
@@ -200,7 +202,9 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     CameraChoiceDialog(
         cameraChoiceDialogVisible,
         { cameraChoiceDialogVisible = false },
-        { cameraId = it })
+        { cameraId = it },
+        modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
+    )
     IpAddressDialog(ipAddressDialogVisible, { ipAddressDialogVisible = false }) { ipAddress = it }
     ListDialog(
         runnerDialogVisible,
