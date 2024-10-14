@@ -2,7 +2,9 @@ package dev.stashy.vtracker.ui.component.dialog
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +29,7 @@ fun <T> ListDialogContent(
     LazyColumn(modifier) {
         item {
             ProvideTextStyle(MaterialTheme.typography.titleLarge) {
-                Row(modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)) {
+                Row(modifier = Modifier.padding(top = 24.dp, start = 24.dp, bottom = 12.dp)) {
                     title()
                 }
             }
@@ -44,6 +46,10 @@ fun <T> ListDialogContent(
             ) {
                 item(it)
             }
+        }
+
+        item {
+            Spacer(Modifier.height(16.dp))
         }
     }
 }

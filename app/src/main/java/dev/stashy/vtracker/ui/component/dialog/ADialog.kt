@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +30,7 @@ fun ADialog(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     backgroundColor: Color = Color.Transparent,
-    shape: CornerBasedShape = MaterialTheme.shapes.medium,
+    shape: CornerBasedShape = MaterialTheme.shapes.large,
     content: @Composable () -> Unit
 ) {
     val animationSpec = spring<Float>(stiffness = Spring.StiffnessMedium)
@@ -45,7 +47,8 @@ fun ADialog(
         BasicAlertDialog(onDismissRequest = onDismiss) {
             Surface(
                 shape = shape,
-                color = containerColor
+                color = containerColor,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f))
             ) {
                 content()
             }
