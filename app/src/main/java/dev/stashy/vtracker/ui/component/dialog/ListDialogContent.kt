@@ -39,7 +39,7 @@ fun <T> ListDialogContent(
                     onSelect(it)
                     onDismiss()
                 }
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 24.dp, vertical = 12.dp)
                 .fillMaxWidth()
             ) {
                 item(it)
