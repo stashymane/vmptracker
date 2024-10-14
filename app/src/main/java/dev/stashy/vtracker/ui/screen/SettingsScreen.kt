@@ -25,7 +25,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,22 +34,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
 import dev.stashy.vtracker.R
+import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.SettingsRow
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceDialog
+import dev.stashy.vtracker.ui.component.dialog.IpAddressDialog
+import dev.stashy.vtracker.ui.component.dialog.ListDialog
 
 @Composable
 fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     val scrollState = rememberScrollState()
     val navController = LocalNavController.current
 
-    var cameraId by remember { mutableIntStateOf(0) }
+    var ipAddress by remember { mutableStateOf(IpAddress("192.168.1.10", 5123)) }
+
+    var cameraId by remember { mutableStateOf("0") }
     var runner by remember { mutableStateOf(Delegate.GPU) }
     var detectionConfidence by remember { mutableFloatStateOf(0.5f) }
     var trackingConfidence by remember { mutableFloatStateOf(0.5f) }
     var presenceConfidence by remember { mutableFloatStateOf(0.5f) }
 
     var cameraChoiceDialogVisible by remember { mutableStateOf(false) }
+    var ipAddressDialogVisible by remember { mutableStateOf(false) }
+    var runnerDialogVisible by remember { mutableStateOf(false) }
 
     Column(
         Modifier
@@ -86,7 +92,9 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_targetip_title)) },
                 description = { Text(stringResource(R.string.setting_targetip_description)) },
-                current = { Text("192.168.1.10:5123") }) {}
+                current = { Text(ipAddress.toString()) }) {
+                ipAddressDialogVisible = true
+            }
 
             SettingsRow(
                 enabled = false,
@@ -120,16 +128,9 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_runner_title)) },
                 description = { Text(stringResource(R.string.setting_runner_description)) },
-                current = {
-                    Text(
-                        stringResource(
-                            when (runner) {
-                                Delegate.CPU -> R.string.settings_runner_CPU
-                                Delegate.GPU -> R.string.settings_runner_GPU
-                            }
-                        )
-                    )
-                }) {}
+                current = { Text(stringResource(runner.stringResource())) }) {
+                runnerDialogVisible = true
+            }
             SettingsRow(
                 title = { Text(stringResource(R.string.setting_detectionconf_title)) },
                 description = { Text(stringResource(R.string.setting_detectionconf_description)) },
@@ -172,7 +173,24 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
         }
     }
 
-    CameraChoiceDialog(cameraChoiceDialogVisible, { cameraChoiceDialogVisible = false }, {})
+    CameraChoiceDialog(
+        cameraChoiceDialogVisible,
+        { cameraChoiceDialogVisible = false },
+        { cameraId = it })
+    IpAddressDialog(ipAddressDialogVisible, { ipAddressDialogVisible = false }) { ipAddress = it }
+    ListDialog(
+        runnerDialogVisible,
+        { runnerDialogVisible = false },
+        Delegate.entries.toList(),
+        { Text("Runner") },
+        onSelect = { runner = it }) {
+        Text(it.name)
+    }
+}
+
+private fun Delegate.stringResource() = when (this) {
+    Delegate.CPU -> R.string.settings_runner_CPU
+    Delegate.GPU -> R.string.settings_runner_GPU
 }
 
 private fun Float.toPercentage() = "${(this * 100).toInt()}%"
