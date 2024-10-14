@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
@@ -204,7 +203,6 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     ADialog(
         cameraChoiceDialogVisible,
         { cameraChoiceDialogVisible = false },
-        backgroundColor = Color.Transparent,
         modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
     ) {
         CameraChoiceContent(
@@ -215,7 +213,6 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
 
     ADialog(
         ipAddressDialogVisible, { ipAddressDialogVisible = false },
-        backgroundColor = Color.Transparent,
         modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
     ) {
         IpAddressDialogContent({ ipAddressDialogVisible = false }) { ipAddress = it }
@@ -224,7 +221,6 @@ fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
     ADialog(
         runnerDialogVisible,
         { runnerDialogVisible = false },
-        backgroundColor = Color.Transparent,
         modifier = Modifier.hazeChild(hazeState, LocalHazeStyle.current)
     ) {
         ListDialogContent(

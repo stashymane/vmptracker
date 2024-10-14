@@ -27,7 +27,7 @@ fun ADialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainerLowest.copy(0.8f),
+    backgroundColor: Color = Color.Transparent,
     shape: CornerBasedShape = MaterialTheme.shapes.medium,
     content: @Composable () -> Unit
 ) {
