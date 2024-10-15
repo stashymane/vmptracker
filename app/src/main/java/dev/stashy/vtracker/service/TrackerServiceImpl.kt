@@ -16,29 +16,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by CoroutineScope(Job()) {
     private val faceTracker = FaceTracker()
-    private val cameraProvider = ProcessCameraProvider.getInstance(this)
 
-    private val _status: MutableStateFlow<Status> = MutableStateFlow(Status.NotRunning)
-    override val status: StateFlow<Status> = _status
-
+    override val status: MutableStateFlow<Status> = MutableStateFlow(Status.NotRunning)
     override val frames: ReceiveChannel<ImageProxy>
         get() = TODO("Not yet implemented")
 
     override val results get() = faceTracker.results
 
-    /**
-     * Starts the service from a received intent, and sets this up as a foreground service.
-     */
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        setupForegroundService()
-        return START_STICKY
-    }
-
-    fun setupForegroundService() {
+    internal fun setupForegroundService() {
         try {
             val notification = NotificationCompat.Builder(this, persistentNotificationChannelId)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -55,7 +43,7 @@ class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by Coroutin
                 else 0
             )
         } catch (e: Exception) {
-            _status.tryEmit(Status.Error(e))
+            status.tryEmit(Status.Error(e))
         }
     }
 
@@ -65,17 +53,25 @@ class TrackerServiceImpl : Service(), TrackerService, CoroutineScope by Coroutin
     override fun start() {
         setupForegroundService()
         faceTracker.start(this, FaceTrackerSettings())
-        _status.tryEmit(Status.Running)
+        status.tryEmit(Status.Running)
     }
 
     override fun stop() {
         stopForeground(STOP_FOREGROUND_REMOVE)
         faceTracker.stop()
-        _status.tryEmit(Status.NotRunning)
+        status.tryEmit(Status.NotRunning)
     }
 
     override fun onDestroy() {
         faceTracker.stop()
+    }
+
+    /**
+     * Starts the service from a received intent, and sets this up as a foreground service.
+     */
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        setupForegroundService()
+        return START_STICKY
     }
 
     private val binder = LocalBinder()
