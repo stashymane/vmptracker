@@ -1,10 +1,5 @@
 package dev.stashy.vtracker.ui.screen
 
-import android.util.Size
-import androidx.camera.viewfinder.compose.Viewfinder
-import androidx.camera.viewfinder.surface.ImplementationMode
-import androidx.camera.viewfinder.surface.TransformationInfo
-import androidx.camera.viewfinder.surface.ViewfinderSurfaceRequest
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -47,16 +42,6 @@ fun PreviewScreen(
     val navController = LocalNavController.current
     val displayMetrics = LocalContext.current.resources.displayMetrics
 
-    val surfaceRequest =
-        ViewfinderSurfaceRequest.Builder(
-            Size(
-                displayMetrics.widthPixels,
-                displayMetrics.heightPixels
-            )
-        )
-//            .populateFromCharacteristics()
-            .build()
-
     val startButtonColor by animateColorAsState(
         when (status) {
             is TrackerService.Status.Running -> MaterialTheme.colorScheme.primary
@@ -71,12 +56,7 @@ fun PreviewScreen(
     )
 
     Box(Modifier.fillMaxSize()) {
-        Viewfinder(
-            surfaceRequest,
-            ImplementationMode.EXTERNAL,
-            transformationInfo = TransformationInfo(0, 0, 0, 0, 0, false),
-            modifier = Modifier.matchParentSize()
-        )
+        //TODO viewfinder should be here
 
         Box(
             Modifier
@@ -84,7 +64,10 @@ fun PreviewScreen(
                 .fillMaxSize()
         ) {
             Button(
-                viewmodel::toggle,
+                {
+                    if (viewmodel.status.value is TrackerService.Status.Running) viewmodel.stop()
+                    else viewmodel.start()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = startButtonColor,
                     contentColor = startButtonContentColor

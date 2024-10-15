@@ -4,26 +4,5 @@ import androidx.lifecycle.ViewModel
 import dev.stashy.vtracker.service.TrackerService
 
 class MainViewmodel(
-    val tracker: TrackerService
-) : ViewModel() {
-    val status = tracker.status
-
-    init {
-
-    }
-
-    fun start() {
-        tracker.start()
-    }
-
-    fun stop() {
-        tracker.stop()
-    }
-
-    fun toggle() {
-        if (tracker.status.value is TrackerService.Status.Running)
-            stop()
-        else
-            start()
-    }
-}
+    tracker: TrackerService
+) : ViewModel(), TrackerService by tracker {}
