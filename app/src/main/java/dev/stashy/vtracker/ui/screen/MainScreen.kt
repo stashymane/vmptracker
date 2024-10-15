@@ -6,20 +6,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    viewmodel: MainViewmodel = koinInject()
+    viewmodel: MainViewmodel = koinViewModel()
 ) {
-    val navController = LocalNavController.current
-    val sidePadding = 16.dp
-
-    val status by viewmodel.tracker.status.collectAsState()
+    val status by viewmodel.status.collectAsState()
 
     PreviewScreen(status, contentPadding)
 }
