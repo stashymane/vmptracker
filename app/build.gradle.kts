@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.bundles.camerax)
     implementation(libs.mediapipe.vision)
 
+    implementation(libs.androidx.materialIconsExtended)
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
     implementation(libs.haze)

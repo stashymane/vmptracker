@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Cameraswitch
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -80,7 +80,7 @@ fun PreviewScreen(
                     .align(Alignment.BottomStart)
                     .padding(32.dp)
             ) {
-                Icon(Icons.Default.Refresh, "Lens change")
+                Icon(Icons.Default.Cameraswitch, "Lens change")
             }
 
             Button(
@@ -103,7 +103,7 @@ fun PreviewScreen(
                     ) {
                         when (it) {
                             is TrackerService.Status.Running -> {
-                                Icon(imageVector = Icons.Default.Close, null)
+                                Icon(imageVector = Icons.Default.Stop, null)
                                 Text(stringResource(R.string.stop_button))
                             }
 
