@@ -14,11 +14,11 @@
     <string name="settings_runner_GPU">GPU</string>
     <string name="settings_runner_CPU">CPU</string>
     <string name="setting_detectionconf_title">Detection confidence</string>
-    <string name="setting_detectionconf_description">How confident the tracker has to be to start tracking a face.</string>
+    <string name="setting_detectionconf_description">The minimum confidence score for the face detection to be considered successful.</string>
     <string name="setting_trackingconf_title">Tracking confidence</string>
-    <string name="setting_trackingconf_description">TODO tutorial</string>
+    <string name="setting_trackingconf_description">The minimum confidence score for the face tracking to be considered successful.</string>
     <string name="setting_presenceconf_title">Presence confidence</string>
-    <string name="setting_presenceconf_desription">TODO tutorial</string>
+    <string name="setting_presenceconf_desription">The minimum confidence score of face presence score in the face landmark detection.</string>
     <string name="settings_save">Save</string>
     <string name="settings_discard">Discard</string>
     <string name="settings_reset">Reset to defaults</string>
@@ -32,7 +32,7 @@
     <string name="setting_tracking_model_title">Model</string>
     <string name="setting_tracking_model_description">Only MediaPipe is supported at the moment.</string>
     <string name="setting_tracking_model_mediapipe">MediaPipe</string>
-    <string name="starting_up">Starting up...</string>
+    <string name="starting_up">Starting up…</string>
     <string name="notification_persistent_name">Service notification</string>
     <string name="notification_persistent_description">Displayed when VTracker is running.</string>
     <string name="camera_facing_rear">Rear</string>
