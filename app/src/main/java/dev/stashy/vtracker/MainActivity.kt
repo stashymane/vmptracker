@@ -24,6 +24,7 @@ import dev.stashy.vtracker.ui.PermissionGate
 import dev.stashy.vtracker.ui.screen.LoadingScreen
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
+import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -40,6 +41,7 @@ class MainActivity : ComponentActivity() {
     val module = module {
         single { androidContext().dataStore }
         viewModel { MainViewmodel(tracker.value!!) }
+        viewModel { SettingsViewmodel(get()) }
     }
 
     override fun onStart() {

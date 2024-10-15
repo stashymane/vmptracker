@@ -53,9 +53,14 @@ import dev.stashy.vtracker.ui.component.dialog.ADialog
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
 import dev.stashy.vtracker.ui.component.dialog.IpAddressDialogContent
 import dev.stashy.vtracker.ui.component.dialog.ListDialogContent
+import dev.stashy.vtracker.ui.vm.SettingsViewmodel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SettingsScreen(contentPadding: PaddingValues = PaddingValues(0.dp)) {
+fun SettingsScreen(
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    vm: SettingsViewmodel = koinViewModel()
+) {
     val scrollState = rememberScrollState()
     val navController = LocalNavController.current
 
