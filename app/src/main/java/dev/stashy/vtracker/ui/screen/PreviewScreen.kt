@@ -54,6 +54,7 @@ fun PreviewScreen(
                 displayMetrics.heightPixels
             )
         )
+//            .populateFromCharacteristics()
             .build()
 
     val startButtonColor by animateColorAsState(

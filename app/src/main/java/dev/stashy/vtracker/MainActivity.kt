@@ -9,13 +9,20 @@ import android.os.IBinder
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.service.TrackerServiceImpl
 import dev.stashy.vtracker.service.setupNotificationChannel
-import dev.stashy.vtracker.ui.Main
+import dev.stashy.vtracker.ui.Layout
+import dev.stashy.vtracker.ui.PermissionGate
+import dev.stashy.vtracker.ui.screen.LoadingScreen
+import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.android.ext.koin.androidContext
@@ -32,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
     val module = module {
         single { androidContext().dataStore }
-        viewModel { MainViewmodel(tracker) }
+        viewModel { MainViewmodel(tracker.value!!) }
     }
 
     override fun onStart() {
@@ -54,8 +61,19 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val trackerService by tracker.collectAsState()
+
             KoinAndroidContext {
-                Main()
+                VTrackerTheme {
+                    Surface {
+                        AnimatedContent(trackerService, label = "Loading service screen") {
+                            when (it) {
+                                null -> LoadingScreen()
+                                else -> PermissionGate { Layout() }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -41,4 +41,6 @@
     <string name="camera_facing_unknown">Unknown</string>
     <string name="service_running">Running</string>
     <string name="service_notrunning">Not running</string>
+    <string name="notification_required_title">Notification permission required</string>
+    <string name="notification_required_description">The only notification we send is the one telling you whether VTracker is running.</string>
 </resources>

@@ -1,6 +1,5 @@
 package dev.stashy.vtracker.ui.screen
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,24 +19,9 @@ fun MainScreen(
     val navController = LocalNavController.current
     val sidePadding = 16.dp
 
-    val trackerService by viewmodel.tracker.collectAsState()
+    val status by viewmodel.tracker.status.collectAsState()
 
-    AnimatedContent(
-        trackerService,
-        label = "service loading"
-    ) { tracker ->
-        when (tracker) {
-            null -> {
-                LoadingScreen()
-            }
-
-            else -> {
-                val status by tracker.status.collectAsState()
-
-                PreviewScreen(status, contentPadding)
-            }
-        }
-    }
+    PreviewScreen(status, contentPadding)
 }
 
 
