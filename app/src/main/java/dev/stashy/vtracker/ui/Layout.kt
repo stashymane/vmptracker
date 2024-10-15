@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dev.stashy.vtracker.ui.component.LocalNavController
-import dev.stashy.vtracker.ui.screen.MainScreen
+import dev.stashy.vtracker.ui.screen.PreviewScreen
 import dev.stashy.vtracker.ui.screen.Screen
 import dev.stashy.vtracker.ui.screen.SettingsScreen
 
@@ -31,11 +31,11 @@ fun Layout() {
             }
         ) { innerPadding ->
             NavHost(navController,
-                Screen.Home,
+                Screen.Preview,
                 enterTransition = { fadeIn() + scaleIn(initialScale = 1.1f) },
                 exitTransition = { fadeOut() + scaleOut(targetScale = 0.9f) }) {
-                composable<Screen.Home> {
-                    MainScreen(innerPadding)
+                composable<Screen.Preview> {
+                    PreviewScreen(innerPadding)
                 }
                 composable<Screen.Settings> {
                     SettingsScreen(innerPadding)

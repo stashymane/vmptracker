@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,10 +35,10 @@ import org.koin.compose.koinInject
 
 @Composable
 fun PreviewScreen(
-    status: TrackerService.Status,
     contentPadding: PaddingValues,
     viewmodel: MainViewmodel = koinInject()
 ) {
+    val status by viewmodel.status.collectAsState()
     val navController = LocalNavController.current
 
     val startButtonColor by animateColorAsState(
@@ -63,7 +64,7 @@ fun PreviewScreen(
         ) {
             Button(
                 {
-                    if (viewmodel.status.value is TrackerService.Status.Running) viewmodel.stop()
+                    if (status is TrackerService.Status.Running) viewmodel.stop()
                     else viewmodel.start()
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -111,6 +112,6 @@ fun PreviewScreen(
 @Composable
 private fun PreviewScreenPreview() {
     VTrackerTheme {
-        PreviewScreen(TrackerService.Status.Running, PaddingValues())
+        PreviewScreen(PaddingValues())
     }
 }
