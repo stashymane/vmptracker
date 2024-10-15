@@ -50,7 +50,6 @@ import dev.stashy.vtracker.ui.LocalHazeStyle
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.SettingsRow
 import dev.stashy.vtracker.ui.component.dialog.ADialog
-import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
 import dev.stashy.vtracker.ui.component.dialog.IpAddressDialogContent
 import dev.stashy.vtracker.ui.component.dialog.ListDialogContent
 import dev.stashy.vtracker.ui.vm.SettingsViewmodel
@@ -75,7 +74,6 @@ fun SettingsScreen(
 
     var ipAddress by remember { mutableStateOf(IpAddress("192.168.1.10", 5123)) }
 
-    var cameraId by remember { mutableStateOf("0") }
     var runner by remember { mutableStateOf(Delegate.GPU) }
     var detectionConfidence by remember { mutableFloatStateOf(0.5f) }
     var trackingConfidence by remember { mutableFloatStateOf(0.5f) }
@@ -153,12 +151,6 @@ fun SettingsScreen(
                     description = { Text(stringResource(R.string.setting_tracking_model_description)) },
                     current = { Text(stringResource(R.string.setting_tracking_model_mediapipe)) }) {}
                 SettingsRow(
-                    title = { Text(stringResource(R.string.setting_camera_title)) },
-                    description = { Text(stringResource(R.string.setting_camera_description)) },
-                    current = { Text(stringResource(R.string.setting_camera_back) + " 1") }) {
-                    cameraChoiceDialogVisible = true
-                }
-                SettingsRow(
                     title = { Text(stringResource(R.string.setting_runner_title)) },
                     description = { Text(stringResource(R.string.setting_runner_description)) },
                     current = { Text(stringResource(runner.stringResource())) }) {
@@ -215,17 +207,6 @@ fun SettingsScreen(
                 Text(stringResource(R.string.settings_save))
             }
         }
-    }
-
-    ADialog(
-        cameraChoiceDialogVisible,
-        { cameraChoiceDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, hazeStyle)
-    ) {
-        CameraChoiceContent(
-            { cameraChoiceDialogVisible = false },
-            { cameraId = it }
-        )
     }
 
     ADialog(

@@ -6,6 +6,8 @@ import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalLensFacing
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -17,11 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CameraChoiceContent(
+    current: String,
     onDismiss: () -> Unit,
     onSelect: (String) -> Unit
 ) {
@@ -44,7 +48,12 @@ fun CameraChoiceContent(
         },
         Modifier.fillMaxWidth()
     ) {
-        Text("${it.cameraId()} (${stringResource(it.facing())})")
+        val id = it.cameraId()
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(it.facing()))
+            Text("[$id]")
+            if (id == current) Text(stringResource(dev.stashy.vtracker.R.string.setting_camera_current))
+        }
     }
 }
 
@@ -65,6 +74,6 @@ fun CameraInfo.cameraId() = Camera2CameraInfo.from(this).cameraId
 @Composable
 private fun CameraChoiceDialogPreview() {
     VTrackerTheme {
-        CameraChoiceContent({}, {})
+        CameraChoiceContent("", {}, {})
     }
 }
