@@ -18,24 +18,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,13 +41,12 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
 import dev.stashy.vtracker.R
-import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.ui.LocalHazeStyle
 import dev.stashy.vtracker.ui.component.LocalNavController
-import dev.stashy.vtracker.ui.component.SettingsRow
-import dev.stashy.vtracker.ui.component.dialog.ADialog
-import dev.stashy.vtracker.ui.component.dialog.IpAddressDialogContent
-import dev.stashy.vtracker.ui.component.dialog.ListDialogContent
+import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsDialog
+import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsPart
+import dev.stashy.vtracker.ui.screen.parts.FaceSettingsDialog
+import dev.stashy.vtracker.ui.screen.parts.FaceSettingsPart
 import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 import org.koin.androidx.compose.koinViewModel
 
@@ -66,22 +61,16 @@ fun SettingsScreen(
     val hazeState = remember { HazeState() }
     val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surfaceDim)
 
+    val dialogModifier = Modifier.hazeChild(hazeState, hazeStyle)
+
     val surfaceGradient =
         listOf(
             MaterialTheme.colorScheme.surface.copy(0f),
             MaterialTheme.colorScheme.surface
         )
 
-    var ipAddress by remember { mutableStateOf(IpAddress("192.168.1.10", 5123)) }
-
-    var runner by remember { mutableStateOf(Delegate.GPU) }
-    var detectionConfidence by remember { mutableFloatStateOf(0.5f) }
-    var trackingConfidence by remember { mutableFloatStateOf(0.5f) }
-    var presenceConfidence by remember { mutableFloatStateOf(0.5f) }
-
-    var cameraChoiceDialogVisible by remember { mutableStateOf(false) }
-    var ipAddressDialogVisible by remember { mutableStateOf(false) }
-    var runnerDialogVisible by remember { mutableStateOf(false) }
+    val connectionState by vm.connectionState.collectAsState()
+    val faceTrackingState by vm.faceTrackingState.collectAsState()
 
     Box(
         Modifier
@@ -105,78 +94,11 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.headlineLarge
                     )
                     Spacer(Modifier.weight(1f))
-                    TextButton(onClick = {}) { Text(stringResource(R.string.settings_reset)) }
+                    TextButton(onClick = vm::reset) { Text(stringResource(R.string.settings_reset)) }
                 }
 
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Default.Share, null)
-                    Text(
-                        stringResource(R.string.settings_category_connection),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-
-                SettingsRow(
-                    title = { Text(stringResource(R.string.setting_targetip_title)) },
-                    description = { Text(stringResource(R.string.setting_targetip_description)) },
-                    current = { Text(ipAddress.toString()) }) {
-                    ipAddressDialogVisible = true
-                }
-
-                SettingsRow(
-                    enabled = false,
-                    title = { Text(stringResource(R.string.setting_protocol_title)) },
-                    description = { Text(stringResource(R.string.setting_protocol_description)) },
-                    current = { Text("VTracker") }) {}
-
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Default.Face, null)
-                    Text(
-                        stringResource(R.string.settings_category_face_tracking),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-
-                SettingsRow(
-                    enabled = false,
-                    title = { Text(stringResource(R.string.setting_tracking_model_title)) },
-                    description = { Text(stringResource(R.string.setting_tracking_model_description)) },
-                    current = { Text(stringResource(R.string.setting_tracking_model_mediapipe)) }) {}
-                SettingsRow(
-                    title = { Text(stringResource(R.string.setting_runner_title)) },
-                    description = { Text(stringResource(R.string.setting_runner_description)) },
-                    current = { Text(stringResource(runner.stringResource())) }) {
-                    runnerDialogVisible = true
-                }
-                SettingsRow(
-                    title = { Text(stringResource(R.string.setting_detectionconf_title)) },
-                    description = { Text(stringResource(R.string.setting_detectionconf_description)) },
-                    current = { Text(detectionConfidence.toPercentage()) },
-                    control = {
-                        Slider(detectionConfidence, { detectionConfidence = it })
-                    }) {}
-                SettingsRow(
-                    title = { Text(stringResource(R.string.setting_trackingconf_title)) },
-                    description = { Text(stringResource(R.string.setting_trackingconf_description)) },
-                    current = { Text(trackingConfidence.toPercentage()) },
-                    control = {
-                        Slider(trackingConfidence, { trackingConfidence = it })
-                    }) {}
-                SettingsRow(
-                    title = { Text(stringResource(R.string.setting_presenceconf_title)) },
-                    description = { Text(stringResource(R.string.setting_presenceconf_desription)) },
-                    current = { Text(presenceConfidence.toPercentage()) },
-                    control = {
-                        Slider(presenceConfidence, { presenceConfidence = it })
-                    }) {}
+                ConnectionSettingsPart(connectionState)
+                FaceSettingsPart(faceTrackingState)
             }
         }
 
@@ -209,35 +131,28 @@ fun SettingsScreen(
         }
     }
 
-    ADialog(
-        ipAddressDialogVisible, { ipAddressDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, hazeStyle)
-    ) {
-        IpAddressDialogContent(
-            { ipAddressDialogVisible = false },
-            currentAddress = ipAddress
-        ) { ipAddress = it }
-    }
+    ConnectionSettingsDialog(connectionState, dialogModifier)
+    FaceSettingsDialog(faceTrackingState, dialogModifier)
+}
 
-    ADialog(
-        runnerDialogVisible,
-        { runnerDialogVisible = false },
-        modifier = Modifier.hazeChild(hazeState, hazeStyle)
+@Composable
+fun TitleRow(titleId: Int, icon: ImageVector) {
+    Row(
+        modifier = Modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        ListDialogContent(
-            items = Delegate.entries.toList(),
-            title = { Text(stringResource(R.string.setting_runner_title)) },
-            onDismiss = { runnerDialogVisible = false },
-            onSelect = { runner = it }
-        ) {
-            Text(it.name)
-        }
+        Icon(icon, null)
+        Text(
+            stringResource(titleId),
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 }
 
-private fun Delegate.stringResource() = when (this) {
+fun Delegate.stringResource() = when (this) {
     Delegate.CPU -> R.string.settings_runner_CPU
     Delegate.GPU -> R.string.settings_runner_GPU
 }
 
-private fun Float.toPercentage() = "${(this * 100).toInt()}%"
+fun Float.toPercentage() = "${(this * 100).toInt()}%"
