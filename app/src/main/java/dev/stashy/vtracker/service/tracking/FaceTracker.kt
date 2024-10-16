@@ -11,8 +11,8 @@ import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarkerResult
-import dev.stashy.vtracker.model.FaceTrackerSettings
-import dev.stashy.vtracker.model.applySettings
+import dev.stashy.vtracker.model.settings.FaceTrackerSettings
+import dev.stashy.vtracker.model.settings.applySettings
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import java.lang.RuntimeException

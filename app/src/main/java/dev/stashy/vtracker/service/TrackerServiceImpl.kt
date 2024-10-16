@@ -9,7 +9,7 @@ import android.os.IBinder
 import androidx.camera.core.ImageProxy
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
-import dev.stashy.vtracker.model.FaceTrackerSettings
+import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.service.TrackerService.Status
 import dev.stashy.vtracker.service.tracking.FaceTracker
 import kotlinx.coroutines.CoroutineScope
