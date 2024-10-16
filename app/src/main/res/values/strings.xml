@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VTracker</string>
+    <string name="app_name">vmptracker</string>
     <string name="camera_required_title">Camera permission required</string>
     <string name="camera_required_description">For tracking to work, the app requires camera permissions.</string>
     <string name="camera_required_button">Request permission</string>
