@@ -60,7 +60,7 @@ fun SettingsScreen(
     val navController = LocalNavController.current
 
     val hazeState = remember { HazeState() }
-    val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surfaceDim)
+    val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surface)
 
     val connectionState by vm.connectionState.collectAsState()
     val faceTrackingState by vm.faceTrackingState.collectAsState()
