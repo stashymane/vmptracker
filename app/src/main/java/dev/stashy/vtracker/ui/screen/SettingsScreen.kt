@@ -35,12 +35,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.mediapipe.tasks.core.Delegate
-import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild
 import dev.stashy.vtracker.R
-import dev.stashy.vtracker.ui.LocalHazeStyle
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsDialog
 import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsPart
@@ -60,7 +58,6 @@ fun SettingsScreen(
     val navController = LocalNavController.current
 
     val hazeState = remember { HazeState() }
-    val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surface)
 
     val connectionState by vm.connectionState.collectAsState()
     val faceTrackingState by vm.faceTrackingState.collectAsState()
@@ -102,7 +99,7 @@ fun SettingsScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.End),
             modifier = Modifier
                 .clipToBounds()
-                .hazeChild(hazeState, LocalHazeStyle.current)
+                .hazeChild(hazeState)
                 .padding(
                     start = 16.dp + contentPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = 16.dp + contentPadding.calculateEndPadding(LocalLayoutDirection.current),
@@ -126,7 +123,7 @@ fun SettingsScreen(
         }
     }
 
-    val dialogModifier = Modifier.hazeChild(hazeState, hazeStyle)
+    val dialogModifier = Modifier.hazeChild(hazeState)
 
     ConnectionSettingsDialog(connectionState, dialogModifier)
     FaceSettingsDialog(faceTrackingState, dialogModifier)

@@ -15,6 +15,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.chrisbanes.haze.HazeDefaults
+import dev.chrisbanes.haze.LocalHazeStyle
 import dev.stashy.vtracker.R
 import dev.stashy.vtracker.ui.screen.PermissionRequestScreen
 
