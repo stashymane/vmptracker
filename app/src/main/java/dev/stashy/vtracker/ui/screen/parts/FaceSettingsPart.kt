@@ -3,6 +3,7 @@ package dev.stashy.vtracker.ui.screen.parts
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 
 @Composable
 fun FaceSettingsPart(state: SettingsViewmodel.FaceTrackingState) {
+    var enabled by state.enabled
     var runner by state.runner
     var detectionConfidence by state.detectionConfidence
     var trackingConfidence by state.trackingConfidence
@@ -30,7 +32,9 @@ fun FaceSettingsPart(state: SettingsViewmodel.FaceTrackingState) {
 
     var runnerDialogVisible by state.runnerDialogVisible
 
-    TitleRow(R.string.settings_category_face_tracking, Icons.Default.Face)
+    TitleRow(R.string.settings_category_face_tracking, Icons.Default.Face) {
+        Switch(enabled, { enabled = !enabled })
+    }
 
     SettingsRow(
         title = { Text(stringResource(R.string.setting_runner_title)) },

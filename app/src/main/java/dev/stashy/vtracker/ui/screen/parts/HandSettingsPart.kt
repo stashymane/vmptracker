@@ -3,6 +3,7 @@ package dev.stashy.vtracker.ui.screen.parts
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WavingHand
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 
 @Composable
 fun HandSettingsPart(state: SettingsViewmodel.HandTrackingState) {
+    var enabled by state.enabled
     var runner by state.runner
     var detectionConfidence by state.detectionConfidence
     var trackingConfidence by state.trackingConfidence
@@ -30,8 +32,10 @@ fun HandSettingsPart(state: SettingsViewmodel.HandTrackingState) {
 
     var runnerDialogVisible by state.runnerDialogVisible
 
-    TitleRow(R.string.settings_category_hand_tracking, Icons.Default.WavingHand)
-
+    TitleRow(R.string.settings_category_hand_tracking, Icons.Default.WavingHand) {
+        Switch(enabled, { enabled = !enabled })
+    }
+    
     SettingsRow(
         title = { Text(stringResource(R.string.setting_runner_title)) },
         description = { Text(stringResource(R.string.setting_runner_description)) },

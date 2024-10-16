@@ -141,7 +141,7 @@ fun SettingsScreen(
 }
 
 @Composable
-fun TitleRow(titleId: Int, icon: ImageVector) {
+fun TitleRow(titleId: Int, icon: ImageVector, control: (@Composable () -> Unit)? = null) {
     Row(
         modifier = Modifier.padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -152,6 +152,10 @@ fun TitleRow(titleId: Int, icon: ImageVector) {
             stringResource(titleId),
             style = MaterialTheme.typography.headlineSmall
         )
+        if (control != null) {
+            Spacer(Modifier.weight(1f))
+            control()
+        }
     }
 }
 

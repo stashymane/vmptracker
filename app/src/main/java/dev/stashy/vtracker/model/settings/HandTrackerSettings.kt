@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HandTrackerSettings(
+    val enabled: Boolean = false,
     val hands: Int = 2,
     val runner: Delegate = Delegate.GPU,
     val detectionConfidence: Float = 0.5f,

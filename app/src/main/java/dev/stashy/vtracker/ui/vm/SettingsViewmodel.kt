@@ -29,7 +29,7 @@ class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
         faceTrackingState.tryEmit(FaceTrackingState())
     }
 
-    class ConnectionState {
+    class ConnectionState() {
         val protocol = mutableStateOf("VTracker")
         val ipAddress = mutableStateOf(IpAddress("192.168.1.10", 5123))
 
@@ -38,15 +38,17 @@ class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
         fun toSettings() = ConnectionSettings.VTracker(ipAddress.value)
     }
 
-    class FaceTrackingState {
-        val runner = mutableStateOf<Delegate>(Delegate.GPU)
-        val detectionConfidence = mutableFloatStateOf(0.5f)
-        val trackingConfidence = mutableFloatStateOf(0.5f)
-        val presenceConfidence = mutableFloatStateOf(0.5f)
+    class FaceTrackingState(settings: FaceTrackerSettings = FaceTrackerSettings()) {
+        val enabled = mutableStateOf(settings.enabled)
+        val runner = mutableStateOf<Delegate>(settings.runner)
+        val detectionConfidence = mutableFloatStateOf(settings.detectionConfidence)
+        val trackingConfidence = mutableFloatStateOf(settings.trackingConfidence)
+        val presenceConfidence = mutableFloatStateOf(settings.presenceConfidence)
 
         val runnerDialogVisible = mutableStateOf(false)
 
         fun toSettings() = FaceTrackerSettings(
+            enabled.value,
             1,
             runner.value,
             detectionConfidence.floatValue,
@@ -55,15 +57,17 @@ class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
         )
     }
 
-    class HandTrackingState {
-        val runner = mutableStateOf<Delegate>(Delegate.GPU)
-        val detectionConfidence = mutableFloatStateOf(0.5f)
-        val trackingConfidence = mutableFloatStateOf(0.5f)
-        val presenceConfidence = mutableFloatStateOf(0.5f)
+    class HandTrackingState(settings: HandTrackerSettings = HandTrackerSettings()) {
+        val enabled = mutableStateOf(settings.enabled)
+        val runner = mutableStateOf<Delegate>(settings.runner)
+        val detectionConfidence = mutableFloatStateOf(settings.detectionConfidence)
+        val trackingConfidence = mutableFloatStateOf(settings.trackingConfidence)
+        val presenceConfidence = mutableFloatStateOf(settings.presenceConfidence)
 
         val runnerDialogVisible = mutableStateOf(false)
 
         fun toSettings() = HandTrackerSettings(
+            enabled.value,
             2,
             runner.value,
             detectionConfidence.floatValue,
