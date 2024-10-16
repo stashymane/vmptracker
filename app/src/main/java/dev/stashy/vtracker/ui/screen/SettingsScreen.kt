@@ -1,6 +1,5 @@
 package dev.stashy.vtracker.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -63,12 +62,6 @@ fun SettingsScreen(
     val hazeState = remember { HazeState() }
     val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surfaceDim)
 
-    val surfaceGradient =
-        listOf(
-            MaterialTheme.colorScheme.surface.copy(0f),
-            MaterialTheme.colorScheme.surface
-        )
-
     val connectionState by vm.connectionState.collectAsState()
     val faceTrackingState by vm.faceTrackingState.collectAsState()
     val handTrackingState by vm.handTrackingState.collectAsState()
@@ -79,7 +72,6 @@ fun SettingsScreen(
     ) {
         Box(
             Modifier
-                .padding(contentPadding)
                 .haze(hazeState)
                 .matchParentSize()
         ) {
@@ -87,7 +79,7 @@ fun SettingsScreen(
                 Modifier
                     .verticalScroll(scrollState)
                     .matchParentSize()
-                    .padding(bottom = 64.dp)
+                    .padding(contentPadding)
             ) {
                 Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -101,6 +93,8 @@ fun SettingsScreen(
                 ConnectionSettingsPart(connectionState)
                 FaceSettingsPart(faceTrackingState)
                 HandSettingsPart(handTrackingState)
+
+                Spacer(Modifier.height(64.dp))
             }
         }
 
@@ -109,7 +103,6 @@ fun SettingsScreen(
             modifier = Modifier
                 .clipToBounds()
                 .hazeChild(hazeState, LocalHazeStyle.current)
-                .background(Brush.verticalGradient(surfaceGradient))
                 .padding(
                     start = 16.dp + contentPadding.calculateStartPadding(LocalLayoutDirection.current),
                     end = 16.dp + contentPadding.calculateEndPadding(LocalLayoutDirection.current),
