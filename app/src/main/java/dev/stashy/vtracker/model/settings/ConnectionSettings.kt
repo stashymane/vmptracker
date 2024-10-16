@@ -4,8 +4,8 @@ import dev.stashy.vtracker.model.IpAddress
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class SenderSettings {
+sealed class ConnectionSettings {
     data class VTracker(
         val address: IpAddress = IpAddress("127.0.0.1", 5123)
-    ) : SenderSettings()
+    ) : ConnectionSettings()
 }
