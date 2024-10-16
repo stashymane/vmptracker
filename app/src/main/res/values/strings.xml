@@ -5,6 +5,9 @@
     <string name="camera_required_button">Request permission</string>
     <string name="start_button">Start</string>
     <string name="stop_button">Stop</string>
+    <string name="settings_category_connection">Connection</string>
+    <string name="settings_category_face_tracking">Face Tracking</string>
+    <string name="settings_category_hand_tracking">Hand Tracking</string>
     <string name="setting_camera_title">Camera</string>
     <string name="setting_camera_description">Which camera to use for tracking.</string>
     <string name="setting_camera_front">Front</string>
@@ -23,8 +26,6 @@
     <string name="settings_discard">Discard</string>
     <string name="settings_reset">Reset to defaults</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_category_face_tracking">Face Tracking</string>
-    <string name="settings_category_connection">Connection</string>
     <string name="setting_targetip_title">Target address</string>
     <string name="setting_targetip_description">The IP address of the receiver.</string>
     <string name="setting_protocol_title">Protocol</string>

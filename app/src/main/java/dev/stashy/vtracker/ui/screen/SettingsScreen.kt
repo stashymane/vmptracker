@@ -47,6 +47,8 @@ import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsDialog
 import dev.stashy.vtracker.ui.screen.parts.ConnectionSettingsPart
 import dev.stashy.vtracker.ui.screen.parts.FaceSettingsDialog
 import dev.stashy.vtracker.ui.screen.parts.FaceSettingsPart
+import dev.stashy.vtracker.ui.screen.parts.HandSettingsDialog
+import dev.stashy.vtracker.ui.screen.parts.HandSettingsPart
 import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 import org.koin.androidx.compose.koinViewModel
 
@@ -61,8 +63,6 @@ fun SettingsScreen(
     val hazeState = remember { HazeState() }
     val hazeStyle = HazeDefaults.style(MaterialTheme.colorScheme.surfaceDim)
 
-    val dialogModifier = Modifier.hazeChild(hazeState, hazeStyle)
-
     val surfaceGradient =
         listOf(
             MaterialTheme.colorScheme.surface.copy(0f),
@@ -71,6 +71,7 @@ fun SettingsScreen(
 
     val connectionState by vm.connectionState.collectAsState()
     val faceTrackingState by vm.faceTrackingState.collectAsState()
+    val handTrackingState by vm.handTrackingState.collectAsState()
 
     Box(
         Modifier
@@ -99,6 +100,7 @@ fun SettingsScreen(
 
                 ConnectionSettingsPart(connectionState)
                 FaceSettingsPart(faceTrackingState)
+                HandSettingsPart(handTrackingState)
             }
         }
 
@@ -131,8 +133,11 @@ fun SettingsScreen(
         }
     }
 
+    val dialogModifier = Modifier.hazeChild(hazeState, hazeStyle)
+
     ConnectionSettingsDialog(connectionState, dialogModifier)
     FaceSettingsDialog(faceTrackingState, dialogModifier)
+    HandSettingsDialog(handTrackingState, dialogModifier)
 }
 
 @Composable
