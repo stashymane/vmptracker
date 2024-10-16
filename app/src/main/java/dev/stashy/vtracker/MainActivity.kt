@@ -30,6 +30,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -46,14 +47,21 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        setupNotificationChannel()
         Intent(this, TrackerServiceImpl::class.java).also { intent ->
             bindService(intent, connection, BIND_AUTO_CREATE)
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        stopKoin()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        setupNotificationChannel()
         enableEdgeToEdge()
 
         startKoin {
