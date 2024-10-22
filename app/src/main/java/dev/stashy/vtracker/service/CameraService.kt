@@ -1,8 +1,11 @@
 package dev.stashy.vtracker.service
 
 import android.content.Context
+import android.hardware.camera2.CaptureRequest
+import android.util.Range
 import androidx.annotation.OptIn
 import androidx.camera.camera2.interop.Camera2CameraInfo
+import androidx.camera.camera2.interop.Camera2Interop
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraInfo
@@ -72,6 +75,13 @@ interface CameraService {
         previewUseCase.surfaceProvider = null
         cameraProvider.unbind(previewUseCase)
     }
+
+    @OptIn(ExperimentalCamera2Interop::class)
+    fun previewUseCase(): Preview =
+        Preview.Builder().apply {
+            Camera2Interop.Extender(this)
+                .setCaptureRequestOption(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, Range(30, 60))
+        }.build()
 }
 
 @OptIn(ExperimentalCamera2Interop::class)

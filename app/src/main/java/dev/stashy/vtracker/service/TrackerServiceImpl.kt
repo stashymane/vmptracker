@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class TrackerServiceImpl : Service(), AppService {
     override lateinit var cameraProvider: ProcessCameraProvider
-    override val previewUseCase: Preview = Preview.Builder().build()
+    override val previewUseCase: Preview = previewUseCase()
     override val surfaceRequests: MutableStateFlow<SurfaceRequest?> = MutableStateFlow(null)
     private val faceTracker = FaceTracker()
 
