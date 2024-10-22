@@ -16,7 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import dev.stashy.vtracker.service.TrackerService
+import dev.stashy.vtracker.service.AppService
 import dev.stashy.vtracker.service.TrackerServiceImpl
 import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.Layout
@@ -37,11 +37,11 @@ import org.koin.dsl.module
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : ComponentActivity() {
-    val tracker: MutableStateFlow<TrackerService?> = MutableStateFlow(null)
+    val serviceState: MutableStateFlow<AppService?> = MutableStateFlow(null)
 
     val module = module {
         single { androidContext().dataStore }
-        viewModel { MainViewmodel(tracker.value!!) }
+        viewModel { MainViewmodel(serviceState.value!!) }
         viewModel { SettingsViewmodel(get()) }
     }
 
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val trackerService by tracker.collectAsState()
+            val trackerService by serviceState.collectAsState()
 
             KoinAndroidContext {
                 VTrackerTheme {
@@ -91,11 +91,11 @@ class MainActivity : ComponentActivity() {
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as TrackerServiceImpl.LocalBinder
-            tracker.tryEmit(binder.getService())
+            serviceState.tryEmit(binder.getService())
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            tracker.tryEmit(null)
+            serviceState.tryEmit(null)
         }
     }
 }

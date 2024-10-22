@@ -15,8 +15,8 @@ serialization-module = "1.7.3"
 #noinspection GradleDependency
 mediapipe = "0.10.15"
 materialIconsExtended = "1.7.4"
-camerax = "1.4.0-rc04"
-viewfinder-compose = "1.0.0-alpha02"
+camerax = "1.5.0-alpha02"
+viewfinder-compose = "1.4.0-alpha09"
 accompanist = "0.36.0"
 navigation-compose = "2.8.3"
 datastore = "1.1.1"
@@ -47,10 +47,11 @@ mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref =
 
 camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
 camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+camerax-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
 camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 camerax-video = { module = "androidx.camera:camera-video", version.ref = "camerax" }
 camerax-extensions = { module = "androidx.camera:camera-extensions", version.ref = "camerax" }
-camerax-viewfinder-compose = { module = "androidx.camera:camera-viewfinder-compose", version.ref = "viewfinder-compose" }
+camerax-viewfinder-compose = { module = "androidx.camera.viewfinder:viewfinder-compose", version.ref = "viewfinder-compose" }
 
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-module" }
 serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "serialization-module" }
@@ -66,4 +67,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization-plugin" }
 
 [bundles]
-camerax = ["camerax-core", "camerax-camera2", "camerax-lifecycle", "camerax-video", "camerax-extensions", "camerax-viewfinder-compose"]
+camerax = ["camerax-core", "camerax-camera2", "camerax-compose", "camerax-lifecycle", "camerax-video", "camerax-extensions", "camerax-viewfinder-compose"]

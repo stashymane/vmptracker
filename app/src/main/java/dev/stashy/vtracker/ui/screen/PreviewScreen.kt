@@ -1,5 +1,7 @@
 package dev.stashy.vtracker.ui.screen
 
+import androidx.camera.compose.CameraXViewfinder
+import androidx.camera.viewfinder.surface.ImplementationMode
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.stashy.vtracker.R
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.component.LocalNavController
@@ -45,9 +49,12 @@ import org.koin.compose.koinInject
 @Composable
 fun PreviewScreen(
     contentPadding: PaddingValues,
-    viewmodel: MainViewmodel = koinInject()
+    vm: MainViewmodel = koinInject()
 ) {
-    val status by viewmodel.status.collectAsState()
+    val status by vm.status.collectAsState()
+    val surfaceRequest by vm.surfaceRequests.collectAsState()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
     val navController = LocalNavController.current
 
     var showCameraPicker by remember { mutableStateOf(false) }
@@ -66,8 +73,21 @@ fun PreviewScreen(
         }, label = "run button content color"
     )
 
+    LifecycleStartEffect(Unit) {
+        vm.startPreview(lifecycleOwner, "1", 0)
+        onStopOrDispose {
+            vm.stopPreview()
+        }
+    }
+
     Box(Modifier.fillMaxSize()) {
-        //TODO viewfinder should be here
+        surfaceRequest?.let {
+            CameraXViewfinder(
+                it,
+                implementationMode = ImplementationMode.EMBEDDED,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         Box(
             Modifier
@@ -85,8 +105,8 @@ fun PreviewScreen(
 
             Button(
                 {
-                    if (status is TrackerService.Status.Running) viewmodel.stop()
-                    else viewmodel.start()
+                    if (status is TrackerService.Status.Running) vm.stop()
+                    else vm.start()
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = startButtonColor,
@@ -130,7 +150,7 @@ fun PreviewScreen(
 
     if (showCameraPicker)
         ModalBottomSheet({ showCameraPicker = false }, sheetState = bottomSheetState) {
-            CameraChoiceContent("1", { showCameraPicker = false }) { }
+            CameraChoiceContent(vm, "1", { showCameraPicker = false }) { }
         }
 }
 

@@ -2,7 +2,6 @@ package dev.stashy.vtracker.service.tracking
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.os.SystemClock
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
@@ -13,18 +12,19 @@ import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
 import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarkerResult
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.applySettings
+import dev.stashy.vtracker.service.tracking.FaceTracker.Frame
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import java.lang.RuntimeException
 
-class FaceTracker {
+class FaceTracker : Tracker<Result<Frame>, FaceTrackerSettings> {
     private var landmarker: FaceLandmarker? = null
     private val task = "face_landmarker.task"
 
     private val channel: Channel<Result<Frame>> = Channel()
-    val results: ReceiveChannel<Result<Frame>> get() = channel
+    override val results: ReceiveChannel<Result<Frame>> get() = channel
 
-    fun start(context: Context, settings: FaceTrackerSettings) {
+    override fun start(context: Context, settings: FaceTrackerSettings) {
         landmarker?.close()
 
         val baseOptions = BaseOptions.builder()
@@ -50,28 +50,19 @@ class FaceTracker {
         }
     }
 
-    fun stop() {
+    override fun stop() {
         landmarker?.close()
         landmarker = null
     }
 
-    fun feedImage(imageProxy: ImageProxy, flip: Boolean = false) {
+    fun asd(imageProxy: ImageProxy, flip: Boolean = false) {
+        //TODO move this out of facetracker and do for all trackers
+
+    }
+
+    override fun submit(image: Bitmap) {
         val frameTime = SystemClock.uptimeMillis()
-
-        val bitmapBuffer =
-            Bitmap.createBitmap(imageProxy.width, imageProxy.height, Bitmap.Config.ARGB_8888)
-        imageProxy.use { bitmapBuffer.copyPixelsFromBuffer(it.planes[0].buffer) }
-
-        val matrix = Matrix().apply {
-            postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-            if (flip) postScale(-1f, 1f, imageProxy.width.toFloat(), imageProxy.height.toFloat())
-        }
-
-        val rotatedBitmap = Bitmap.createBitmap(
-            bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true
-        )
-
-        landmarker?.detectAsync(BitmapImageBuilder(rotatedBitmap).build(), frameTime)
+        landmarker?.detectAsync(BitmapImageBuilder(image).build(), frameTime)
     }
 
     private fun receiveResult(result: FaceLandmarkerResult, image: MPImage) {
