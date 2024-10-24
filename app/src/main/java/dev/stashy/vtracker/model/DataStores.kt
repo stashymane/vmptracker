@@ -36,5 +36,5 @@ val Context.handTrackerSettings: DataStore<HandTrackerSettings> by dataStore(
 
 val Context.connectionSettings: DataStore<ConnectionSettings> by dataStore(
     fileName = "connection",
-    serializer = dataStoreSerializer(ConnectionSettings.VTracker())
+    serializer = dataStoreSerializer(ConnectionSettings())
 )

@@ -6,7 +6,6 @@ import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mediapipe.tasks.core.Delegate
-import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
@@ -46,18 +45,13 @@ class SettingsViewmodel(
         handTrackingState.emit(HandTrackingState())
     }
 
-    class ConnectionState(settings: ConnectionSettings = ConnectionSettings.VTracker()) {
+    class ConnectionState(settings: ConnectionSettings = ConnectionSettings()) {
         val protocol = mutableStateOf("VTracker")
-        val ipAddress = mutableStateOf(
-            when (settings) {
-                is ConnectionSettings.VTracker -> settings.address
-                else -> IpAddress("127.0.0.1", 5123)
-            }
-        )
+        val ipAddress = mutableStateOf(settings.address)
 
         val ipAddressDialogVisible = mutableStateOf(false)
 
-        fun toSettings(): ConnectionSettings = ConnectionSettings.VTracker(ipAddress.value)
+        fun toSettings(): ConnectionSettings = ConnectionSettings(ipAddress.value)
     }
 
     class FaceTrackingState(settings: FaceTrackerSettings = FaceTrackerSettings()) {
