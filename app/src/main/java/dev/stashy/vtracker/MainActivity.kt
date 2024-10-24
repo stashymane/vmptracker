@@ -1,7 +1,6 @@
 package dev.stashy.vtracker
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
@@ -13,9 +12,10 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
+import dev.stashy.vtracker.model.dataStores
+import dev.stashy.vtracker.model.settings.ConnectionSettings
+import dev.stashy.vtracker.model.settings.FaceTrackerSettings
+import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import dev.stashy.vtracker.service.AppService
 import dev.stashy.vtracker.service.TrackerServiceImpl
 import dev.stashy.vtracker.service.setupNotificationChannel
@@ -32,17 +32,22 @@ import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : ComponentActivity() {
     val serviceState: MutableStateFlow<AppService?> = MutableStateFlow(null)
 
     val module = module {
-        single { androidContext().dataStore }
+        includes(dataStores)
         viewModel { MainViewmodel(serviceState.value!!) }
-        viewModel { SettingsViewmodel(get()) }
+        viewModel {
+            SettingsViewmodel(
+                get(named<ConnectionSettings>()),
+                get(named<FaceTrackerSettings>()),
+                get(named<HandTrackerSettings>())
+            )
+        }
     }
 
     override fun onStart() {

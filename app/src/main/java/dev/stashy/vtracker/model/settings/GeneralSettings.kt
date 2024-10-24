@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GeneralSettings(
-    val cameraId: String
+    val cameraId: String? = null
 )

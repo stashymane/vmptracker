@@ -115,7 +115,7 @@ fun SettingsScreen(
                 Text(stringResource(R.string.settings_discard))
             }
 
-            Button({}) {
+            Button({ vm.save(navController::popBackStack) }) {
                 Icon(Icons.Default.Done, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.settings_save))

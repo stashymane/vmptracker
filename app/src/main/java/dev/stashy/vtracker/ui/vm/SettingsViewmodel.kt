@@ -3,39 +3,61 @@ package dev.stashy.vtracker.ui.vm
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.mediapipe.tasks.core.Delegate
 import dev.stashy.vtracker.model.IpAddress
 import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
+class SettingsViewmodel(
+    val connectionSettings: DataStore<ConnectionSettings>,
+    val faceSettings: DataStore<FaceTrackerSettings>,
+    val handSettings: DataStore<HandTrackerSettings>
+) : ViewModel() {
     val connectionState = MutableStateFlow(ConnectionState())
     val faceTrackingState = MutableStateFlow(FaceTrackingState())
     val handTrackingState = MutableStateFlow(HandTrackingState())
+    //TODO all this repetition can be abstracted away lol
 
-    fun save() {
-        val connection = connectionState.value.toSettings()
-        val face = faceTrackingState.value.toSettings()
-        val hand = handTrackingState.value.toSettings()
-        //TODO actually save
+    init {
+        viewModelScope.launch {
+            connectionState.emit(ConnectionState(connectionSettings.data.first()))
+            faceTrackingState.emit(FaceTrackingState(faceSettings.data.first()))
+            handTrackingState.emit(HandTrackingState(handSettings.data.first()))
+        }
     }
 
-    fun reset() {
-        connectionState.tryEmit(ConnectionState())
-        faceTrackingState.tryEmit(FaceTrackingState())
+    fun save(onFinished: () -> Unit) = viewModelScope.launch {
+        connectionSettings.updateData { connectionState.value.toSettings() }
+        faceSettings.updateData { faceTrackingState.value.toSettings() }
+        handSettings.updateData { handTrackingState.value.toSettings() }
+
+        onFinished()
     }
 
-    class ConnectionState() {
+    fun reset() = viewModelScope.launch {
+        connectionState.emit(ConnectionState())
+        faceTrackingState.emit(FaceTrackingState())
+        handTrackingState.emit(HandTrackingState())
+    }
+
+    class ConnectionState(settings: ConnectionSettings = ConnectionSettings.VTracker()) {
         val protocol = mutableStateOf("VTracker")
-        val ipAddress = mutableStateOf(IpAddress("192.168.1.10", 5123))
+        val ipAddress = mutableStateOf(
+            when (settings) {
+                is ConnectionSettings.VTracker -> settings.address
+                else -> IpAddress("127.0.0.1", 5123)
+            }
+        )
 
         val ipAddressDialogVisible = mutableStateOf(false)
 
-        fun toSettings() = ConnectionSettings.VTracker(ipAddress.value)
+        fun toSettings(): ConnectionSettings = ConnectionSettings.VTracker(ipAddress.value)
     }
 
     class FaceTrackingState(settings: FaceTrackerSettings = FaceTrackerSettings()) {
@@ -47,7 +69,7 @@ class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
 
         val runnerDialogVisible = mutableStateOf(false)
 
-        fun toSettings() = FaceTrackerSettings(
+        fun toSettings(): FaceTrackerSettings = FaceTrackerSettings(
             enabled.value,
             1,
             runner.value,
@@ -66,7 +88,7 @@ class SettingsViewmodel(val dataStore: DataStore<Preferences>) : ViewModel() {
 
         val runnerDialogVisible = mutableStateOf(false)
 
-        fun toSettings() = HandTrackerSettings(
+        fun toSettings(): HandTrackerSettings = HandTrackerSettings(
             enabled.value,
             2,
             runner.value,
