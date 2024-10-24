@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.stashy.vtracker.R
+import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
@@ -52,6 +53,7 @@ fun PreviewScreen(
     vm: MainViewmodel = koinInject()
 ) {
     val status by vm.status.collectAsState()
+    val generalSettings by vm.generalSettings.data.collectAsState(GeneralSettings())
     val surfaceRequest by vm.surfaceRequests.collectAsState()
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -73,8 +75,8 @@ fun PreviewScreen(
         }, label = "run button content color"
     )
 
-    LifecycleStartEffect(Unit) {
-        vm.startPreview(lifecycleOwner, "1", 0)
+    LifecycleStartEffect(generalSettings.cameraId) {
+        vm.startPreview(lifecycleOwner, generalSettings.cameraId ?: "1", 0)
         onStopOrDispose {
             vm.stopPreview()
         }
@@ -150,7 +152,11 @@ fun PreviewScreen(
 
     if (showCameraPicker)
         ModalBottomSheet({ showCameraPicker = false }, sheetState = bottomSheetState) {
-            CameraChoiceContent(vm, "1", { showCameraPicker = false }) { }
+            CameraChoiceContent(
+                vm,
+                generalSettings.cameraId ?: "1",
+                { showCameraPicker = false }, vm::switchCamera
+            )
         }
 }
 

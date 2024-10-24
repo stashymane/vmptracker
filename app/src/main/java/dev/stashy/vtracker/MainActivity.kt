@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import dev.stashy.vtracker.model.dataStores
 import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
+import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import dev.stashy.vtracker.service.AppService
 import dev.stashy.vtracker.service.TrackerServiceImpl
@@ -40,7 +41,12 @@ class MainActivity : ComponentActivity() {
 
     val module = module {
         includes(dataStores)
-        viewModel { MainViewmodel(serviceState.value!!) }
+        viewModel {
+            MainViewmodel(
+                serviceState.value!!,
+                get(named<GeneralSettings>())
+            )
+        }
         viewModel {
             SettingsViewmodel(
                 get(named<ConnectionSettings>()),
