@@ -12,7 +12,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val dataStores = module {
+fun dataStores() = module {
     single(named<GeneralSettings>()) { androidContext().generalSettings }
     single(named<FaceTrackerSettings>()) { androidContext().faceTrackerSettings }
     single(named<HandTrackerSettings>()) { androidContext().handTrackerSettings }

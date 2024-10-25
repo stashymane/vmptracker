@@ -42,6 +42,7 @@ androidx-materialIconsExtended = { module = "androidx.compose.material:material-
 
 androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-androidx-startup = { module = "io.insert-koin:koin-androidx-startup", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 
@@ -68,3 +69,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 
 [bundles]
 camerax = ["camerax-core", "camerax-camera2", "camerax-compose", "camerax-lifecycle", "camerax-video", "camerax-extensions", "camerax-viewfinder-compose"]
+koin = ["koin-core", "koin-androidx-compose", "koin-androidx-startup"]
