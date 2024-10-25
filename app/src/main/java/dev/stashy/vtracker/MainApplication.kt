@@ -12,6 +12,7 @@ import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import dev.stashy.vtracker.service.AppService
 import dev.stashy.vtracker.service.TrackerServiceImpl
+import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.vm.MainViewmodel
 import dev.stashy.vtracker.ui.vm.SettingsViewmodel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +55,9 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        
+        setupNotificationChannel()
+
         Intent(this, TrackerServiceImpl::class.java).also { intent ->
             bindService(intent, connection, BIND_AUTO_CREATE)
         }

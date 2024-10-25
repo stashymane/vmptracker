@@ -8,7 +8,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.Layout
 import dev.stashy.vtracker.ui.PermissionGate
 import dev.stashy.vtracker.ui.screen.LoadingScreen
@@ -19,7 +18,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupNotificationChannel()
         enableEdgeToEdge()
 
         val app = applicationContext as MainApplication
