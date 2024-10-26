@@ -90,13 +90,13 @@ fun PreviewScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp, vertical = 16.dp),
-                isActive = status is TrackerService.Status.Running,
+                serviceStatus = status,
                 showPreview = generalSettings.displayPreview,
                 onPickLens = { showCameraPicker = true },
                 onToggleShow = { vm.showPreview(!generalSettings.displayPreview) },
                 onStart = {
-                    if (status is TrackerService.Status.Running) vm.stop()
-                    else vm.start()
+                    if (status is TrackerService.Status.Running) vm.stopTracking()
+                    else vm.startTracking()
                 },
                 onSettings = { navController.navigate(Screen.Settings) })
         }
@@ -112,7 +112,7 @@ fun PreviewScreen(
         }
 
     (status as? TrackerService.Status.Error)?.let { error ->
-        val dismiss = { vm.stop() }
+        val dismiss = { vm.stopTracking() }
         ADialog(true, dismiss) {
             Column(modifier = Modifier.padding(32.dp)) {
                 Column(

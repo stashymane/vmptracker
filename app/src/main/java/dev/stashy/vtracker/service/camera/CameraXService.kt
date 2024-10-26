@@ -7,15 +7,21 @@ import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.datastore.core.DataStore
 import androidx.lifecycle.LifecycleOwner
+import dev.stashy.vtracker.model.settings.GeneralSettings
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 
-class CameraXService : CameraService, KoinComponent {
+class CameraXService(scope: CoroutineScope) : CameraService, KoinComponent,
+    CoroutineScope by scope {
     override val surfaceRequests: MutableStateFlow<SurfaceRequest?> = MutableStateFlow(null)
 
     private val cameraProvider: ProcessCameraProvider by inject()
+    private val generalSettings: DataStore<GeneralSettings> by inject(named<GeneralSettings>())
 
     override fun getAvailableCameras(): List<CameraInfo> =
         cameraProvider.availableCameraInfos

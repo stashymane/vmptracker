@@ -1,6 +1,5 @@
 package dev.stashy.vtracker.service
 
-import androidx.camera.core.ImageProxy
 import dev.stashy.vtracker.service.tracking.FaceTracker
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +12,8 @@ interface TrackerService {
     }
 
     val status: StateFlow<Status>
-    val frames: ReceiveChannel<ImageProxy>
     val results: ReceiveChannel<Result<FaceTracker.Frame>>
 
-    fun start()
-    fun stop()
+    fun startTracking()
+    fun stopTracking()
 }

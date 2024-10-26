@@ -31,11 +31,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.stashy.vtracker.R
+import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 
 @Composable
 fun CameraControlRow(
-    isActive: Boolean = false,
+    serviceStatus: TrackerService.Status,
     showPreview: Boolean = false,
     onPickLens: () -> Unit,
     onToggleShow: () -> Unit,
@@ -44,14 +45,16 @@ fun CameraControlRow(
     modifier: Modifier = Modifier
 ) {
     val startButtonColor by animateColorAsState(
-        if (isActive)
-            MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.surfaceContainer, label = "run button color"
+        when (serviceStatus) {
+            is TrackerService.Status.Running -> MaterialTheme.colorScheme.primary
+            else -> MaterialTheme.colorScheme.surfaceContainer
+        }, label = "run button color"
     )
     val startButtonContentColor by animateColorAsState(
-        if (isActive)
-            MaterialTheme.colorScheme.onPrimary
-        else MaterialTheme.colorScheme.onSurface, label = "run button content color"
+        when (serviceStatus) {
+            is TrackerService.Status.Running -> MaterialTheme.colorScheme.onPrimary
+            else -> MaterialTheme.colorScheme.onSurface
+        }, label = "run button content color"
     )
 
     Row(
@@ -84,12 +87,12 @@ fun CameraControlRow(
             ),
             modifier = Modifier.padding(8.dp)
         ) {
-            AnimatedContent(isActive, label = "start button text") {
+            AnimatedContent(serviceStatus, label = "start button text") {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (it) {
+                    if (it is TrackerService.Status.Running) {
                         Icon(imageVector = Icons.Default.Stop, null)
                         Text(stringResource(R.string.stop_button))
                     } else {
@@ -112,6 +115,14 @@ fun CameraControlRow(
 @Composable
 private fun CameraControlRowPreview() {
     VTrackerTheme {
-        CameraControlRow(false, false, {}, {}, {}, {}, Modifier.fillMaxWidth())
+        CameraControlRow(
+            TrackerService.Status.NotRunning,
+            false,
+            {},
+            {},
+            {},
+            {},
+            Modifier.fillMaxWidth()
+        )
     }
 }
