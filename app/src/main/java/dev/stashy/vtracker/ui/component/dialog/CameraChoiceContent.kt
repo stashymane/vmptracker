@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.stashy.vtracker.service.CameraService
+import dev.stashy.vtracker.service.camera.CameraService
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import kotlin.math.round
 

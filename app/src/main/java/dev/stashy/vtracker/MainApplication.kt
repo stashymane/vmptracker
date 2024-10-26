@@ -5,13 +5,14 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import androidx.camera.lifecycle.ProcessCameraProvider
 import dev.stashy.vtracker.model.dataStores
 import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import dev.stashy.vtracker.service.AppService
-import dev.stashy.vtracker.service.TrackerServiceImpl
+import dev.stashy.vtracker.service.MainService
 import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.vm.MainViewmodel
 import dev.stashy.vtracker.ui.vm.SettingsViewmodel
@@ -30,6 +31,7 @@ class MainApplication : Application() {
 
     val module = module {
         includes(dataStores())
+        single { ProcessCameraProvider.getInstance(this@MainApplication).get() }
         viewModel {
             MainViewmodel(
                 serviceState.value!!,
@@ -55,17 +57,17 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        
+
         setupNotificationChannel()
 
-        Intent(this, TrackerServiceImpl::class.java).also { intent ->
+        Intent(this, MainService::class.java).also { intent ->
             bindService(intent, connection, BIND_AUTO_CREATE)
         }
     }
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as TrackerServiceImpl.LocalBinder
+            val binder = service as MainService.LocalBinder
             serviceState.tryEmit(binder.getService())
         }
 

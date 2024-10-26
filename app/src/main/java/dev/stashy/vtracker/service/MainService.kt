@@ -7,21 +7,18 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
-import androidx.camera.core.SurfaceRequest
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.service.TrackerService.Status
+import dev.stashy.vtracker.service.camera.CameraService
+import dev.stashy.vtracker.service.camera.CameraXService
 import dev.stashy.vtracker.service.tracking.FaceTracker
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.koin.core.component.KoinComponent
 
-class TrackerServiceImpl : Service(), AppService {
-    override lateinit var cameraProvider: ProcessCameraProvider
-    override val previewUseCase: Preview = previewUseCase()
-    override val surfaceRequests: MutableStateFlow<SurfaceRequest?> = MutableStateFlow(null)
+class MainService(val cameraXService: CameraService = CameraXService()) : Service(), AppService,
+    KoinComponent, CameraService by cameraXService {
     private val faceTracker = FaceTracker()
 
     override val status: MutableStateFlow<Status> = MutableStateFlow(Status.NotRunning)
@@ -29,11 +26,6 @@ class TrackerServiceImpl : Service(), AppService {
         get() = TODO("Not yet implemented")
 
     override val results get() = faceTracker.results
-
-    override fun onCreate() {
-        super.onCreate()
-        cameraProvider = ProcessCameraProvider.getInstance(this).get()
-    }
 
     /**
      * Starts tracking.
@@ -54,29 +46,24 @@ class TrackerServiceImpl : Service(), AppService {
     }
 
     override fun onDestroy() {
-        cameraProvider.unbindAll()
+        cameraXService.stopAll()
         faceTracker.stop()
     }
 
     internal fun setupForegroundService() {
         try {
-            val notification = NotificationCompat.Builder(this, persistentNotificationChannelId)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setSilent(true)
-                .setContentTitle("VTracker is running")
-                .setContentText("Open the app for more details.")
-                .build()
-
             ServiceCompat.startForeground(
                 this,
                 100,
-                notification,
+                serviceNotification(),
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
                     ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA
-                else 0
+                else
+                    0
             )
         } catch (e: Exception) {
             status.tryEmit(Status.Error(e))
+            e.printStackTrace()
         }
     }
 
@@ -91,7 +78,7 @@ class TrackerServiceImpl : Service(), AppService {
     private val binder = LocalBinder()
 
     inner class LocalBinder : Binder() {
-        fun getService(): AppService = this@TrackerServiceImpl
+        fun getService(): AppService = this@MainService
     }
 
     override fun onBind(intent: Intent?): IBinder? = binder

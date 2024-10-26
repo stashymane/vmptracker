@@ -3,7 +3,6 @@ package dev.stashy.vtracker.service.tracking
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
-import androidx.camera.core.ImageProxy
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.core.BaseOptions
@@ -53,11 +52,6 @@ class FaceTracker : Tracker<Result<Frame>, FaceTrackerSettings> {
     override fun stop() {
         landmarker?.close()
         landmarker = null
-    }
-
-    fun asd(imageProxy: ImageProxy, flip: Boolean = false) {
-        //TODO move this out of facetracker and do for all trackers
-
     }
 
     override fun submit(image: Bitmap) {

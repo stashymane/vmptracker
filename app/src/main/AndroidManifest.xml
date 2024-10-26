@@ -39,7 +39,7 @@
         </activity>
 
         <service
-            android:name=".service.TrackerServiceImpl"
+            android:name=".service.MainService"
             android:foregroundServiceType="camera|microphone"
             android:exported="false" />
     </application>

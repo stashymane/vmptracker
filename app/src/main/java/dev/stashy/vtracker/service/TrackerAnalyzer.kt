@@ -4,10 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import dev.stashy.vtracker.service.tracking.Tracker
 import kotlin.use
 
-class TrackerAnalyzer(val trackers: List<Tracker<*, *>>, val flip: Boolean = false) :
+class TrackerAnalyzer(val analyze: (Bitmap) -> Unit, val flip: Boolean = false) :
     ImageAnalysis.Analyzer {
     override fun analyze(imageProxy: ImageProxy) {
         val bitmapBuffer =
@@ -28,8 +27,6 @@ class TrackerAnalyzer(val trackers: List<Tracker<*, *>>, val flip: Boolean = fal
             bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true
         )
 
-        trackers.forEach {
-            it.submit(rotatedBitmap)
-        }
+        analyze(rotatedBitmap)
     }
 }

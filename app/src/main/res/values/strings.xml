@@ -34,8 +34,8 @@
     <string name="setting_tracking_model_description">Only MediaPipe is supported at the moment.</string>
     <string name="setting_tracking_model_mediapipe">MediaPipe</string>
     <string name="starting_up">Starting up…</string>
-    <string name="notification_persistent_name">Service notification</string>
-    <string name="notification_persistent_description">Displayed when VTracker is running.</string>
+    <string name="notification_category_persistent_name">Service notification</string>
+    <string name="notification_category_persistent_description">Displayed when VTracker is running.</string>
     <string name="camera_facing_rear">Rear</string>
     <string name="camera_facing_front">Front</string>
     <string name="camera_facing_external">External</string>
@@ -45,4 +45,6 @@
     <string name="notification_required_title">Notification permission required</string>
     <string name="notification_required_description">The only notification we send is the one telling you whether VTracker is running.</string>
     <string name="setting_camera_current">(current)</string>
+    <string name="notification_persistent_title">vmptracker is running</string>
+    <string name="notification_persistent_description">Open the app for more details.</string>
 </resources>
