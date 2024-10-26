@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.navigation.compose)
     implementation(libs.haze)
+    implementation(libs.placeholder.material3)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
