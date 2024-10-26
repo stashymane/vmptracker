@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -101,14 +103,33 @@ fun PreviewScreen(
     (status as? TrackerService.Status.Error)?.let { error ->
         val dismiss = { vm.stop() }
         ADialog(true, dismiss) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Text("An error has occurred.", style = MaterialTheme.typography.titleLarge)
+            Column(modifier = Modifier.padding(32.dp)) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .verticalScroll(
+                            rememberScrollState()
+                        )
+                        .fillMaxSize()
+                ) {
+                    Text("An error has occurred.", style = MaterialTheme.typography.titleLarge)
 
-                error.exception.message?.let {
-                    Text("Exception: $it")
+                    Column {
+                        Text(
+                            error.exception::class.simpleName ?: "Unable to retrieve class name"
+                        )
+                        Text(error.exception.message ?: "No message provided")
+                    }
+
+                    error.exception.cause?.let { cause ->
+                        Column {
+                            Text("Caused by ${cause::class.simpleName ?: "unknown"}")
+                            cause.message?.let {
+                                Text(it)
+                            }
+                        }
+                    }
                 }
-
-                Text(error.exception.stackTraceToString())
 
                 Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
                     Button(dismiss) {
