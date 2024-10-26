@@ -5,7 +5,9 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cameraswitch
@@ -50,12 +52,12 @@ fun CameraControlRow(
 
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp)
     ) {
-        IconButton(onPickLens) {
+        IconButton(onPickLens, Modifier.size(64.dp)) {
             Icon(Icons.Default.Cameraswitch, "Lens change")
         }
 
@@ -64,7 +66,8 @@ fun CameraControlRow(
             colors = ButtonDefaults.buttonColors(
                 containerColor = startButtonColor,
                 contentColor = startButtonContentColor
-            )
+            ),
+            modifier = Modifier.padding(8.dp)
         ) {
             AnimatedContent(isActive, label = "start button text") {
                 Row(
@@ -82,16 +85,16 @@ fun CameraControlRow(
             }
         }
 
-        IconButton(onSettings) {
+        IconButton(onSettings, Modifier.size(64.dp)) {
             Icon(Icons.Default.Settings, contentDescription = "Settings")
         }
     }
 }
 
-@Preview
+@Preview(widthDp = 400)
 @Composable
 private fun CameraControlRowPreview() {
     VTrackerTheme {
-        CameraControlRow(false, {}, {}, {})
+        CameraControlRow(false, {}, {}, {}, Modifier.fillMaxWidth())
     }
 }
