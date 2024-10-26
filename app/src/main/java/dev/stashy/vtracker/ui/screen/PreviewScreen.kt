@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.stashy.vtracker.model.settings.GeneralSettings
@@ -69,7 +70,8 @@ fun PreviewScreen(
         ) {
             CameraControlRow(modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp, vertical = 16.dp),
                 isActive = status is TrackerService.Status.Running,
                 onPickLens = { showCameraPicker = true },
                 onStart = {

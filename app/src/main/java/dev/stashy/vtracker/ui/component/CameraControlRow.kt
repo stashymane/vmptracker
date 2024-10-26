@@ -51,7 +51,6 @@ fun CameraControlRow(
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
-            .padding(horizontal = 32.dp, vertical = 16.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
             .padding(16.dp)
