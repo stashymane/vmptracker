@@ -2,13 +2,19 @@ package dev.stashy.vtracker.ui.screen
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.viewfinder.surface.ImplementationMode
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,6 +32,7 @@ import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.component.CameraControlRow
 import dev.stashy.vtracker.ui.component.LocalNavController
+import dev.stashy.vtracker.ui.component.dialog.ADialog
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
 import dev.stashy.vtracker.ui.theme.VTrackerTheme
 import dev.stashy.vtracker.ui.vm.MainViewmodel
@@ -90,6 +97,27 @@ fun PreviewScreen(
                 { showCameraPicker = false }, vm::switchCamera
             )
         }
+
+    (status as? TrackerService.Status.Error)?.let { error ->
+        val dismiss = { vm.stop() }
+        ADialog(true, dismiss) {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("An error has occurred.", style = MaterialTheme.typography.titleLarge)
+
+                error.exception.message?.let {
+                    Text("Exception: $it")
+                }
+
+                Text(error.exception.stackTraceToString())
+
+                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                    Button(dismiss) {
+                        Text("Close")
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Preview
