@@ -2,6 +2,9 @@ package dev.stashy.vtracker.ui.screen
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.viewfinder.surface.ImplementationMode
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,8 +59,12 @@ fun PreviewScreen(
     var showCameraPicker by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LifecycleStartEffect(generalSettings.cameraId) {
-        vm.startPreview(lifecycleOwner, generalSettings.cameraId ?: "1", 0)
+    LifecycleStartEffect(generalSettings) {
+        if (generalSettings.displayPreview)
+            vm.startPreview(lifecycleOwner, generalSettings.cameraId ?: "1")
+        else
+            vm.stopPreview()
+
         onStopOrDispose {
             vm.stopPreview()
         }
@@ -65,11 +72,13 @@ fun PreviewScreen(
 
     Box(Modifier.fillMaxSize()) {
         surfaceRequest?.let {
-            CameraXViewfinder(
-                it,
-                implementationMode = ImplementationMode.EMBEDDED,
-                modifier = Modifier.fillMaxSize()
-            )
+            AnimatedVisibility(generalSettings.displayPreview, enter = fadeIn(), exit = fadeOut()) {
+                CameraXViewfinder(
+                    it,
+                    implementationMode = ImplementationMode.EMBEDDED,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
 
         Box(
@@ -82,7 +91,9 @@ fun PreviewScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp, vertical = 16.dp),
                 isActive = status is TrackerService.Status.Running,
+                showPreview = generalSettings.displayPreview,
                 onPickLens = { showCameraPicker = true },
+                onToggleShow = { vm.showPreview(!generalSettings.displayPreview) },
                 onStart = {
                     if (status is TrackerService.Status.Running) vm.stop()
                     else vm.start()

@@ -14,4 +14,8 @@ class MainViewmodel(
     fun switchCamera(id: String) = viewModelScope.launch {
         generalSettings.updateData { it.copy(cameraId = id) }
     }
+    
+    fun showPreview(value: Boolean) = viewModelScope.launch {
+        generalSettings.updateData { it.copy(displayPreview = value) }
+    }
 }

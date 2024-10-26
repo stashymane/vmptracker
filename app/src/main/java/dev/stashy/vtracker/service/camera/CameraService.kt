@@ -14,7 +14,12 @@ interface CameraService {
     fun startAnalyzer(): Camera
     fun stopAnalyzer()
 
-    fun startPreview(lifecycleOwner: LifecycleOwner, cameraId: String, rotation: Int): Camera
+    fun startPreview(
+        lifecycleOwner: LifecycleOwner,
+        cameraId: String = "1",
+        rotation: Int = 0
+    ): Camera
+
     fun stopPreview()
 
     fun stopAll()

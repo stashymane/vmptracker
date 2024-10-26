@@ -14,6 +14,8 @@ import androidx.compose.material.icons.filled.Cameraswitch
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,7 +36,9 @@ import dev.stashy.vtracker.ui.theme.VTrackerTheme
 @Composable
 fun CameraControlRow(
     isActive: Boolean = false,
+    showPreview: Boolean = false,
     onPickLens: () -> Unit,
+    onToggleShow: () -> Unit,
     onStart: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier
@@ -57,8 +61,19 @@ fun CameraControlRow(
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        IconButton(onPickLens, Modifier.size(64.dp)) {
-            Icon(Icons.Default.Cameraswitch, "Lens change")
+        Row(Modifier.weight(1f)) {
+            IconButton(onPickLens, Modifier.size(64.dp)) {
+                Icon(Icons.Default.Cameraswitch, "Lens change")
+            }
+
+            IconButton(onToggleShow, Modifier.size(64.dp)) {
+                AnimatedContent(showPreview, label = "Preview icon") {
+                    if (it)
+                        Icon(Icons.Default.Visibility, "Hide preview")
+                    else
+                        Icon(Icons.Default.VisibilityOff, "Show preview")
+                }
+            }
         }
 
         Button(
@@ -85,8 +100,10 @@ fun CameraControlRow(
             }
         }
 
-        IconButton(onSettings, Modifier.size(64.dp)) {
-            Icon(Icons.Default.Settings, contentDescription = "Settings")
+        Row(Modifier.weight(1f), horizontalArrangement = Arrangement.End) {
+            IconButton(onSettings, Modifier.size(64.dp)) {
+                Icon(Icons.Default.Settings, contentDescription = "Settings")
+            }
         }
     }
 }
@@ -95,6 +112,6 @@ fun CameraControlRow(
 @Composable
 private fun CameraControlRowPreview() {
     VTrackerTheme {
-        CameraControlRow(false, {}, {}, {}, Modifier.fillMaxWidth())
+        CameraControlRow(false, false, {}, {}, {}, {}, Modifier.fillMaxWidth())
     }
 }
