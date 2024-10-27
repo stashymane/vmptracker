@@ -2,6 +2,9 @@ package dev.stashy.vtracker.ui.component
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -70,7 +73,7 @@ fun CameraControlRow(
             }
 
             IconButton(onToggleShow, Modifier.size(64.dp)) {
-                AnimatedContent(showPreview, label = "Preview icon") {
+                AnimatedContent(showPreview, label = "Preview icon", transitionSpec = { fadeIn() togetherWith fadeOut() }) {
                     if (it)
                         Icon(Icons.Default.Visibility, "Hide preview")
                     else
