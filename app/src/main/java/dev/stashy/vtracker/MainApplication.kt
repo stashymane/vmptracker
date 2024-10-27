@@ -11,7 +11,6 @@ import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
-import dev.stashy.vtracker.service.AppService
 import dev.stashy.vtracker.service.MainService
 import dev.stashy.vtracker.service.setupNotificationChannel
 import dev.stashy.vtracker.ui.vm.MainViewmodel
@@ -27,7 +26,7 @@ import org.koin.dsl.module
 
 @OptIn(KoinExperimentalAPI::class)
 class MainApplication : Application() {
-    val serviceState: MutableStateFlow<AppService?> = MutableStateFlow(null)
+    val serviceState: MutableStateFlow<MainService?> = MutableStateFlow(null)
 
     val module = module {
         includes(dataStores())
@@ -35,6 +34,7 @@ class MainApplication : Application() {
         viewModel {
             MainViewmodel(
                 serviceState.value!!,
+                serviceState.value!!.cameraXService,
                 get(named<GeneralSettings>())
             )
         }

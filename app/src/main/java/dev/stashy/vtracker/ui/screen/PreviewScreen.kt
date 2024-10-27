@@ -47,7 +47,7 @@ import org.koin.compose.koinInject
 @Composable
 fun PreviewScreen(
     contentPadding: PaddingValues,
-    vm: MainViewmodel = koinInject()
+    vm: MainViewmodel = koinInject(),
 ) {
     val status by vm.status.collectAsState()
     val generalSettings by vm.generalSettings.data.collectAsState(GeneralSettings())
@@ -60,10 +60,8 @@ fun PreviewScreen(
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LifecycleStartEffect(generalSettings) {
-        if (generalSettings.displayPreview)
-            vm.startPreview(lifecycleOwner, generalSettings.cameraId ?: "1")
-        else
-            vm.stopPreview()
+        if (generalSettings.displayPreview) vm.startPreview()
+        else vm.stopPreview()
 
         onStopOrDispose {
             vm.stopPreview()
@@ -105,7 +103,7 @@ fun PreviewScreen(
     if (showCameraPicker)
         ModalBottomSheet({ showCameraPicker = false }, sheetState = bottomSheetState) {
             CameraChoiceContent(
-                vm,
+                vm.cameraService,
                 generalSettings.cameraId ?: "1",
                 { showCameraPicker = false }, vm::switchCamera
             )

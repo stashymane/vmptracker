@@ -1,25 +1,22 @@
 package dev.stashy.vtracker.service
 
-import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
+import androidx.lifecycle.LifecycleService
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.service.TrackerService.Status
-import dev.stashy.vtracker.service.camera.CameraService
 import dev.stashy.vtracker.service.camera.CameraXService
 import dev.stashy.vtracker.service.tracking.FaceTracker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.core.component.KoinComponent
 
-class MainService(
-    val cameraXService: CameraService = CameraXService(CoroutineScope(Dispatchers.IO))
-) : Service(), AppService, KoinComponent, CameraService by cameraXService {
+class MainService() : LifecycleService(), TrackerService, KoinComponent {
+    val cameraXService = CameraXService(this)
+
     private val faceTracker = FaceTracker()
 
     override val status: MutableStateFlow<Status> = MutableStateFlow(Status.NotRunning)
@@ -44,7 +41,7 @@ class MainService(
     }
 
     override fun onDestroy() {
-        cameraXService.stopAll()
+        super.onDestroy()
         faceTracker.stop()
     }
 
@@ -69,6 +66,7 @@ class MainService(
      * Starts the service from a received intent, and sets this up as a foreground service.
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
         setupForegroundService()
         return START_STICKY
     }
@@ -76,8 +74,11 @@ class MainService(
     private val binder = LocalBinder()
 
     inner class LocalBinder : Binder() {
-        fun getService(): AppService = this@MainService
+        fun getService(): MainService = this@MainService
     }
 
-    override fun onBind(intent: Intent?): IBinder? = binder
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
+        return binder
+    }
 }
