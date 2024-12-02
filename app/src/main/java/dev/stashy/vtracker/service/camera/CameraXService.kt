@@ -48,7 +48,8 @@ class CameraXService(lifecycleOwner: LifecycleOwner) : CameraService, KoinCompon
     }
 
     override fun getAvailableCameras(): List<CameraInfo> =
-        cameraProvider.availableCameraInfos
+        cameraProvider.availableCameraInfos.filter { !it.isLogicalMultiCameraSupported }
+            .sortedBy { it.lensFacing }
 
     override fun start(useCase: UseCase) {
         stop(useCase)
