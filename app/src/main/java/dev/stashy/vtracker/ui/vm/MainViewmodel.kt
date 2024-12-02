@@ -18,11 +18,11 @@ class MainViewmodel(
 
     fun startPreview() {
         cameraService.start(previewUseCase)
-        cameraService.startPreview()
+        cameraService.bindPreview()
     }
 
     fun stopPreview() {
-        cameraService.stopPreview()
+        cameraService.unbindPreview()
         cameraService.stop(previewUseCase)
     }
 

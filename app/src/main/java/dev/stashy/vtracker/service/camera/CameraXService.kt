@@ -64,13 +64,13 @@ class CameraXService(lifecycleOwner: LifecycleOwner) : CameraService, KoinCompon
         cameraProvider.unbind(useCase)
     }
 
-    override fun startPreview() {
+    override fun bindPreview() {
         previewUseCase.setSurfaceProvider { newSurfaceRequest ->
             surfaceRequests.value = newSurfaceRequest
         }
     }
 
-    override fun stopPreview() {
+    override fun unbindPreview() {
         previewUseCase.surfaceProvider = null
     }
 }

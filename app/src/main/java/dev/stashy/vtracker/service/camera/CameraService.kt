@@ -13,6 +13,6 @@ interface CameraService {
     fun start(useCase: UseCase)
     fun stop(useCase: UseCase)
 
-    fun startPreview()
-    fun stopPreview()
+    fun bindPreview()
+    fun unbindPreview()
 }
