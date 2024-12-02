@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.service.camera.CameraService
+import dev.stashy.vtracker.service.camera.previewUseCase
 import kotlinx.coroutines.launch
 
 class MainViewmodel(
@@ -16,11 +17,13 @@ class MainViewmodel(
     val surfaceRequests get() = cameraService.surfaceRequests
 
     fun startPreview() {
-
+        cameraService.start(previewUseCase)
+        cameraService.startPreview()
     }
 
     fun stopPreview() {
-
+        cameraService.stopPreview()
+        cameraService.stop(previewUseCase)
     }
 
     fun switchCamera(id: String) = viewModelScope.launch {
