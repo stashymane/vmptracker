@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -35,7 +36,9 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
+import dev.stashy.vtracker.ui.LocalSnackbarState
 import dev.stashy.vtracker.ui.component.CameraControlRow
+import dev.stashy.vtracker.ui.component.CustomSnackbar
 import dev.stashy.vtracker.ui.component.LocalNavController
 import dev.stashy.vtracker.ui.component.dialog.ADialog
 import dev.stashy.vtracker.ui.component.dialog.CameraChoiceContent
@@ -84,19 +87,28 @@ fun PreviewScreen(
                 .padding(contentPadding)
                 .fillMaxSize()
         ) {
-            CameraControlRow(modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 16.dp),
-                serviceStatus = status,
-                showPreview = generalSettings.displayPreview,
-                onPickLens = { showCameraPicker = true },
-                onToggleShow = { vm.showPreview(!generalSettings.displayPreview) },
-                onStart = {
-                    if (status is TrackerService.Status.Running) vm.stopTracking()
-                    else vm.startTracking()
-                },
-                onSettings = { navController.navigate(Screen.Settings) })
+            Column(
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 32.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                SnackbarHost(LocalSnackbarState.current) { data ->
+                    CustomSnackbar(data)
+                }
+
+                CameraControlRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    serviceStatus = status,
+                    showPreview = generalSettings.displayPreview,
+                    onPickLens = { showCameraPicker = true },
+                    onToggleShow = { vm.showPreview(!generalSettings.displayPreview) },
+                    onStart = {
+                        if (status is TrackerService.Status.Running) vm.stopTracking()
+                        else vm.startTracking()
+                    },
+                    onSettings = { navController.navigate(Screen.Settings) })
+            }
         }
     }
 

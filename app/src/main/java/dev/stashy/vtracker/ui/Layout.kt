@@ -22,15 +22,9 @@ fun Layout() {
     val navController = rememberNavController()
 
     CompositionLocalProvider(LocalNavController provides navController) {
-        Scaffold(
-            topBar = {
-//            CenterAlignedTopAppBar(
-//                title = { Text(stringResource(dev.stashy.vtracker.R.string.app_name)) },
-//                actions = { }
-//            )
-            }
-        ) { innerPadding ->
-            NavHost(navController,
+        Scaffold() { innerPadding ->
+            NavHost(
+                navController,
                 Screen.Preview,
                 enterTransition = { fadeIn() + scaleIn(initialScale = 1.1f) },
                 exitTransition = { fadeOut() + scaleOut(targetScale = 0.9f) }) {
