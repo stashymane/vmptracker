@@ -22,8 +22,8 @@ class MainViewmodel(
     }
 
     fun stopPreview() {
-        cameraService.unbindPreview()
         cameraService.stop(previewUseCase)
+        cameraService.unbindPreview()
     }
 
     fun switchCamera(id: String) = viewModelScope.launch {
