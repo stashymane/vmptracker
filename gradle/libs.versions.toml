@@ -1,27 +1,27 @@
 [versions]
 agp = "8.7.2"
-kotlin = "2.0.20"
-coreKtx = "1.13.1"
+kotlin = "2.1.0"
+coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycle = "2.8.6"
+lifecycle = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.10.00"
+composeBom = "2024.11.00"
 
-serialization-plugin = "2.0.20"
+serialization-plugin = "2.1.0"
 serialization-module = "1.7.3"
 
 #noinspection GradleDependency
 mediapipe = "0.10.16"
-materialIconsExtended = "1.7.4"
-camerax = "1.5.0-alpha02"
-viewfinder-compose = "1.4.0-alpha09"
+materialIconsExtended = "1.7.5"
+camerax = "1.5.0-alpha03"
+viewfinder-compose = "1.4.0-alpha10"
 accompanist = "0.36.0"
-navigation-compose = "2.8.3"
+navigation-compose = "2.8.4"
 datastore = "1.1.1"
 koin = "4.0.0"
-haze = "0.9.0-rc02"
+haze = "1.0.2"
 placeholder = "1.0.8"
 
 [libraries]
