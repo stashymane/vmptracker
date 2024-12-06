@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import android.os.StrictMode
 import androidx.camera.lifecycle.ProcessCameraProvider
 import dev.stashy.vtracker.model.dataStores
 import dev.stashy.vtracker.model.settings.ConnectionSettings
@@ -56,6 +57,21 @@ class MainApplication : Application() {
     }
 
     override fun onCreate() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
+            StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+//                    .penaltyDeath()
+                    .build()
+            )
+        }
         super.onCreate()
 
         setupNotificationChannel()
