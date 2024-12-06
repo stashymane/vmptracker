@@ -1,6 +1,8 @@
 [versions]
 agp = "8.7.3"
 kotlin = "2.1.0"
+downloadTask = "5.6.0"
+
 kotlinx-datetime = "0.6.1"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -14,7 +16,7 @@ serialization-plugin = "2.1.0"
 serialization-module = "1.7.3"
 
 #noinspection GradleDependency
-mediapipe = "0.10.16"
+mediapipe = "0.10.18"
 materialIconsExtended = "1.7.5"
 camerax = "1.5.0-alpha03"
 viewfinder-compose = "1.4.0-alpha10"
@@ -71,6 +73,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization-plugin" }
+downloadTask = { id = "de.undercouch.download", version.ref = "downloadTask" }
 
 [bundles]
 camerax = ["camerax-core", "camerax-camera2", "camerax-compose", "camerax-lifecycle", "camerax-video", "camerax-extensions", "camerax-viewfinder-compose"]

@@ -1,6 +1,7 @@
 .gradle
 .idea
 local.properties
+app/src/main/assets/tasks/*
 
 # Compiled class file
 *.class
