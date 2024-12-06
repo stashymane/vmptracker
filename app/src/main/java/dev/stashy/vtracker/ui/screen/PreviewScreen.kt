@@ -111,7 +111,7 @@ fun PreviewScreen(
                     onPickLens = { showCameraPicker = true },
                     onToggleShow = { vm.showPreview(!generalSettings.displayPreview) },
                     onStart = {
-                        if (status is TrackerService.Status.Running) vm.stopTracking()
+                        if (status !is TrackerService.Status.NotRunning) vm.stopTracking()
                         else vm.startTracking()
                     },
                     onSettings = { navController.navigate(Screen.Settings) })

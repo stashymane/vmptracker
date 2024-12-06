@@ -40,12 +40,16 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     implementation(libs.serialization.json)
     implementation(libs.serialization.protobuf)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlin.logging)
+    implementation(libs.slf4j.android)
 
     implementation(libs.androidx.datastore)
     implementation(libs.bundles.koin)

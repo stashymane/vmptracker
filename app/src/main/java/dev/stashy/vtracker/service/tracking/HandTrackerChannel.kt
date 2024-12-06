@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
-import com.google.mediapipe.tasks.vision.facelandmarker.FaceLandmarker
-import dev.stashy.vtracker.model.settings.FaceTrackerSettings
+import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
+import dev.stashy.vtracker.model.settings.HandTrackerSettings
 import dev.stashy.vtracker.model.settings.applySettings
 import dev.stashy.vtracker.model.tracking.TrackerFrame
 import dev.stashy.vtracker.model.tracking.toData
@@ -15,27 +15,26 @@ import kotlinx.coroutines.channels.ReceiveChannel
 
 private const val task = "tasks/face_landmarker.task"
 
-fun CoroutineScope.faceTracker(
+fun CoroutineScope.handTracker(
     context: Context,
     images: ReceiveChannel<Bitmap>,
-    settings: FaceTrackerSettings,
+    settings: HandTrackerSettings,
 ): ReceiveChannel<Result<TrackerFrame>> = tracker(
     images,
-    create = { FaceLandmarker.createFromOptions(context, settings.asOptions()) },
+    create = { HandLandmarker.createFromOptions(context, settings.asOptions()) },
     close = { close() },
     process = { image -> detect(BitmapImageBuilder(image).build()).toData() }
 )
 
-private fun FaceTrackerSettings.asOptions(): FaceLandmarker.FaceLandmarkerOptions {
+private fun HandTrackerSettings.asOptions(): HandLandmarker.HandLandmarkerOptions {
     val baseOptions = BaseOptions.builder()
         .setDelegate(runner)
         .setModelAssetPath(task)
         .build()
 
-    val landmarkerOptions = FaceLandmarker.FaceLandmarkerOptions.builder()
+    val landmarkerOptions = HandLandmarker.HandLandmarkerOptions.builder()
         .setBaseOptions(baseOptions)
         .applySettings(this)
-        .setOutputFaceBlendshapes(true)
         .setRunningMode(RunningMode.IMAGE)
         .build()
 

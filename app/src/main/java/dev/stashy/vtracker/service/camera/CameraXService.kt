@@ -4,6 +4,7 @@ import androidx.camera.camera2.interop.Camera2CameraInfo
 import androidx.camera.camera2.interop.ExperimentalCamera2Interop
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.CameraSelector.LENS_FACING_FRONT
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -15,10 +16,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -51,14 +51,10 @@ class CameraXService(lifecycleOwner: LifecycleOwner) : CameraService, KoinCompon
         cameraProvider.availableCameraInfos.filter { !it.isLogicalMultiCameraSupported }
             .sortedBy { it.lensFacing }
 
-    override fun start(useCase: UseCase) {
+    override suspend fun start(useCase: UseCase) {
         stop(useCase)
-        // the runblocking call sucks but cba to do it properly atm
-        cameraProvider.bindToLifecycle(
-            this,
-            cameraSelectorFromId(runBlocking { cameraIdFlow.first() }),
-            useCase
-        )
+        val cameraSelector = cameraSelectorFromId(cameraIdFlow.firstOrNull())
+        cameraProvider.bindToLifecycle(this, cameraSelector, useCase)
     }
 
     override fun stop(useCase: UseCase) {
@@ -77,5 +73,9 @@ class CameraXService(lifecycleOwner: LifecycleOwner) : CameraService, KoinCompon
 }
 
 @androidx.annotation.OptIn(ExperimentalCamera2Interop::class)
-fun cameraSelectorFromId(id: String) = CameraSelector.Builder()
-    .addCameraFilter { it.filter { Camera2CameraInfo.from(it).cameraId == id } }.build()
+fun cameraSelectorFromId(id: String?): CameraSelector = id?.let { actualId ->
+    CameraSelector.Builder()
+        .addCameraFilter { it.filter { Camera2CameraInfo.from(it).cameraId == actualId } }.build()
+} ?: default()
+
+private fun default() = CameraSelector.Builder().requireLensFacing(LENS_FACING_FRONT).build()

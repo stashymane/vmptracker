@@ -13,10 +13,11 @@ class MainViewmodel(
     val trackerService: TrackerService,
     val cameraService: CameraService,
     val generalSettings: DataStore<GeneralSettings>,
-) : ViewModel(), TrackerService by trackerService {
+) : ViewModel() {
     val surfaceRequests get() = cameraService.surfaceRequests
+    val status get() = trackerService.status
 
-    fun startPreview() {
+    fun startPreview() = viewModelScope.launch {
         cameraService.start(previewUseCase)
         cameraService.bindPreview()
     }
@@ -24,6 +25,14 @@ class MainViewmodel(
     fun stopPreview() {
         cameraService.stop(previewUseCase)
         cameraService.unbindPreview()
+    }
+
+    fun startTracking() = viewModelScope.launch {
+        trackerService.startTracking()
+    }
+
+    fun stopTracking() {
+        trackerService.stopTracking()
     }
 
     fun switchCamera(id: String) = viewModelScope.launch {

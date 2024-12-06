@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +47,7 @@ fun CameraControlRow(
     onToggleShow: () -> Unit,
     onStart: () -> Unit,
     onSettings: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val startButtonColor by animateColorAsState(
         when (serviceStatus) {
@@ -73,7 +75,10 @@ fun CameraControlRow(
             }
 
             IconButton(onToggleShow, Modifier.size(64.dp)) {
-                AnimatedContent(showPreview, label = "Preview icon", transitionSpec = { fadeIn() togetherWith fadeOut() }) {
+                AnimatedContent(
+                    showPreview,
+                    label = "Preview icon",
+                    transitionSpec = { fadeIn() togetherWith fadeOut() }) {
                     if (it)
                         Icon(Icons.Default.Visibility, "Hide preview")
                     else
@@ -95,12 +100,20 @@ fun CameraControlRow(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (it is TrackerService.Status.Running) {
-                        Icon(imageVector = Icons.Default.Stop, null)
-                        Text(stringResource(R.string.stop_button))
-                    } else {
-                        Icon(imageVector = Icons.Default.PlayArrow, null)
-                        Text(stringResource(R.string.start_button))
+                    when (it) {
+                        is TrackerService.Status.Starting -> {
+                            CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                        }
+
+                        is TrackerService.Status.Running -> {
+                            Icon(imageVector = Icons.Default.Stop, null)
+                            Text(stringResource(R.string.stop_button))
+                        }
+
+                        else -> {
+                            Icon(imageVector = Icons.Default.PlayArrow, null)
+                            Text(stringResource(R.string.start_button))
+                        }
                     }
                 }
             }
@@ -118,14 +131,34 @@ fun CameraControlRow(
 @Composable
 private fun CameraControlRowPreview() {
     VTrackerTheme {
-        CameraControlRow(
-            TrackerService.Status.NotRunning,
-            false,
-            {},
-            {},
-            {},
-            {},
-            Modifier.fillMaxWidth()
-        )
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            CameraControlRow(
+                TrackerService.Status.NotRunning,
+                false,
+                {},
+                {},
+                {},
+                {},
+                Modifier.fillMaxWidth()
+            )
+            CameraControlRow(
+                TrackerService.Status.Starting,
+                false,
+                {},
+                {},
+                {},
+                {},
+                Modifier.fillMaxWidth()
+            )
+            CameraControlRow(
+                TrackerService.Status.Running,
+                false,
+                {},
+                {},
+                {},
+                {},
+                Modifier.fillMaxWidth()
+            )
+        }
     }
 }

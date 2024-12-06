@@ -10,7 +10,7 @@ interface CameraService {
 
     fun getAvailableCameras(): List<CameraInfo>
 
-    fun start(useCase: UseCase)
+    suspend fun start(useCase: UseCase)
     fun stop(useCase: UseCase)
 
     fun bindPreview()

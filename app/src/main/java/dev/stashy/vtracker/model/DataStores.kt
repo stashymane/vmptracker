@@ -7,6 +7,7 @@ import dev.stashy.vtracker.model.settings.ConnectionSettings
 import dev.stashy.vtracker.model.settings.FaceTrackerSettings
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.model.settings.HandTrackerSettings
+import dev.stashy.vtracker.model.settings.PoseTrackerSettings
 import dev.stashy.vtracker.model.settings.dataStoreSerializer
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -16,6 +17,7 @@ fun dataStores() = module {
     factory(named<GeneralSettings>()) { androidContext().generalSettings }
     factory(named<FaceTrackerSettings>()) { androidContext().faceTrackerSettings }
     factory(named<HandTrackerSettings>()) { androidContext().handTrackerSettings }
+    factory(named<PoseTrackerSettings>()) { androidContext().poseTrackerSettings }
     factory(named<ConnectionSettings>()) { androidContext().connectionSettings }
 }
 
@@ -32,6 +34,11 @@ val Context.faceTrackerSettings: DataStore<FaceTrackerSettings> by dataStore(
 val Context.handTrackerSettings: DataStore<HandTrackerSettings> by dataStore(
     fileName = "handTracker",
     serializer = dataStoreSerializer(HandTrackerSettings())
+)
+
+val Context.poseTrackerSettings: DataStore<PoseTrackerSettings> by dataStore(
+    fileName = "poseTracker",
+    serializer = dataStoreSerializer(PoseTrackerSettings())
 )
 
 val Context.connectionSettings: DataStore<ConnectionSettings> by dataStore(
