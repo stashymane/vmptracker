@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.LocalSnackbarState
@@ -56,11 +56,11 @@ fun PreviewScreen(
     val generalSettings by vm.generalSettings.data.collectAsState(GeneralSettings())
     val surfaceRequest by vm.surfaceRequests.collectAsState()
 
-    val lifecycleOwner = LocalLifecycleOwner.current
     val navController = LocalNavController.current
 
     var showCameraPicker by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var currentError by remember { mutableStateOf<Throwable?>(null) }
 
     LifecycleStartEffect(generalSettings) {
         if (generalSettings.displayPreview) vm.startPreview()
@@ -68,6 +68,13 @@ fun PreviewScreen(
 
         onStopOrDispose {
             vm.stopPreview()
+        }
+    }
+
+    LaunchedEffect(status) {
+        currentError = when (status) {
+            is TrackerService.Status.Error -> (status as TrackerService.Status.Error).exception
+            else -> null
         }
     }
 
@@ -121,28 +128,24 @@ fun PreviewScreen(
             )
         }
 
-    (status as? TrackerService.Status.Error)?.let { error ->
+    currentError?.let { error ->
         val dismiss = { vm.stopTracking() }
         ADialog(true, dismiss) {
             Column(modifier = Modifier.padding(32.dp)) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier
-                        .verticalScroll(
-                            rememberScrollState()
-                        )
+                        .verticalScroll(rememberScrollState())
                         .fillMaxSize()
                 ) {
                     Text("An error has occurred.", style = MaterialTheme.typography.titleLarge)
 
                     Column {
-                        Text(
-                            error.exception::class.simpleName ?: "Unable to retrieve class name"
-                        )
-                        Text(error.exception.message ?: "No message provided")
+                        Text(error::class.simpleName ?: "Unable to retrieve class name")
+                        Text(error.message ?: "No message provided")
                     }
 
-                    error.exception.cause?.let { cause ->
+                    error.cause?.let { cause ->
                         Column {
                             Text("Caused by ${cause::class.simpleName ?: "unknown"}")
                             cause.message?.let {
