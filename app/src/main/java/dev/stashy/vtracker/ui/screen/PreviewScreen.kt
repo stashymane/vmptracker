@@ -129,7 +129,7 @@ fun PreviewScreen(
         }
 
     currentError?.let { error ->
-        val dismiss = { vm.stopTracking() }
+        val dismiss = { currentError = null }
         ADialog(true, dismiss) {
             Column(modifier = Modifier.padding(32.dp)) {
                 Column(
