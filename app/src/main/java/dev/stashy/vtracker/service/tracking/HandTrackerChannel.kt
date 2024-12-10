@@ -2,6 +2,7 @@ package dev.stashy.vtracker.service.tracking
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.SystemClock
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -23,7 +24,9 @@ fun CoroutineScope.handTracker(
     images,
     create = { HandLandmarker.createFromOptions(context, settings.asOptions()) },
     close = { close() },
-    process = { image -> detect(BitmapImageBuilder(image).build()).toData() }
+    process = { image ->
+        detectForVideo(BitmapImageBuilder(image).build(), SystemClock.uptimeMillis()).toData()
+    }
 )
 
 private fun HandTrackerSettings.asOptions(): HandLandmarker.HandLandmarkerOptions {
@@ -35,7 +38,7 @@ private fun HandTrackerSettings.asOptions(): HandLandmarker.HandLandmarkerOption
     val landmarkerOptions = HandLandmarker.HandLandmarkerOptions.builder()
         .setBaseOptions(baseOptions)
         .applySettings(this)
-        .setRunningMode(RunningMode.IMAGE)
+        .setRunningMode(RunningMode.VIDEO)
         .build()
 
     return landmarkerOptions

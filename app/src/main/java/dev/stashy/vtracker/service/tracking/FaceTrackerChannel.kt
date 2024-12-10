@@ -2,6 +2,7 @@ package dev.stashy.vtracker.service.tracking
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.SystemClock
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -23,7 +24,9 @@ fun CoroutineScope.faceTracker(
     images,
     create = { FaceLandmarker.createFromOptions(context, settings.asOptions()) },
     close = { close() },
-    process = { image -> detect(BitmapImageBuilder(image).build()).toData() }
+    process = { image ->
+        detectForVideo(BitmapImageBuilder(image).build(), SystemClock.uptimeMillis()).toData()
+    }
 )
 
 private fun FaceTrackerSettings.asOptions(): FaceLandmarker.FaceLandmarkerOptions {
@@ -36,7 +39,7 @@ private fun FaceTrackerSettings.asOptions(): FaceLandmarker.FaceLandmarkerOption
         .setBaseOptions(baseOptions)
         .applySettings(this)
         .setOutputFaceBlendshapes(true)
-        .setRunningMode(RunningMode.IMAGE)
+        .setRunningMode(RunningMode.VIDEO)
         .build()
 
     return landmarkerOptions
