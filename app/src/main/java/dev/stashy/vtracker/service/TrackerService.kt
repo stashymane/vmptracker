@@ -1,7 +1,7 @@
 package dev.stashy.vtracker.service
 
 import dev.stashy.vtracker.model.tracking.TrackerFrame
-import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 
 interface TrackerService {
@@ -13,7 +13,7 @@ interface TrackerService {
     }
 
     val status: StateFlow<Status>
-    val results: ReceiveChannel<Result<TrackerFrame>>
+    val frames: Channel<TrackerFrame>
 
     fun startTracking()
     fun stopTracking()

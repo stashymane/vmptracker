@@ -22,9 +22,12 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -39,15 +42,14 @@ class MainService() : LifecycleService(), KoinComponent, TrackerService {
     var trackingJob: Job? = null
 
     val images = Channel<Bitmap>()
-    override val results: Channel<Result<TrackerFrame>> = Channel()
+    override val frames: Channel<TrackerFrame> = Channel()
     override val status: MutableStateFlow<TrackerService.Status> =
         MutableStateFlow(TrackerService.Status.NotRunning)
 
     val resultWatcher = lifecycleScope.launch { //TODO temporary for testing
         logger.info { "WATCHING FOR RESULTS" }
-        results.consumeAsFlow().collect {
-            val processTime = it.getOrNull()?.processingTime ?: "N/A"
-            logger.info { "Frame processing took ${processTime}ms" }
+        frames.consumeAsFlow().collect {
+            logger.info { "${it.result.size} items / ${it.processingTime}" }
         }
         logger.info { "STOPPED WATCHING" }
     }
@@ -65,15 +67,24 @@ class MainService() : LifecycleService(), KoinComponent, TrackerService {
                     get(named<PoseTrackerSettings>())
                 ).consumeAsFlow()
                     .onStart { status.emit(TrackerService.Status.Running) }
+                    .map(Result<TrackerFrame>::getOrThrow)
+                    .catch { cause ->
+                        status.emit(TrackerService.Status.Error(cause))
+                        logger.error(cause) { "Failed to retrieve tracking data." }
+                    }
                     .onCompletion { cause ->
                         if (cause == null || cause is CancellationException)
-                            status.emit(TrackerService.Status.NotRunning)
+                            status.update { status ->
+                                status as? TrackerService.Status.Error
+                                    ?: TrackerService.Status.NotRunning
+                            }
                         else {
                             status.emit(TrackerService.Status.Error(cause))
-                            logger.error(cause) { "Tracking job has encountered an exception." }
+                            logger.error(cause) { "Tracking job has failed." }
                         }
+                        stopTracking()
                     }
-                    .collect(results::send)
+                    .collect(frames::send)
             }
             analysisUseCase.setAnalyzer(Runnable::run) { image ->
                 images.trySend(image.toBitmap())
