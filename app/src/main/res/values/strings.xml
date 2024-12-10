@@ -40,6 +40,7 @@
     <string name="camera_facing_front">Front</string>
     <string name="camera_facing_external">External</string>
     <string name="camera_facing_unknown">Unknown</string>
+    <string name="camera_waiting_open">Opening camera...</string>
     <string name="service_running">Running</string>
     <string name="service_notrunning">Not running</string>
     <string name="notification_required_title">Notification permission required</string>

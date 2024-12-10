@@ -31,9 +31,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleStartEffect
+import dev.stashy.vtracker.R
 import dev.stashy.vtracker.model.settings.GeneralSettings
 import dev.stashy.vtracker.service.TrackerService
 import dev.stashy.vtracker.ui.LocalSnackbarState
@@ -79,13 +81,24 @@ fun PreviewScreen(
     }
 
     Box(Modifier.fillMaxSize()) {
-        surfaceRequest?.let {
-            AnimatedVisibility(generalSettings.displayPreview, enter = fadeIn(), exit = fadeOut()) {
-                CameraXViewfinder(
-                    it,
-                    implementationMode = ImplementationMode.EMBEDDED,
-                    modifier = Modifier.fillMaxSize()
-                )
+        AnimatedVisibility(
+            generalSettings.displayPreview,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.matchParentSize()
+        ) {
+            Box(Modifier.matchParentSize()) {
+                surfaceRequest?.let {
+                    Text(
+                        stringResource(R.string.camera_waiting_open),
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    CameraXViewfinder(
+                        it,
+                        implementationMode = ImplementationMode.EMBEDDED,
+                        modifier = Modifier.matchParentSize()
+                    )
+                }
             }
         }
 
