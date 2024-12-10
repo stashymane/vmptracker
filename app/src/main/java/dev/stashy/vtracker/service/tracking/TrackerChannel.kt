@@ -1,6 +1,7 @@
 package dev.stashy.vtracker.service.tracking
 
 import android.graphics.Bitmap
+import android.os.SystemClock
 import dev.stashy.vtracker.model.tracking.TrackerFrame
 import dev.stashy.vtracker.model.tracking.TrackingData
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 fun <T> CoroutineScope.tracker(
@@ -27,10 +28,11 @@ fun <T> CoroutineScope.tracker(
     invokeOnClose { cause -> processor.close(cause) }
 
     images.consumeAsFlow().buffer(bufferSize, BufferOverflow.DROP_OLDEST).collect { image ->
-        val timestamp = Clock.System.now()
+        val timestamp = Instant.fromEpochMilliseconds(SystemClock.uptimeMillis())
+
         send(runCatching {
             val result = withContext(Dispatchers.IO) { processor.process(image) }
-            val delta = Clock.System.now() - timestamp
+            val delta = Instant.fromEpochMilliseconds(SystemClock.uptimeMillis()) - timestamp
 
             TrackerFrame(result, delta, image.width to image.height)
         })
