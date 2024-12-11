@@ -87,7 +87,18 @@ class MainService() : LifecycleService(), KoinComponent, TrackerService {
                     .collect(frames::send)
             }
             analysisUseCase.setAnalyzer(Runnable::run) { image ->
-                images.trySend(image.toBitmap())
+                val w = image.width
+                val h = image.height
+
+                val bitmap = Bitmap.createBitmap(
+                    image.toBitmap(), 0, 0, w, h,
+                    Matrix().apply {
+                        postRotate(image.imageInfo.rotationDegrees.toFloat())
+                        postScale(-1f, 1f, w / 2f, h / 2f)
+                    }, true
+                )
+
+                images.trySend(bitmap)
                 image.close()
             }
             cameraXService.start(analysisUseCase)
