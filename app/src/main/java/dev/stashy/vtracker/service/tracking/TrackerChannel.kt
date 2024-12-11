@@ -28,11 +28,11 @@ fun <T> CoroutineScope.tracker(
     invokeOnClose { cause -> processor.close(cause) }
 
     images.consumeAsFlow().buffer(bufferSize, BufferOverflow.DROP_OLDEST).collect { image ->
-        val timestamp = Instant.fromEpochMilliseconds(SystemClock.uptimeMillis())
+        val timestamp = SystemClock.uptimeMillis()
 
         send(runCatching {
             val result = withContext(Dispatchers.IO) { processor.process(image) }
-            val delta = Instant.fromEpochMilliseconds(SystemClock.uptimeMillis()) - timestamp
+            val delta = (SystemClock.uptimeMillis() - timestamp).milliseconds
 
             TrackerFrame(result, delta, image.width to image.height)
         })
