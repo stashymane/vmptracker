@@ -27,6 +27,14 @@
         android:theme="@style/Theme.VTracker"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="34">
+        <uses-library
+            android:name="libOpenCL.so"
+            android:required="false" />
+
+        <uses-library
+            android:name="libOpenCL-pixel.so"
+            android:required="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
