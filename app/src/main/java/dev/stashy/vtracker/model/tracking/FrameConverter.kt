@@ -8,36 +8,34 @@ import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult
 import kotlin.jvm.optionals.getOrNull
 
-fun FaceLandmarkerResult.toData(): List<TrackingData> = buildList {
+fun FaceLandmarkerResult.toData(): List<TrackingData> {
     val landmarks = faceLandmarks()
-    val blendshapes = faceBlendshapes().getOrNull()
+    val blendshapes = faceBlendshapes().getOrNull() ?: listOf()
 
-    for (i in 0..landmarks.size) {
-        add(
+    return landmarks.zip(blendshapes)
+        .map { (landmark, blendshape) ->
             TrackingData.Face(
-                landmarks[i].map(NormalizedLandmark::toPos),
-                blendshapes?.get(i)?.toMap() ?: mapOf()
+                landmark.map(NormalizedLandmark::toPos),
+                blendshape.toMap()
             )
-        )
-    }
+        }
 }
 
 fun HandLandmarkerResult.toData(): List<TrackingData> = buildList {
 
 }
 
-fun PoseLandmarkerResult.toData(): List<TrackingData> = buildList {
+fun PoseLandmarkerResult.toData(): List<TrackingData> {
     val landmarks = landmarks()
     val worldLandmarks = worldLandmarks()
 
-    for (i in 0..landmarks.size) {
-        add(
+    return landmarks.zip(worldLandmarks)
+        .map { (landmark, worldLandmark) ->
             TrackingData.Pose(
-                landmarks[i].map(NormalizedLandmark::toPos),
-                worldLandmarks[i].map(Landmark::toPos)
+                landmark.map(NormalizedLandmark::toPos),
+                worldLandmark.map(Landmark::toPos)
             )
-        )
-    }
+        }
 }
 
 fun NormalizedLandmark.toPos(): TrackingData.Pos = TrackingData.Pos(x(), y(), z())
