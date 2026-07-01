@@ -41,4 +41,5 @@ include(
     ":app:common",
     ":app:icons",
     ":app:android",
+    ":components:battery",
 )

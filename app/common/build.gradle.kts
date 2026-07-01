@@ -23,6 +23,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.model)
             implementation(projects.app.icons)
+            implementation(projects.components.battery)
 
             implementation(kotlinLibs.serialization.json)
             implementation(kotlinLibs.serialization.protobuf)

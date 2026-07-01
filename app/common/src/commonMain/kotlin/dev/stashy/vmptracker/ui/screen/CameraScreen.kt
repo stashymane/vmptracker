@@ -29,6 +29,7 @@ import dev.stashy.vmptracker.ui.LocalDeviceCorners
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.camera.CameraViewport
 import dev.stashy.vmptracker.ui.components.CameraControls
+import dev.stashy.vmptracker.ui.components.NotificationBar
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 import dev.stashy.vmptracker.vm.CameraViewmodel
@@ -42,7 +43,7 @@ fun CameraScreen(
 
     Scaffold(
         Modifier.fillMaxSize(),
-        topBar = {},
+        topBar = { NotificationBar() },
         bottomBar = { CameraControls(vm) }
     ) { _ ->
         AnimatedVisibility(

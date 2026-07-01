@@ -12,4 +12,7 @@
 
     <string name="settings-face-section">Face tracking</string>
     <string name="settings-hand-section">Hand tracking</string>
+
+    <string name="warning-battery-low-title">Battery low</string>
+    <string name="warning-battery-low-content">Please plug in a charger.</string>
 </resources>
