@@ -1,0 +1,15 @@
+<resources>
+    <string name="screen-title-settings">Settings</string>
+
+    <string name="visibility-visible">Camera visible</string>
+    <string name="visibility-hidden">Camera hidden</string>
+
+    <string name="tracking-button-start">Start</string>
+    <string name="tracking-button-stop">Stop</string>
+    <string name="tracking-button-retry">Retry</string>
+
+    <string name="error-tracking-failed">Failed to start tracking</string>
+
+    <string name="settings-face-section">Face tracking</string>
+    <string name="settings-hand-section">Hand tracking</string>
+</resources>

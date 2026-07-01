@@ -1,23 +1,44 @@
+rootProject.name = "vmptracker"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
-        mavenCentral()
+        google()
         gradlePluginPortal()
+        mavenCentral()
     }
+    includeBuild("conventions")
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    @Suppress("UnstableApiUsage")
     repositories {
         google()
         mavenCentral()
     }
+
+    versionCatalogs {
+        register("androidLibs") {
+            from(files("gradle/android.versions.toml"))
+        }
+        register("kotlinLibs") {
+            from(files("gradle/kotlin.versions.toml"))
+        }
+        register("ktorLibs") {
+            from("io.ktor:ktor-version-catalog:3.5.0")
+        }
+        register("composeLibs") {
+            from(files("gradle/compose.versions.toml"))
+        }
+    }
 }
 
-rootProject.name = "VTracker"
-include(":app")
+include(
+    ":model",
+    ":app:common",
+    ":app:icons",
+    ":app:android",
+)

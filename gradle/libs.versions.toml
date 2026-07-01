@@ -1,85 +1,32 @@
 [versions]
-agp = "8.7.3"
-kotlin = "2.1.0"
-downloadTask = "5.6.0"
-
-kotlinx-datetime = "0.6.1"
-coreKtx = "1.15.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-lifecycle = "2.8.7"
-activityCompose = "1.9.3"
-composeBom = "2024.11.00"
-
-serialization-plugin = "2.1.0"
-serialization-module = "1.7.3"
-
-kotlin-logging = "7.0.0"
+jvm = "25"
+jvm-target = "11"
+kotlin-logging = "8.0.4"
 slf4j-android = "1.7.36"
 
-#noinspection GradleDependency
-mediapipe = "0.10.18"
-materialIconsExtended = "1.7.5"
-camerax = "1.5.0-alpha03"
-viewfinder-compose = "1.4.0-alpha10"
-accompanist = "0.36.0"
-navigation-compose = "2.8.4"
-datastore = "1.1.1"
-koin = "4.0.0"
-haze = "1.0.2"
-placeholder = "1.0.8"
+datastore = "1.2.1"
+koin = "4.2.2"
+
+junit = "4.13.2"
+downloadTask = "5.7.0"
+mediapipe = "0.10.35"
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-materialIconsExtended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 
-androidx-datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
+
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-androidx-startup = { module = "io.insert-koin:koin-androidx-startup", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 
-camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
-camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
-camerax-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
-camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
-camerax-video = { module = "androidx.camera:camera-video", version.ref = "camerax" }
-camerax-extensions = { module = "androidx.camera:camera-extensions", version.ref = "camerax" }
-camerax-viewfinder-compose = { module = "androidx.camera.viewfinder:viewfinder-compose", version.ref = "viewfinder-compose" }
-
-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-module" }
-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "serialization-module" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 slf4j-android = { module = "org.slf4j:slf4j-android", version.ref = "slf4j-android" }
 
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
-haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
-placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "placeholder" }
-
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization-plugin" }
 downloadTask = { id = "de.undercouch.download", version.ref = "downloadTask" }
 
 [bundles]
-camerax = ["camerax-core", "camerax-camera2", "camerax-compose", "camerax-lifecycle", "camerax-video", "camerax-extensions", "camerax-viewfinder-compose"]
 koin = ["koin-core", "koin-androidx-compose", "koin-androidx-startup"]

@@ -1,0 +1,58 @@
+[versions]
+composeMultiplatform = "1.12.0-alpha02"
+hotReload = "1.1.1"
+
+material3 = "1.12.0-alpha02"
+material3-adaptive = "1.3.0-beta02"
+navigation3 = "1.1.1"
+lifecycle = "2.11.0-beta02"
+
+coil = "3.5.0"
+materialKolor = "4.1.1"
+placeholder = "1.0.12"
+haze = "1.7.2"
+markdownRenderer = "0.41.0"
+
+[libraries]
+jb-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+jb-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+jb-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+jb-uiTooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
+jb-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+jb-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+
+jb-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+
+material3-adaptive-core = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "material3-adaptive" }
+material3-adaptive-layout = { module = "org.jetbrains.compose.material3.adaptive:adaptive-layout", version.ref = "material3-adaptive" }
+material3-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "material3-adaptive" }
+
+androidx-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+
+lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycle" }
+
+coil-main = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
+
+materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
+placeholder-material3 = { module = "com.eygraber:compose-placeholder-material3", version.ref = "placeholder" }
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+
+[plugins]
+compose = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+hotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "hotReload" }
+
+[bundles]
+jb = ["jb-runtime", "jb-foundation", "jb-ui", "jb-uiToolingPreview",
+    "jb-components-resources", "jb-material3"]
+
+lifecycle = ["lifecycle-runtime-compose", "lifecycle-viewmodel-compose", "lifecycle-viewmodel-navigation3"]
+adaptive = ["material3-adaptive-core", "material3-adaptive-layout", "material3-adaptive-navigation3"]
+nav3 = ["androidx-navigation3-ui"]
+
+app = ["coil-main", "coil-compose", "coil-network", "coil-svg",
+    "materialKolor", "placeholder-material3", "haze"]

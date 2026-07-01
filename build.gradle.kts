@@ -1,8 +1,11 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.compose) apply false
-    alias(libs.plugins.kotlin.serialization) apply false
-    alias(libs.plugins.downloadTask) apply false
+    alias(kotlinLibs.plugins.multiplatform) apply false
+    alias(kotlinLibs.plugins.serialization) apply false
+    alias(kotlinLibs.plugins.composeCompiler) apply false
+    alias(composeLibs.plugins.compose) apply false
+    alias(composeLibs.plugins.hotReload) apply false
+    alias(androidLibs.plugins.application) apply false
+    alias(androidLibs.plugins.library) apply false
 }
+
+group = "dev.stashy.vmptracker"
