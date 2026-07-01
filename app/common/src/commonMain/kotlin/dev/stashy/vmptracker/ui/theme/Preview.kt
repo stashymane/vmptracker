@@ -3,22 +3,27 @@ package dev.stashy.vmptracker.ui.theme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
-import dev.stashy.vmptracker.model.settings.AppSettings
+import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.ui.AppBackStack
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.LocalSettingsActions
 import dev.stashy.vmptracker.ui.nav.Screens
+import dev.stashy.vmptracker.vm.SettingsViewmodel
 
 @Composable
 fun PreviewHost(
     content: @Composable () -> Unit
 ) {
     val backStack = AppBackStack(Screens.Camera)
+    val settings = viewModel<SettingsViewmodel>()
 
     CompositionLocalProvider(
-        LocalSettings provides AppSettings(),
+        LocalSettings provides settings.settings.collectAsState().value,
+        LocalSettingsActions provides settings,
         LocalBackStack provides backStack
     ) {
         AppTheme() {

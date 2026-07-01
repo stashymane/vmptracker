@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -64,7 +65,7 @@ fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp =
     val color by animateColorAsState(
         when (state) {
             is NotRunning -> Color.Transparent
-            is Starting -> Color.Yellow
+            is Starting -> MaterialTheme.colorScheme.primary
             is Running -> Color.Green
             is Failed -> Color.Red
         }
@@ -79,9 +80,9 @@ fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp =
             is NotRunning -> opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
 
             is Starting -> {
-                opacityAnimator.snapTo(0.5f)
-                opacityAnimator.animateTo(1f, tween(500, easing = EaseInOut))
+                opacityAnimator.snapTo(0f)
                 opacityAnimator.animateTo(0.5f, tween(500, easing = EaseInOut))
+                opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
             }
 
             is Running -> {
@@ -97,8 +98,6 @@ fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp =
                     opacityAnimator.animateTo(0.5f, tween(800, easing = EaseInOut))
                 }
             }
-
-            else -> opacityAnimator.snapTo(1f)
         }
     }
 
