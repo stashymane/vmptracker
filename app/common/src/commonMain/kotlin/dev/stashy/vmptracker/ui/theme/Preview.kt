@@ -1,10 +1,8 @@
 package dev.stashy.vmptracker.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import dev.stashy.vmptracker.model.settings.AppSettings
@@ -23,7 +21,7 @@ fun PreviewHost(
         LocalSettings provides AppSettings(),
         LocalBackStack provides backStack
     ) {
-        AppTheme(Color.Blue, isSystemInDarkTheme()) {
+        AppTheme() {
             Surface {
                 content()
             }

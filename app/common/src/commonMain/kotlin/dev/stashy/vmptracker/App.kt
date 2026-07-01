@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import dev.stashy.vmptracker.model.settings.ColorMode
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.Navigation
@@ -22,7 +21,7 @@ fun AppScreen() {
         ColorMode.Dark -> true
     }
 
-    AppTheme(Color.Red, isDark) {
+    AppTheme(isDark) {
         Surface(Modifier.fillMaxSize()) {
             Navigation()
         }
