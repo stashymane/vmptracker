@@ -6,6 +6,7 @@ import androidx.datastore.core.FileStorage
 import androidx.datastore.core.Storage
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.PreferencesFileSerializer
+import dev.stashy.vmptracker.camera.cameraModule
 import dev.stashy.vmptracker.model.settings.AppSettings
 import dev.stashy.vmptracker.model.settings.FaceTrackerSettings
 import org.koin.android.ext.koin.androidContext
@@ -14,6 +15,8 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 actual fun dataStores(): Module = module {
+    includes(cameraModule())
+
     factory(named<AppSettings>()) {
         DataStoreFactory.create(
             storage = androidContext().getStorage("general")

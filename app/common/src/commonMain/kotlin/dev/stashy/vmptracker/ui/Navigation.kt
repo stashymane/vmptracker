@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.navigation3.ui.NavDisplay
+import dev.stashy.vmptracker.ui.nav.BottomSheetSceneStrategy
 import dev.stashy.vmptracker.ui.nav.MultiBackStack
 import dev.stashy.vmptracker.ui.nav.Screen
 import dev.stashy.vmptracker.ui.nav.Screens
@@ -18,7 +19,8 @@ fun Navigation() {
         NavDisplay(
             backStack.backStack,
             onBack = backStack::removeLast,
-            entryProvider = Screen::provideEntry
+            sceneStrategies = listOf(BottomSheetSceneStrategy()),
+            entryProvider = Screen::provideEntry,
         )
     }
 }

@@ -6,7 +6,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.StrictMode
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
+import dev.stashy.vmptracker.camera.CameraServiceLauncher
 import dev.stashy.vmptracker.vm.viewmodelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -26,9 +27,15 @@ class MainApplication : Application(), KoinStartup {
             dataStores(),
             viewmodelModule(),
             module {
-                includes(dataStores())
-                single { ProcessCameraProvider.getInstance(this@MainApplication).get() }
-            }
+                single<CameraServiceLauncher> {
+                    CameraServiceLauncher {
+                        ContextCompat.startForegroundService(
+                            this@MainApplication,
+                            Intent(this@MainApplication, MainService::class.java),
+                        )
+                    }
+                }
+            },
         )
     }
 
@@ -51,18 +58,12 @@ class MainApplication : Application(), KoinStartup {
 
         super.onCreate()
 
-        Intent(this, MainService::class.java).also { intent ->
-            bindService(intent, connection, BIND_AUTO_CREATE)
-        }
+        bindService(Intent(this, MainService::class.java), connection, BIND_AUTO_CREATE)
     }
 
     private val connection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            val binder = service as MainService.LocalBinder
-            binder.service
-        }
+        override fun onServiceConnected(className: ComponentName, service: IBinder) = Unit
 
-        override fun onServiceDisconnected(arg0: ComponentName) {
-        }
+        override fun onServiceDisconnected(className: ComponentName) = Unit
     }
 }

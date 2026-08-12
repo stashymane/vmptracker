@@ -12,6 +12,26 @@
 
     <string name="settings-face-section">Face tracking</string>
     <string name="settings-hand-section">Hand tracking</string>
+    <string name="settings-camera-section">Camera</string>
+
+    <string name="settings-camera-lens-title">Camera lens</string>
+    <string name="settings-camera-lens-subtitle">Which camera lens to use for capture</string>
+
+    <string name="settings-capture-framerate-title">Capture frame rate</string>
+    <string name="settings-capture-framerate-subtitle">Target frames per second for camera capture.</string>
+    <string name="settings-capture-framerate-value">%1$d FPS</string>
+
+    <string name="camera-lens-selector">Select camera lens</string>
+    <string name="camera-facing-front">Front</string>
+    <string name="camera-facing-rear">Rear</string>
+    <string name="camera-facing-external">External</string>
+    <string name="camera-facing-unknown">Unknown</string>
+    <string name="camera-lens-ultrawide">Ultrawide</string>
+    <string name="camera-lens-wide">Wide</string>
+    <string name="camera-lens-telephoto">Telephoto</string>
+    <string name="camera-lens-zoom">%1$s×</string>
+    <string name="camera-lens-max-resolution">%1$d×%2$d</string>
+    <string name="camera-lens-frame-rates">%1$s FPS</string>
 
     <string name="warning-battery-low-title">Battery low</string>
     <string name="warning-battery-low-content">Please plug in a charger.</string>

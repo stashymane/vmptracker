@@ -1,7 +1,10 @@
 package dev.stashy.vmptracker.ui.nav
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
+import dev.stashy.vmptracker.ui.screen.CameraFrameRatePickerSheet
+import dev.stashy.vmptracker.ui.screen.CameraLensPickerSheet
 import dev.stashy.vmptracker.ui.screen.CameraScreen
 import dev.stashy.vmptracker.ui.screen.SettingsScreen
 import kotlinx.serialization.Serializable
@@ -10,9 +13,14 @@ import kotlinx.serialization.Serializable
 sealed class Screen(
     override val group: Group? = null
 ) : MultiBackStack.Entry<Screen.Group> {
-    fun provideEntry(): NavEntry<Screen> = NavEntry(this) {
+    fun provideEntry(): NavEntry<Screen> = NavEntry(
+        key = this,
+        metadata = entryMetadata(),
+    ) {
         Content()
     }
+
+    open fun entryMetadata(): Map<String, Any> = emptyMap()
 
     @Composable
     abstract fun Content()
@@ -44,6 +52,30 @@ object Screens {
         @Composable
         override fun Content() {
             CameraScreen()
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Serializable
+    data object CameraLensPicker : Screen(Group.Home) {
+        override fun entryMetadata(): Map<String, Any> =
+            BottomSheetSceneStrategy.bottomSheet()
+
+        @Composable
+        override fun Content() {
+            CameraLensPickerSheet()
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Serializable
+    data object CameraFrameRatePicker : Screen(Group.Home) {
+        override fun entryMetadata(): Map<String, Any> =
+            BottomSheetSceneStrategy.bottomSheet()
+
+        @Composable
+        override fun Content() {
+            CameraFrameRatePickerSheet()
         }
     }
 

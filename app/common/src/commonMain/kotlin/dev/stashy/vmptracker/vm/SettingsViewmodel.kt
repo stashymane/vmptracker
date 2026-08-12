@@ -13,6 +13,9 @@ class SettingsViewmodel : ViewModel(), SettingsActions {
         this.settings.emit(settings)
     }
 
-    override suspend fun toggleViewport() =
+    override suspend fun togglePreviewVisibility() =
         update(currentSettings.copy(displayPreview = !currentSettings.displayPreview))
+
+    override suspend fun setCaptureFrameRate(fps: Int) =
+        update(currentSettings.copy(captureFrameRate = fps.coerceIn(1, 240)))
 }

@@ -3,49 +3,76 @@ package dev.stashy.vmptracker.ui.screen
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.stashy.vmptracker.camera.CameraController
+import dev.stashy.vmptracker.camera.NoOpCameraController
 import dev.stashy.vmptracker.icons.Icons
+import dev.stashy.vmptracker.icons.outlined.Camera24Dp
 import dev.stashy.vmptracker.icons.outlined.Face24Dp
-import dev.stashy.vmptracker.icons.outlined.FrontHand24Dp
+import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
+import dev.stashy.vmptracker.ui.LocalBackStack
+import dev.stashy.vmptracker.ui.components.InlineIcon
+import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
+import dev.stashy.vmptracker.ui.nav.Screens
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import dev.stashy.vmptracker.ui.theme.inDp
 import dev.stashy.vmptracker.vm.SettingsViewmodel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 import vmptracker.app.Res
 import vmptracker.app.screen_title_settings
+import vmptracker.app.settings_camera_lens_subtitle
+import vmptracker.app.settings_camera_lens_title
+import vmptracker.app.settings_camera_section
+import vmptracker.app.settings_capture_framerate_subtitle
+import vmptracker.app.settings_capture_framerate_title
+import vmptracker.app.settings_capture_framerate_value
 import vmptracker.app.settings_face_section
-import vmptracker.app.settings_hand_section
 
 @Composable
-fun SettingsScreen(vm: SettingsViewmodel = koinViewModel()) {
+fun SettingsScreen(
+    vm: SettingsViewmodel = koinViewModel(),
+    cameraController: CameraController = koinInject(),
+) {
     val scrollState = rememberScrollState()
+    val settings by vm.settings.collectAsStateWithLifecycle()
+    val captureState by cameraController.captureState.collectAsStateWithLifecycle()
+    val lensState by cameraController.lensState.collectAsStateWithLifecycle()
+    val backStack = LocalBackStack.current
+    val selectedLensLabel = selectedCameraLensLabel(lensState)
+    val captureFrameRateOptions = captureState.supportedFrameRates
+        .ifEmpty { listOf(settings.captureFrameRate) }
 
     Scaffold { paddingValues ->
         Column(Modifier.verticalScroll(scrollState).padding(paddingValues)) {
-            SettingsSectionHeader(Modifier.padding(vertical = 8.dp)) {
+            Row(Modifier.padding(horizontal = 32.dp, vertical = 16.dp).padding(top = 16.dp)) {
                 Text(
                     stringResource(Res.string.screen_title_settings),
                     style = MaterialTheme.typography.displaySmallEmphasized
@@ -53,20 +80,63 @@ fun SettingsScreen(vm: SettingsViewmodel = koinViewModel()) {
             }
 
             SettingsSectionHeader {
-                SettingsSectionTitle(Res.string.settings_face_section, Icons.Outlined.Face24Dp)
+                InlineIcon(Icons.Outlined.PhotoCamera24Dp)
+                Text(stringResource(Res.string.settings_camera_section))
             }
 
-            SettingEntry(
-                Res.string.settings_face_section,
-                Modifier.clickable {},
-                icon = Icons.Outlined.Visibility24Dp,
-                subtitle = Res.string.settings_face_section
-            ) {
-                Switch(false, {})
+            SettingsSectionContent {
+                SettingEntry(
+                    title = Res.string.settings_camera_lens_title,
+                    subtitle = Res.string.settings_camera_lens_subtitle,
+                    icon = Icons.Outlined.Camera24Dp,
+                    onClick = if (lensState.lenses.size > 1) {
+                        { backStack.add(Screens.CameraLensPicker) }
+                    } else {
+                        null
+                    },
+                ) {
+                    Text(
+                        selectedLensLabel,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+
+                SettingEntry(
+                    title = Res.string.settings_capture_framerate_title,
+                    icon = Icons.Outlined.Camera24Dp,
+                    subtitle = Res.string.settings_capture_framerate_subtitle,
+                    onClick = if (captureFrameRateOptions.size > 1) {
+                        { backStack.add(Screens.CameraFrameRatePicker) }
+                    } else {
+                        null
+                    },
+                ) {
+                    Text(
+                        stringResource(
+                            Res.string.settings_capture_framerate_value,
+                            settings.captureFrameRate,
+                        ),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
             }
 
             SettingsSectionHeader {
-                SettingsSectionTitle(Res.string.settings_hand_section, Icons.Outlined.FrontHand24Dp)
+                InlineIcon(Icons.Outlined.Face24Dp)
+                Text(stringResource(Res.string.settings_face_section))
+            }
+
+            SettingsSectionContent {
+                SettingEntry(
+                    Res.string.settings_face_section,
+                    icon = Icons.Outlined.Visibility24Dp,
+                    subtitle = Res.string.settings_face_section,
+                    onClick = {}
+                ) {
+                    Switch(false, {})
+                }
             }
         }
     }
@@ -77,30 +147,27 @@ fun SettingsSectionHeader(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    val lineHeight = LocalTextStyle.current.lineHeight.inDp()
-
     Row(
-        modifier.padding(horizontal = 16.dp, vertical = lineHeight * 0.75f),
-        horizontalArrangement = Arrangement.spacedBy(lineHeight * 0.75f),
+        modifier.padding(horizontal = 32.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ProvideTextStyle(MaterialTheme.typography.headlineMedium) {
+        ProvideTextStyle(MaterialTheme.typography.titleLarge) {
             content()
         }
     }
 }
 
 @Composable
-fun SettingsSectionTitle(
-    title: StringResource,
-    icon: ImageVector? = null
+fun SettingsSectionContent(
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    val lineHeight = LocalTextStyle.current.lineHeight.inDp()
-
-    icon?.let {
-        Icon(icon, null, Modifier.size(lineHeight))
+    Column(
+        Modifier.padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        content()
     }
-    Text(stringResource(title))
 }
 
 @Composable
@@ -109,30 +176,45 @@ fun SettingEntry(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     subtitle: StringResource? = null,
-    control: @Composable () -> Unit
-) = Column(modifier.padding(horizontal = 16.dp, vertical = 8.dp).fillMaxWidth()) {
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    onClick: (() -> Unit)? = null,
+    control: @Composable () -> Unit = {},
+) = Surface(
+    modifier.fillMaxWidth(),
+    shape = MaterialTheme.shapes.small,
+    color = MaterialTheme.colorScheme.surfaceContainer
+) {
+    Column(
+        Modifier.let { onClick?.let { onClick -> it.clickable(onClick = onClick) } ?: it }
+            .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            icon?.let { icon -> Icon(icon, null) }
-            Text(stringResource(title), style = MaterialTheme.typography.bodyLarge)
-        }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = ButtonDefaults.MinHeight),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                icon?.let { icon -> Icon(icon, null) }
+                Text(stringResource(title), style = MaterialTheme.typography.bodyLarge)
+            }
 
-        control()
-    }
-    subtitle?.let {
-        Row(Modifier.padding(bottom = 8.dp).padding(horizontal = 8.dp)) {
-            Text(
-                stringResource(subtitle),
-                style = MaterialTheme.typography.bodyMedium.merge(
-                    color = LocalContentColor.current.copy(
-                        alpha = 0.8f
+            control()
+        }
+        subtitle?.let {
+            Row(Modifier.padding(bottom = 8.dp).padding(horizontal = 8.dp)) {
+                Text(
+                    stringResource(subtitle),
+                    style = MaterialTheme.typography.bodyMedium.merge(
+                        color = LocalContentColor.current.copy(
+                            alpha = 0.8f
+                        )
                     )
                 )
-            )
+            }
         }
     }
 }
@@ -140,5 +222,8 @@ fun SettingEntry(
 @DevicePreview
 @Composable
 private fun SettingsScreenPreview() = PreviewHost {
-    SettingsScreen(viewModel())
+    SettingsScreen(
+        vm = viewModel(),
+        cameraController = NoOpCameraController,
+    )
 }

@@ -1,13 +1,10 @@
 package dev.stashy.vmptracker.ui.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.model.TrackingState
 import dev.stashy.vmptracker.ui.LocalDeviceCorners
-import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.camera.CameraPreviewEffect
 import dev.stashy.vmptracker.ui.camera.CameraViewport
 import dev.stashy.vmptracker.ui.components.CameraControls
 import dev.stashy.vmptracker.ui.components.NotificationBar
@@ -40,20 +37,14 @@ import org.koin.androidx.compose.koinViewModel
 fun CameraScreen(
     vm: CameraViewmodel = koinViewModel()
 ) {
-    val settings = LocalSettings.current
+    CameraPreviewEffect()
 
     Scaffold(
         Modifier.fillMaxSize(),
         topBar = { NotificationBar() },
         bottomBar = { CameraControls(vm) }
     ) { _ ->
-        AnimatedVisibility(
-            settings.displayPreview,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            CameraViewport()
-        }
+        CameraViewport(Modifier.fillMaxSize())
 
         val state by vm.trackingState.collectAsStateWithLifecycle()
         StatusEdge(state)
@@ -64,10 +55,10 @@ fun CameraScreen(
 fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp = 8.dp) {
     val color by animateColorAsState(
         when (state) {
-            is NotRunning -> Color.Transparent
-            is Starting -> MaterialTheme.colorScheme.primary
-            is Running -> Color.Green
-            is Failed -> Color.Red
+            is TrackingState.NotRunning -> Color.Transparent
+            is TrackingState.Starting -> MaterialTheme.colorScheme.primary
+            is TrackingState.Running -> Color.Green
+            is TrackingState.Failed -> Color.Red
         }
     )
 
@@ -77,21 +68,21 @@ fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp =
     LaunchedEffect(state) {
         opacityAnimator.stop()
         when (state) {
-            is NotRunning -> opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
+            is TrackingState.NotRunning -> opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
 
-            is Starting -> {
+            is TrackingState.Starting -> {
                 opacityAnimator.snapTo(0f)
                 opacityAnimator.animateTo(0.5f, tween(500, easing = EaseInOut))
                 opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
             }
 
-            is Running -> {
+            is TrackingState.Running -> {
                 opacityAnimator.snapTo(0.5f)
                 opacityAnimator.animateTo(1f, tween(200, easing = EaseOut))
                 opacityAnimator.animateTo(0.5f, tween(2000, easing = EaseInOut))
             }
 
-            is Failed -> {
+            is TrackingState.Failed -> {
                 opacityAnimator.snapTo(0.5f)
                 while (true) {
                     opacityAnimator.animateTo(1f, tween(200, easing = EaseOut))

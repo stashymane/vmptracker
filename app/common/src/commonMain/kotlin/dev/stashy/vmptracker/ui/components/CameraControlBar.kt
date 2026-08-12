@@ -37,6 +37,7 @@ import dev.stashy.vmptracker.icons.filled.Stop24Dp
 import dev.stashy.vmptracker.icons.outlined.Settings24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.icons.outlined.VisibilityOff24
+import dev.stashy.vmptracker.model.TrackingState
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
@@ -73,7 +74,7 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FilledIconToggleButton(settings.displayPreview, {
-            scope.launch { settingsActions.toggleViewport() }
+            scope.launch { settingsActions.togglePreviewVisibility() }
         }) {
             AnimatedContent(
                 settings.displayPreview,
@@ -99,7 +100,7 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
         Button(
             vm::toggleTracking,
             Modifier.widthIn(min = 160.dp),
-            enabled = state !is Starting && state !is Failed
+            enabled = state !is TrackingState.Starting && state !is TrackingState.Failed
         ) {
             AnimatedContent(
                 state,
@@ -109,16 +110,16 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 when (it) {
-                    NotRunning, is Failed -> StartButtonContent(
+                    TrackingState.NotRunning, is TrackingState.Failed -> StartButtonContent(
                         Icons.Filled.PlayArrow24Dp,
                         stringResource(Res.string.tracking_button_start)
                     )
 
-                    Starting -> Box(Modifier.wrapContentSize()) {
+                    TrackingState.Starting -> Box(Modifier.wrapContentSize()) {
                         LinearProgressIndicator(Modifier.width(80.dp))
                     }
 
-                    Running -> StartButtonContent(
+                    TrackingState.Running -> StartButtonContent(
                         Icons.Filled.Stop24Dp,
                         stringResource(Res.string.tracking_button_stop)
                     )
