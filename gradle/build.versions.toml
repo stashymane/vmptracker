@@ -1,7 +1,0 @@
-[versions]
-kotlin = "2.4.0"
-agp = "9.2.1"
-
-[libraries]
-kmp-gradlePlugin = { module = "org.jetbrains.kotlin.multiplatform:org.jetbrains.kotlin.multiplatform.gradle.plugin", version.ref = "kotlin" }
-android-library-gradlePlugin = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "agp" }
