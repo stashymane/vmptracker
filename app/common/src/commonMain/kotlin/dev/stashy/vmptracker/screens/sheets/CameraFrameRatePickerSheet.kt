@@ -1,30 +1,28 @@
 package dev.stashy.vmptracker.screens.sheets
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.camera.CameraController
 import dev.stashy.vmptracker.camera.NoOpCameraController
+import dev.stashy.vmptracker.icons.Icons
+import dev.stashy.vmptracker.icons.outlined.Check24Dp
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import dev.stashy.vmptracker.ui.LocalBackStack
+import dev.stashy.vmptracker.ui.components.settings.SettingEntry
+import dev.stashy.vmptracker.ui.components.settings.SettingsSection
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 import kotlinx.coroutines.launch
@@ -48,42 +46,39 @@ fun CameraFrameRatePickerSheet(
         .ifEmpty { listOf(settings.captureFrameRate) }
 
     Column(
-        Modifier.fillMaxWidth().padding(bottom = 64.dp),
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            stringResource(Res.string.settings_capture_framerate_title),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-        )
-
-        LazyColumn {
-            items(frameRateOptions, key = { it }) { fps ->
+        SettingsSection({
+            Text(stringResource(Res.string.settings_capture_framerate_title))
+        }) {
+            frameRateOptions.forEach { fps ->
                 val selected = fps == settings.captureFrameRate
 
-                ListItem(
-                    headlineContent = {
+                SettingEntry(
+                    title = {
                         Text(
                             stringResource(Res.string.settings_capture_framerate_value, fps),
-                            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                            fontWeight = if (selected) Bold else Normal,
                         )
                     },
-                    leadingContent = {
-                        RadioButton(
-                            selected = selected,
-                            onClick = null,
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            scope.launch {
-                                vm.setCaptureFrameRate(fps)
-                                backStack.removeLast()
-                            }
-                        },
-                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                )
+                    onClick = {
+                        scope.launch {
+                            vm.setCaptureFrameRate(fps)
+                            backStack.removeLast()
+                        }
+                    }) {
+                    if (selected)
+                        Icon(Icons.Outlined.Check24Dp, null)
+                }
+            }
+        }
+
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton({
+                backStack.removeLast()
+            }) {
+                Text("Cancel")
             }
         }
     }

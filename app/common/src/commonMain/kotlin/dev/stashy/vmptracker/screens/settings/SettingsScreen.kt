@@ -1,10 +1,12 @@
 package dev.stashy.vmptracker.screens.settings
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -23,12 +25,11 @@ import dev.stashy.vmptracker.icons.outlined.Face24Dp
 import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.model.Screens
-import dev.stashy.vmptracker.screens.settings.components.SettingEntry
-import dev.stashy.vmptracker.screens.settings.components.SettingsSectionContent
-import dev.stashy.vmptracker.screens.settings.components.SettingsSectionHeader
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.components.InlineIcon
 import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
+import dev.stashy.vmptracker.ui.components.settings.SettingEntry
+import dev.stashy.vmptracker.ui.components.settings.SettingsSection
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 import org.jetbrains.compose.resources.stringResource
@@ -59,24 +60,25 @@ fun SettingsScreen(
         .ifEmpty { listOf(settings.captureFrameRate) }
 
     Scaffold { paddingValues ->
-        Column(Modifier.verticalScroll(scrollState).padding(paddingValues)) {
-            Row(Modifier.padding(horizontal = 32.dp, vertical = 16.dp).padding(top = 16.dp)) {
+        Column(
+            Modifier.verticalScroll(scrollState).padding(paddingValues).padding(horizontal = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp).padding(top = 16.dp)) {
                 Text(
                     stringResource(Res.string.screen_title_settings),
                     style = MaterialTheme.typography.displaySmallEmphasized
                 )
             }
 
-            SettingsSectionHeader {
+            SettingsSection({
                 InlineIcon(Icons.Outlined.PhotoCamera24Dp)
                 Text(stringResource(Res.string.settings_camera_section))
-            }
-
-            SettingsSectionContent {
+            }) {
                 SettingEntry(
-                    title = Res.string.settings_camera_lens_title,
-                    subtitle = Res.string.settings_camera_lens_subtitle,
-                    icon = Icons.Outlined.Camera24Dp,
+                    title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
+                    subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
+                    icon = { Icon(Icons.Outlined.Camera24Dp, null) },
                     onClick = if (lensState.lenses.size > 1) {
                         { backStack.add(Screens.CameraLensPicker) }
                     } else {
@@ -91,9 +93,9 @@ fun SettingsScreen(
                 }
 
                 SettingEntry(
-                    title = Res.string.settings_capture_framerate_title,
-                    icon = Icons.Outlined.Camera24Dp,
-                    subtitle = Res.string.settings_capture_framerate_subtitle,
+                    title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
+                    icon = { Icon(Icons.Outlined.Camera24Dp, null) },
+                    subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
                     onClick = if (captureFrameRateOptions.size > 1) {
                         { backStack.add(Screens.CameraFrameRatePicker) }
                     } else {
@@ -111,16 +113,14 @@ fun SettingsScreen(
                 }
             }
 
-            SettingsSectionHeader {
+            SettingsSection({
                 InlineIcon(Icons.Outlined.Face24Dp)
                 Text(stringResource(Res.string.settings_face_section))
-            }
-
-            SettingsSectionContent {
+            }) {
                 SettingEntry(
-                    Res.string.settings_face_section,
-                    icon = Icons.Outlined.Visibility24Dp,
-                    subtitle = Res.string.settings_face_section,
+                    { Text(stringResource(Res.string.settings_face_section)) },
+                    icon = { Icon(Icons.Outlined.Visibility24Dp, null) },
+                    subtitle = { Text(stringResource(Res.string.settings_face_section)) },
                     onClick = {}
                 ) {
                     Switch(false, {})
