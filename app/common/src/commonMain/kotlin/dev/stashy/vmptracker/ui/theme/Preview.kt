@@ -7,11 +7,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.ui.AppBackStack
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
-import dev.stashy.vmptracker.ui.nav.Screens
 import dev.stashy.vmptracker.vm.SettingsViewmodel
 
 @Composable

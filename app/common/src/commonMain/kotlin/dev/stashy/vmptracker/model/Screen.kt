@@ -1,8 +1,12 @@
-package dev.stashy.vmptracker.ui.nav
+package dev.stashy.vmptracker.model
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.NavMetadataKey
+import androidx.navigation3.runtime.metadata
+import dev.stashy.vmptracker.ui.nav.BottomSheetSceneStrategy
+import dev.stashy.vmptracker.ui.nav.MultiBackStack
 import dev.stashy.vmptracker.ui.screen.CameraFrameRatePickerSheet
 import dev.stashy.vmptracker.ui.screen.CameraLensPickerSheet
 import dev.stashy.vmptracker.ui.screen.CameraScreen
@@ -13,14 +17,16 @@ import kotlinx.serialization.Serializable
 sealed class Screen(
     override val group: Group? = null
 ) : MultiBackStack.Entry<Screen.Group> {
+    open fun metadata(): Map<String, Any> = emptyMap()
+
     fun provideEntry(): NavEntry<Screen> = NavEntry(
         key = this,
-        metadata = entryMetadata(),
+        metadata = metadata() + metadata {
+            group?.let { put(Group.MetaKey, it) }
+        },
     ) {
         Content()
     }
-
-    open fun entryMetadata(): Map<String, Any> = emptyMap()
 
     @Composable
     abstract fun Content()
@@ -40,9 +46,9 @@ sealed class Screen(
         companion object {
             val Home = Group("home")
             val Settings = Group("settings")
-
-            const val META_KEY: String = "screen.group"
         }
+
+        object MetaKey : NavMetadataKey<Group>
     }
 }
 
@@ -58,7 +64,7 @@ object Screens {
     @OptIn(ExperimentalMaterial3Api::class)
     @Serializable
     data object CameraLensPicker : Screen(Group.Home) {
-        override fun entryMetadata(): Map<String, Any> =
+        override fun metadata(): Map<String, Any> =
             BottomSheetSceneStrategy.bottomSheet()
 
         @Composable
@@ -70,7 +76,7 @@ object Screens {
     @OptIn(ExperimentalMaterial3Api::class)
     @Serializable
     data object CameraFrameRatePicker : Screen(Group.Home) {
-        override fun entryMetadata(): Map<String, Any> =
+        override fun metadata(): Map<String, Any> =
             BottomSheetSceneStrategy.bottomSheet()
 
         @Composable

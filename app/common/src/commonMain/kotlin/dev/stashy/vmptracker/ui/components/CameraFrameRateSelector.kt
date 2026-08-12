@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.ui.LocalBackStack
-import dev.stashy.vmptracker.ui.nav.Screens
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 

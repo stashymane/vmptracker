@@ -11,8 +11,8 @@ import dev.stashy.vmptracker.camera.CameraLensState
 import dev.stashy.vmptracker.camera.LensFacing
 import dev.stashy.vmptracker.icons.Icons
 import dev.stashy.vmptracker.icons.outlined.CameraSwitch24Dp
+import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.ui.LocalBackStack
-import dev.stashy.vmptracker.ui.nav.Screens
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 import org.jetbrains.compose.resources.stringResource

@@ -35,10 +35,10 @@ import dev.stashy.vmptracker.icons.outlined.Camera24Dp
 import dev.stashy.vmptracker.icons.outlined.Face24Dp
 import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
+import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.components.InlineIcon
 import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
-import dev.stashy.vmptracker.ui.nav.Screens
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
 import dev.stashy.vmptracker.vm.SettingsViewmodel
