@@ -1,4 +1,4 @@
-package dev.stashy.vmptracker.vm
+package dev.stashy.vmptracker.screens.settings
 
 import androidx.lifecycle.ViewModel
 import dev.stashy.vmptracker.model.SettingsActions

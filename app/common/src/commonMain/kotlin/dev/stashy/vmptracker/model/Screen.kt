@@ -5,12 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavMetadataKey
 import androidx.navigation3.runtime.metadata
+import dev.stashy.vmptracker.screens.camera.CameraScreen
+import dev.stashy.vmptracker.screens.settings.SettingsScreen
+import dev.stashy.vmptracker.screens.sheets.CameraFrameRatePickerSheet
+import dev.stashy.vmptracker.screens.sheets.CameraLensPickerSheet
 import dev.stashy.vmptracker.ui.nav.BottomSheetSceneStrategy
 import dev.stashy.vmptracker.ui.nav.MultiBackStack
-import dev.stashy.vmptracker.ui.screen.CameraFrameRatePickerSheet
-import dev.stashy.vmptracker.ui.screen.CameraLensPickerSheet
-import dev.stashy.vmptracker.ui.screen.CameraScreen
-import dev.stashy.vmptracker.ui.screen.SettingsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

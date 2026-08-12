@@ -8,7 +8,6 @@ import android.os.IBinder
 import android.os.StrictMode
 import androidx.core.content.ContextCompat
 import dev.stashy.vmptracker.camera.CameraServiceLauncher
-import dev.stashy.vmptracker.vm.viewmodelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androix.startup.KoinStartup

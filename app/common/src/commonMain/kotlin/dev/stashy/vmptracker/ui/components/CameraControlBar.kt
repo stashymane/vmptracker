@@ -39,12 +39,12 @@ import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.icons.outlined.VisibilityOff24
 import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.model.TrackingState
+import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import dev.stashy.vmptracker.vm.CameraViewmodel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import vmptracker.app.Res

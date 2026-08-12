@@ -1,4 +1,4 @@
-package dev.stashy.vmptracker.ui.screen
+package dev.stashy.vmptracker.screens.sheets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.camera.CameraLens
+import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.components.cameraLensLabel
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import dev.stashy.vmptracker.vm.CameraViewmodel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import vmptracker.app.Res

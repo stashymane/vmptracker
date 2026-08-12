@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.model.TrackingState
+import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSnackbarState
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import dev.stashy.vmptracker.vm.CameraViewmodel
 import org.jetbrains.compose.resources.stringResource
 import vmptracker.app.Res
 import vmptracker.app.error_tracking_failed

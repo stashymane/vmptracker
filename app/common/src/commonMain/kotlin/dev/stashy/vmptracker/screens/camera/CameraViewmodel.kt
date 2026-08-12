@@ -1,4 +1,4 @@
-package dev.stashy.vmptracker.vm
+package dev.stashy.vmptracker.screens.camera
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

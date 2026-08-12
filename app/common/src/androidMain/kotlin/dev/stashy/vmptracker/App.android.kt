@@ -13,11 +13,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import dev.stashy.vmptracker.ui.LocalDeviceCorners
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
 import dev.stashy.vmptracker.ui.theme.LocalSystemColor
-import dev.stashy.vmptracker.vm.SettingsViewmodel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -1,4 +1,4 @@
-package dev.stashy.vmptracker.ui.camera
+package dev.stashy.vmptracker.camera.ui
 
 import androidx.camera.core.SurfaceRequest
 

@@ -1,30 +1,17 @@
-package dev.stashy.vmptracker.ui.screen
+package dev.stashy.vmptracker.screens.settings
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,13 +23,14 @@ import dev.stashy.vmptracker.icons.outlined.Face24Dp
 import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.model.Screens
+import dev.stashy.vmptracker.screens.settings.components.SettingEntry
+import dev.stashy.vmptracker.screens.settings.components.SettingsSectionContent
+import dev.stashy.vmptracker.screens.settings.components.SettingsSectionHeader
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.components.InlineIcon
 import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import dev.stashy.vmptracker.vm.SettingsViewmodel
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -137,83 +125,6 @@ fun SettingsScreen(
                 ) {
                     Switch(false, {})
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsSectionHeader(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    Row(
-        modifier.padding(horizontal = 32.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ProvideTextStyle(MaterialTheme.typography.titleLarge) {
-            content()
-        }
-    }
-}
-
-@Composable
-fun SettingsSectionContent(
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Column(
-        Modifier.padding(horizontal = 16.dp).clip(MaterialTheme.shapes.large),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        content()
-    }
-}
-
-@Composable
-fun SettingEntry(
-    title: StringResource,
-    modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
-    subtitle: StringResource? = null,
-    onClick: (() -> Unit)? = null,
-    control: @Composable () -> Unit = {},
-) = Surface(
-    modifier.fillMaxWidth(),
-    shape = MaterialTheme.shapes.small,
-    color = MaterialTheme.colorScheme.surfaceContainer
-) {
-    Column(
-        Modifier.let { onClick?.let { onClick -> it.clickable(onClick = onClick) } ?: it }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = ButtonDefaults.MinHeight),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                icon?.let { icon -> Icon(icon, null) }
-                Text(stringResource(title), style = MaterialTheme.typography.bodyLarge)
-            }
-
-            control()
-        }
-        subtitle?.let {
-            Row(Modifier.padding(bottom = 8.dp).padding(horizontal = 8.dp)) {
-                Text(
-                    stringResource(subtitle),
-                    style = MaterialTheme.typography.bodyMedium.merge(
-                        color = LocalContentColor.current.copy(
-                            alpha = 0.8f
-                        )
-                    )
-                )
             }
         }
     }

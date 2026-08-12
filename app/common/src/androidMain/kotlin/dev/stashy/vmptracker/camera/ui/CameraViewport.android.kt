@@ -1,5 +1,6 @@
-package dev.stashy.vmptracker.ui.camera
+package dev.stashy.vmptracker.camera.ui
 
+import android.Manifest
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.viewfinder.core.ImplementationMode
 import androidx.compose.animation.AnimatedContent
@@ -32,7 +33,7 @@ actual fun CameraViewport(modifier: Modifier) {
     val previewHost = koinInject<CameraPreviewHost>()
     val settings = LocalSettings.current
     val motionScheme = MaterialTheme.motionScheme
-    val cameraPermission = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 
     val surfaceRequest by previewHost.surfaceRequest.collectAsStateWithLifecycle()
     val phase = ViewportPhase.from(
@@ -46,7 +47,7 @@ actual fun CameraViewport(modifier: Modifier) {
         modifier = modifier,
         transitionSpec = {
             fadeIn(motionScheme.slowSpatialSpec()) togetherWith
-                fadeOut(motionScheme.slowSpatialSpec()) using null
+                    fadeOut(motionScheme.slowSpatialSpec()) using null
         },
         contentKey = { target ->
             when (target) {
