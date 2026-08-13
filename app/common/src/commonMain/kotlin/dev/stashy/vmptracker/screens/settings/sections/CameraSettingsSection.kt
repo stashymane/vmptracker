@@ -41,6 +41,7 @@ import vmptracker.app.settings_camera_lens_title
 import vmptracker.app.settings_camera_section
 import vmptracker.app.settings_capture_framerate_subtitle
 import vmptracker.app.settings_capture_framerate_title
+import vmptracker.app.settings_capture_framerate_value
 
 @Composable
 fun CameraSettingsSection(
@@ -68,19 +69,14 @@ fun CameraSettingsSection(
             subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
             icon = { Icon(Icons.Outlined.Camera24Dp, null) },
             onClick = { showDialog = true },
-        ) {
-            Text(
-                selectedLensLabel,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-        }
+            label = { Text(selectedLensLabel) }
+        )
 
         SettingEntry(
             title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
             icon = { Icon(Icons.Outlined.Camera24Dp, null) },
             subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
-            compact = false
+            label = { Text(stringResource(Res.string.settings_capture_framerate_value, settings.captureFrameRate)) }
         ) {
             CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
                 scope.launch { vm.setCaptureFrameRate(it) }

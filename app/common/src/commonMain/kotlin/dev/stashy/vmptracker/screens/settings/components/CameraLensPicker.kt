@@ -1,5 +1,6 @@
 package dev.stashy.vmptracker.screens.settings.components
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -79,13 +80,17 @@ fun CameraLensPicker(
                     }
                 }
             },
-            icon = { LensIcon(lens.facing) },
+            icon = {
+                AnimatedContent(selected) { selected ->
+                    if (selected)
+                        Icon(Icons.Outlined.Check24Dp, null)
+                    else
+                        LensIcon(lens.facing)
+                }
+            },
             onClick = { onClick(lens.id) },
             containerColor = containerColor
-        ) {
-            if (selected)
-                Icon(Icons.Outlined.Check24Dp, null)
-        }
+        )
     }
 }
 

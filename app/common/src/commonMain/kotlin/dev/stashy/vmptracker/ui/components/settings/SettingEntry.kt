@@ -44,9 +44,9 @@ fun SettingEntry(
     icon: (@Composable () -> Unit)? = null,
     subtitle: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
-    compact: Boolean = true,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
-    control: @Composable () -> Unit = {},
+    label: @Composable () -> Unit = {},
+    control: (@Composable () -> Unit)? = null
 ) = Surface(
     modifier.fillMaxWidth(),
     shape = MaterialTheme.shapes.small,
@@ -96,17 +96,17 @@ fun SettingEntry(
                 }
             }
 
-            if (compact) {
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    control()
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ProvideTextStyle(MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary)) {
+                    label()
                 }
             }
         }
 
-        if (!compact) {
+        control?.let { control ->
             Row(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
@@ -134,7 +134,8 @@ private fun SettingEntryCompactPreview() = PreviewHost {
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
         subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
         icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-    ) { PreviewControl() }
+        label = { PreviewControl() }
+    )
 }
 
 @ComponentPreview
@@ -143,8 +144,7 @@ private fun SettingEntryFullPreview() = PreviewHost {
     SettingEntry(
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
         subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
-        icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-        compact = true
+        icon = { Icon(Icons.Outlined.Camera24Dp, null) }
     ) { PreviewControl() }
 }
 
@@ -154,7 +154,8 @@ private fun SettingEntryWithoutSubtitleCompactPreview() = PreviewHost {
     SettingEntry(
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
         icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-    ) { PreviewControl() }
+        label = { PreviewControl() }
+    )
 }
 
 @ComponentPreview
@@ -162,7 +163,6 @@ private fun SettingEntryWithoutSubtitleCompactPreview() = PreviewHost {
 private fun SettingEntryWithoutSubtitleFullPreview() = PreviewHost {
     SettingEntry(
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
-        icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-        compact = true
+        icon = { Icon(Icons.Outlined.Camera24Dp, null) }
     ) { PreviewControl() }
 }

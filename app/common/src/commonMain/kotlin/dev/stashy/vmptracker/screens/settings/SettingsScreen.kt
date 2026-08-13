@@ -62,10 +62,9 @@ fun SettingsScreen(
                     { Text(stringResource(Res.string.settings_face_section)) },
                     icon = { Icon(Icons.Outlined.Visibility24Dp, null) },
                     subtitle = { Text(stringResource(Res.string.settings_face_section)) },
-                    onClick = {}
-                ) {
-                    Switch(false, {})
-                }
+                    onClick = {},
+                    label = { Switch(false, {}) }
+                )
             }
         }
     }
