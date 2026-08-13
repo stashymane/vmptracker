@@ -11,6 +11,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Path
 import dev.stashy.vmptracker.model.SettingsActions
 import dev.stashy.vmptracker.model.settings.AppSettings
+import dev.stashy.vmptracker.model.settings.CameraSettings
 
 val LocalBackStack: ProvidableCompositionLocal<AppBackStack> =
     compositionLocalOf { error("LocalBackStack not initialized.") }
@@ -26,6 +27,9 @@ val LocalBottomSheetPeekOffset: ProvidableCompositionLocal<BottomSheetPeekOffset
 
 val LocalSettings: ProvidableCompositionLocal<AppSettings> =
     compositionLocalOf { AppSettings() }
+
+val LocalCameraSettings: ProvidableCompositionLocal<CameraSettings> =
+    compositionLocalOf { CameraSettings() }
 
 val LocalSettingsActions: ProvidableCompositionLocal<SettingsActions> =
     staticCompositionLocalOf { error("Settings actions not provided") }

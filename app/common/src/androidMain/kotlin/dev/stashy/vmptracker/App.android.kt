@@ -14,6 +14,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import dev.stashy.vmptracker.ui.LocalDeviceCorners
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
@@ -24,6 +25,7 @@ import org.koin.androidx.compose.koinViewModel
 actual fun App() {
     val settingsViewmodel: SettingsViewmodel = koinViewModel()
     val settings by settingsViewmodel.settings.collectAsStateWithLifecycle()
+    val cameraSettings by settingsViewmodel.cameraSettings.collectAsStateWithLifecycle()
 
     val view = LocalView.current
     val corners = remember(view) { getCornerRadius(view) }
@@ -35,6 +37,7 @@ actual fun App() {
     CompositionLocalProvider(
         LocalSystemColor provides systemColor,
         LocalSettings provides settings,
+        LocalCameraSettings provides cameraSettings,
         LocalSettingsActions provides settingsViewmodel,
         LocalDeviceCorners provides corners
     ) {

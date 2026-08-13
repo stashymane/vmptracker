@@ -9,14 +9,14 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.stashy.vmptracker.camera.CameraControllerImpl
-import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 actual fun CameraPreviewEffect() {
     val controller = koinInject<CameraControllerImpl>()
-    val settings = LocalSettings.current
+    val settings = LocalCameraSettings.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 

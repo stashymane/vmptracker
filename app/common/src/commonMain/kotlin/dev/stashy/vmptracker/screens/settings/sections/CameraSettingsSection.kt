@@ -50,7 +50,7 @@ fun CameraSettingsSection(
 ) {
     val scope = rememberCoroutineScope()
 
-    val settings by vm.settings.collectAsStateWithLifecycle()
+    val settings by vm.cameraSettings.collectAsStateWithLifecycle()
     val captureState by cameraController.captureState.collectAsStateWithLifecycle()
     val lensState by cameraController.lensState.collectAsStateWithLifecycle()
 
@@ -79,7 +79,9 @@ fun CameraSettingsSection(
             label = { Text(stringResource(Res.string.settings_capture_framerate_value, settings.captureFrameRate)) }
         ) {
             CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
-                scope.launch { vm.setCaptureFrameRate(it) }
+                scope.launch {
+                    vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
+                }
             })
         }
     }

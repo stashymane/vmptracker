@@ -35,7 +35,7 @@ fun CameraFrameRatePickerSheet(
     cameraController: CameraController = koinInject(),
 ) {
     val scope = rememberCoroutineScope()
-    val settings by vm.settings.collectAsStateWithLifecycle()
+    val settings by vm.cameraSettings.collectAsStateWithLifecycle()
     val captureState by cameraController.captureState.collectAsStateWithLifecycle()
     val frameRateOptions by remember {
         derivedStateOf { captureState.supportedFrameRates.ifEmpty { listOf(settings.captureFrameRate) } }
@@ -53,7 +53,9 @@ fun CameraFrameRatePickerSheet(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 CameraFrameRatePicker(frameRateOptions, settings.captureFrameRate, {
-                    scope.launch { vm.setCaptureFrameRate(it) }
+                    scope.launch {
+                        vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
+                    }
                 })
             }
         }

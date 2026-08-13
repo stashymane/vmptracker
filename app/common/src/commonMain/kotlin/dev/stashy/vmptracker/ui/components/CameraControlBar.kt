@@ -41,7 +41,7 @@ import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.model.TrackingState
 import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.ui.LocalBackStack
-import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
@@ -58,7 +58,7 @@ import vmptracker.app.visibility_visible
 @Composable
 fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
     val settingsActions = LocalSettingsActions.current
-    val settings = LocalSettings.current
+    val settings = LocalCameraSettings.current
     val backStack = LocalBackStack.current
     val motionScheme = MaterialTheme.motionScheme
 
@@ -74,7 +74,9 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FilledIconToggleButton(settings.displayPreview, {
-            scope.launch { settingsActions.togglePreviewVisibility() }
+            scope.launch {
+                settingsActions.update(settings.copy(displayPreview = !settings.displayPreview))
+            }
         }) {
             AnimatedContent(
                 settings.displayPreview,

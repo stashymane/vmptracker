@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.model.TrackingState
 import dev.stashy.vmptracker.screens.camera.CameraViewmodel
-import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import dev.stashy.vmptracker.ui.LocalSnackbarState
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
@@ -39,7 +39,7 @@ fun CameraControls(vm: CameraViewmodel, modifier: Modifier = Modifier) {
     val state by vm.trackingState.collectAsStateWithLifecycle()
     val zoomState by vm.zoomState.collectAsStateWithLifecycle()
     val lensState by vm.lensState.collectAsStateWithLifecycle()
-    val settings = LocalSettings.current
+    val settings = LocalCameraSettings.current
 
     val errorText = stringResource(Res.string.error_tracking_failed)
     val retryButtonText = stringResource(Res.string.tracking_button_retry)

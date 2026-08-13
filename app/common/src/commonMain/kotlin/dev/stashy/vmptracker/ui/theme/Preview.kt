@@ -11,6 +11,7 @@ import dev.stashy.vmptracker.model.Screens
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import dev.stashy.vmptracker.ui.AppBackStack
 import dev.stashy.vmptracker.ui.LocalBackStack
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import dev.stashy.vmptracker.ui.LocalSettings
 import dev.stashy.vmptracker.ui.LocalSettingsActions
 
@@ -23,6 +24,7 @@ fun PreviewHost(
 
     CompositionLocalProvider(
         LocalSettings provides settings.settings.collectAsState().value,
+        LocalCameraSettings provides settings.cameraSettings.collectAsState().value,
         LocalSettingsActions provides settings,
         LocalBackStack provides backStack
     ) {

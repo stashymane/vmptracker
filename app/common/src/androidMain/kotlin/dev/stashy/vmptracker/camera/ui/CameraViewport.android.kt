@@ -20,18 +20,18 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.stashy.vmptracker.camera.CameraPreviewHost
-import dev.stashy.vmptracker.ui.LocalSettings
+import dev.stashy.vmptracker.ui.LocalCameraSettings
 import org.koin.compose.koinInject
 
 /**
  * Displays the live CameraX preview. Permission requests and session binding are handled by
- * [CameraPreviewEffect]; this composable only reflects [LocalSettings.displayPreview].
+ * [CameraPreviewEffect]; this composable only reflects [LocalCameraSettings.displayPreview].
  */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 actual fun CameraViewport(modifier: Modifier) {
     val previewHost = koinInject<CameraPreviewHost>()
-    val settings = LocalSettings.current
+    val settings = LocalCameraSettings.current
     val motionScheme = MaterialTheme.motionScheme
     val cameraPermission = rememberPermissionState(Manifest.permission.CAMERA)
 
