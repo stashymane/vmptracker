@@ -19,8 +19,12 @@ typealias AppBackStack = MultiBackStack<Screen, Screen.Group>
 @Composable
 fun Navigation() {
     val backStack = remember { AppBackStack(Screens.Camera) }
+    val peekOffset = remember { BottomSheetPeekOffset() }
 
-    CompositionLocalProvider(LocalBackStack provides backStack) {
+    CompositionLocalProvider(
+        LocalBackStack provides backStack,
+        LocalBottomSheetPeekOffset provides peekOffset,
+    ) {
         NavDisplay(
             backStack.backStack,
             onBack = backStack::removeLast,

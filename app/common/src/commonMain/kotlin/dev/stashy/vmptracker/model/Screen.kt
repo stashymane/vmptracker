@@ -65,7 +65,10 @@ object Screens {
     @Serializable
     data object CameraLensPicker : Screen(Group.Home) {
         override fun metadata(): Map<String, Any> =
-            BottomSheetSceneStrategy.bottomSheet()
+            BottomSheetSceneStrategy.bottomSheet(
+                shiftUnderlyingContent = true,
+                showScrim = false,
+            )
 
         @Composable
         override fun Content() {
@@ -77,7 +80,10 @@ object Screens {
     @Serializable
     data object CameraFrameRatePicker : Screen(Group.Home) {
         override fun metadata(): Map<String, Any> =
-            BottomSheetSceneStrategy.bottomSheet()
+            BottomSheetSceneStrategy.bottomSheet(
+                shiftUnderlyingContent = true,
+                showScrim = false,
+            )
 
         @Composable
         override fun Content() {

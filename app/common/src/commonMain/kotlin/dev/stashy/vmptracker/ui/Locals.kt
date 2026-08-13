@@ -2,7 +2,11 @@ package dev.stashy.vmptracker.ui
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.ProvidableCompositionLocal
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Path
 import dev.stashy.vmptracker.model.SettingsActions
@@ -10,6 +14,15 @@ import dev.stashy.vmptracker.model.settings.AppSettings
 
 val LocalBackStack: ProvidableCompositionLocal<AppBackStack> =
     compositionLocalOf { error("LocalBackStack not initialized.") }
+
+/** Vertical offset applied to content under an opted-in peeking bottom sheet. */
+@Stable
+class BottomSheetPeekOffset {
+    var px by mutableFloatStateOf(0f)
+}
+
+val LocalBottomSheetPeekOffset: ProvidableCompositionLocal<BottomSheetPeekOffset> =
+    compositionLocalOf { BottomSheetPeekOffset() }
 
 val LocalSettings: ProvidableCompositionLocal<AppSettings> =
     compositionLocalOf { AppSettings() }

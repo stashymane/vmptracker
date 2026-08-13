@@ -1,14 +1,17 @@
 package dev.stashy.vmptracker.screens.camera
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.camera.ui.CameraPreviewEffect
 import dev.stashy.vmptracker.camera.ui.CameraViewport
+import dev.stashy.vmptracker.ui.LocalBottomSheetPeekOffset
 import dev.stashy.vmptracker.ui.components.CameraControls
 import dev.stashy.vmptracker.ui.components.NotificationBar
 import dev.stashy.vmptracker.ui.theme.DevicePreview
@@ -21,15 +24,23 @@ fun CameraScreen(
 ) {
     CameraPreviewEffect()
 
-    Scaffold(
-        Modifier.fillMaxSize(),
-        topBar = { NotificationBar() },
-        bottomBar = { CameraControls(vm) }
-    ) { _ ->
-        CameraViewport(Modifier.fillMaxSize())
+    val peekOffset = LocalBottomSheetPeekOffset.current
+    val trackingState by vm.trackingState.collectAsStateWithLifecycle()
 
-        val state by vm.trackingState.collectAsStateWithLifecycle()
-        StatusEdge(state)
+    Box(Modifier.fillMaxSize()) {
+        Scaffold(
+            Modifier
+                .fillMaxSize()
+                .graphicsLayer {
+                    translationY = -peekOffset.px
+                },
+            topBar = { NotificationBar() },
+            bottomBar = { CameraControls(vm) }
+        ) { _ ->
+            CameraViewport(Modifier.fillMaxSize())
+        }
+
+        StatusEdge(trackingState)
     }
 }
 
