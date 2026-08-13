@@ -21,6 +21,9 @@
     <string name="settings-capture-framerate-subtitle">Target frames per second for camera capture.</string>
     <string name="settings-capture-framerate-value">%1$d FPS</string>
 
+    <string name="settings-viewfinder-performance-title">Viewfinder battery savings</string>
+    <string name="settings-viewfinder-performance-subtitle">Lets the camera view use less battery. May cause the app to feel less responsive.</string>
+
     <string name="camera-lens-selector">Select camera lens</string>
     <string name="camera-facing-front">Front</string>
     <string name="camera-facing-rear">Rear</string>

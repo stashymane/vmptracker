@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,8 +23,10 @@ import dev.stashy.vmptracker.camera.CameraController
 import dev.stashy.vmptracker.camera.CameraLensState
 import dev.stashy.vmptracker.camera.NoOpCameraController
 import dev.stashy.vmptracker.icons.Icons
+import dev.stashy.vmptracker.icons.outlined.BatteryAndroidFrameShield24Dp
 import dev.stashy.vmptracker.icons.outlined.Camera24Dp
 import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
+import dev.stashy.vmptracker.icons.outlined.Speed24Dp
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import dev.stashy.vmptracker.screens.settings.components.CameraFrameRatePicker
 import dev.stashy.vmptracker.screens.settings.components.CameraLensPicker
@@ -42,6 +45,8 @@ import vmptracker.app.settings_camera_section
 import vmptracker.app.settings_capture_framerate_subtitle
 import vmptracker.app.settings_capture_framerate_title
 import vmptracker.app.settings_capture_framerate_value
+import vmptracker.app.settings_viewfinder_performance_subtitle
+import vmptracker.app.settings_viewfinder_performance_title
 
 @Composable
 fun CameraSettingsSection(
@@ -60,29 +65,54 @@ fun CameraSettingsSection(
 
     var showDialog by remember { mutableStateOf(false) }
 
-    SettingsSection({
-        InlineIcon(Icons.Outlined.PhotoCamera24Dp)
-        Text(stringResource(Res.string.settings_camera_section))
-    }) {
-        SettingEntry(
-            title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
-            subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
-            icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-            onClick = { showDialog = true },
-            label = { Text(selectedLensLabel) }
-        )
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        SettingsSection({
+            InlineIcon(Icons.Outlined.PhotoCamera24Dp)
+            Text(stringResource(Res.string.settings_camera_section))
+        }) {
+            SettingEntry(
+                title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
+                subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
+                icon = { Icon(Icons.Outlined.Camera24Dp, null) },
+                onClick = { showDialog = true },
+                label = { Text(selectedLensLabel) }
+            )
 
-        SettingEntry(
-            title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
-            icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-            subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
-            label = { Text(stringResource(Res.string.settings_capture_framerate_value, settings.captureFrameRate)) }
-        ) {
-            CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
-                scope.launch {
-                    vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
+            SettingEntry(
+                title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
+                icon = { Icon(Icons.Outlined.Speed24Dp, null) },
+                subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
+                label = {
+                    Text(
+                        stringResource(
+                            Res.string.settings_capture_framerate_value,
+                            settings.captureFrameRate
+                        )
+                    )
                 }
-            })
+            ) {
+                CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
+                    scope.launch {
+                        vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
+                    }
+                })
+            }
+        }
+
+        SettingsSection {
+            val togglePreviewPerformance: suspend (Boolean) -> Unit =
+                { vm.update(settings.copy(previewPerformance = it)) }
+            SettingEntry(
+                title = { Text(stringResource(Res.string.settings_viewfinder_performance_title)) },
+                icon = { Icon(Icons.Outlined.BatteryAndroidFrameShield24Dp, null) },
+                subtitle = { Text(stringResource(Res.string.settings_viewfinder_performance_subtitle)) },
+                onClick = { scope.launch { togglePreviewPerformance(!settings.previewPerformance) } },
+                label = {
+                    Switch(
+                        settings.previewPerformance,
+                        { scope.launch { togglePreviewPerformance(it) } })
+                }
+            )
         }
     }
 

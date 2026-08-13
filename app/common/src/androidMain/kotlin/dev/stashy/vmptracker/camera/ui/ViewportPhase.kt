@@ -7,6 +7,7 @@ internal sealed interface ViewportPhase {
 
     data class Ready(
         val surfaceRequest: SurfaceRequest,
+        val performanceMode: Boolean
     ) : ViewportPhase
 
     companion object {
@@ -14,9 +15,10 @@ internal sealed interface ViewportPhase {
             displayPreview: Boolean,
             permissionGranted: Boolean,
             surfaceRequest: SurfaceRequest?,
+            performanceMode: Boolean
         ): ViewportPhase = when {
             !displayPreview || !permissionGranted || surfaceRequest == null -> Hidden
-            else -> Ready(surfaceRequest)
+            else -> Ready(surfaceRequest, performanceMode)
         }
     }
 }

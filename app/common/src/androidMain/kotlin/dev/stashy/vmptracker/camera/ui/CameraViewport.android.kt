@@ -40,6 +40,7 @@ actual fun CameraViewport(modifier: Modifier) {
         displayPreview = settings.displayPreview,
         permissionGranted = cameraPermission.status.isGranted,
         surfaceRequest = surfaceRequest,
+        performanceMode = settings.previewPerformance
     )
 
     AnimatedContent(
@@ -64,7 +65,7 @@ actual fun CameraViewport(modifier: Modifier) {
                 Box(Modifier.fillMaxSize().background(Color.Black)) {
                     CameraXViewfinder(
                         surfaceRequest = target.surfaceRequest,
-                        implementationMode = ImplementationMode.EXTERNAL,
+                        implementationMode = if (target.performanceMode) ImplementationMode.EXTERNAL else ImplementationMode.EMBEDDED,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
