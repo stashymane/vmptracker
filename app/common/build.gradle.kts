@@ -37,7 +37,6 @@ kotlin {
             implementation(composeLibs.bundles.app)
 
             implementation(libs.androidx.datastore.core)
-            implementation(libs.androidx.datastore.preferences)
             implementation(libs.bundles.koin)
         }
 

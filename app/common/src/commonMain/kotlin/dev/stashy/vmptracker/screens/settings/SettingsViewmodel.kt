@@ -1,20 +1,36 @@
 package dev.stashy.vmptracker.screens.settings
 
+import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dev.stashy.vmptracker.model.SettingsActions
 import dev.stashy.vmptracker.model.settings.AppSettings
 import dev.stashy.vmptracker.model.settings.CameraSettings
-import kotlinx.coroutines.flow.MutableStateFlow
+import dev.stashy.vmptracker.model.settings.InMemoryDataStore
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
-class SettingsViewmodel : ViewModel(), SettingsActions {
-    val settings: MutableStateFlow<AppSettings> = MutableStateFlow(AppSettings())
-    val cameraSettings: MutableStateFlow<CameraSettings> = MutableStateFlow(CameraSettings())
+class SettingsViewmodel(
+    private val appSettingsStore: DataStore<AppSettings> = InMemoryDataStore(AppSettings()),
+    private val cameraSettingsStore: DataStore<CameraSettings> = InMemoryDataStore(CameraSettings()),
+) : ViewModel(), SettingsActions {
+    val settings: StateFlow<AppSettings> = appSettingsStore.data.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        AppSettings(),
+    )
+    val cameraSettings: StateFlow<CameraSettings> = cameraSettingsStore.data.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        CameraSettings(),
+    )
 
     override suspend fun update(settings: AppSettings) {
-        this.settings.emit(settings)
+        appSettingsStore.updateData { settings }
     }
 
     override suspend fun update(settings: CameraSettings) {
-        this.cameraSettings.emit(settings)
+        cameraSettingsStore.updateData { settings }
     }
 }

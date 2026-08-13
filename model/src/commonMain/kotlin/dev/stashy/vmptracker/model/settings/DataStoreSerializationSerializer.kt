@@ -1,8 +1,12 @@
 package dev.stashy.vmptracker.model.settings
 
+import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.serializer
@@ -16,9 +20,15 @@ class DataStoreSerializationSerializer<T>(
 ) : Serializer<T> {
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun readFrom(input: InputStream): T =
-        json.decodeFromStream(serializer, input)
+        try {
+            json.decodeFromStream(serializer, input)
+        } catch (e: SerializationException) {
+            throw CorruptionException("Cannot read settings", e)
+        } catch (e: IllegalArgumentException) {
+            throw CorruptionException("Cannot read settings", e)
+        }
 
-    override suspend fun writeTo(t: T, output: OutputStream) {
+    override suspend fun writeTo(t: T, output: OutputStream) = withContext(Dispatchers.IO) {
         output.write(json.encodeToString(serializer, t).encodeToByteArray())
     }
 }
