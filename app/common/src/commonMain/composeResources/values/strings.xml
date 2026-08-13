@@ -24,6 +24,14 @@
     <string name="settings-viewfinder-performance-title">Viewfinder battery savings</string>
     <string name="settings-viewfinder-performance-subtitle">Lets the camera view use less battery. May cause the app to feel less responsive.</string>
 
+    <string name="settings-face-enabled-title">Track face</string>
+    <string name="settings-face-enabled-subtitle">Enables tracking your face.</string>
+
+    <string name="settings-model-runner-title">Runner</string>
+    <string name="settings-model-runner-subtitle">What processor to run the detection model on.</string>
+    <string name="settings-model-runner-cpu">CPU</string>
+    <string name="settings-model-runner-gpu">GPU</string>
+
     <string name="camera-lens-selector">Select camera lens</string>
     <string name="camera-facing-front">Front</string>
     <string name="camera-facing-rear">Rear</string>

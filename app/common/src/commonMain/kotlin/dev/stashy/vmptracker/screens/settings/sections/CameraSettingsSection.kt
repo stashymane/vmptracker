@@ -100,17 +100,15 @@ fun CameraSettingsSection(
         }
 
         SettingsSection {
-            val togglePreviewPerformance: suspend (Boolean) -> Unit =
-                { vm.update(settings.copy(previewPerformance = it)) }
+            val togglePreviewPerformance: (Boolean) -> Unit =
+                { scope.launch { vm.update(settings.copy(previewPerformance = it)) } }
             SettingEntry(
                 title = { Text(stringResource(Res.string.settings_viewfinder_performance_title)) },
                 icon = { Icon(Icons.Outlined.BatteryAndroidFrameShield24Dp, null) },
                 subtitle = { Text(stringResource(Res.string.settings_viewfinder_performance_subtitle)) },
-                onClick = { scope.launch { togglePreviewPerformance(!settings.previewPerformance) } },
+                onClick = { togglePreviewPerformance(!settings.previewPerformance) },
                 label = {
-                    Switch(
-                        settings.previewPerformance,
-                        { scope.launch { togglePreviewPerformance(it) } })
+                    Switch(settings.previewPerformance, togglePreviewPerformance)
                 }
             )
         }

@@ -108,6 +108,7 @@ fun SettingEntry(
 
         control?.let { control ->
             Row(
+                Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {

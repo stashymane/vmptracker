@@ -21,6 +21,7 @@ import dev.stashy.vmptracker.icons.Icons
 import dev.stashy.vmptracker.icons.outlined.Face24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.screens.settings.sections.CameraSettingsSection
+import dev.stashy.vmptracker.screens.settings.sections.FaceTrackerSettingsSection
 import dev.stashy.vmptracker.ui.components.InlineIcon
 import dev.stashy.vmptracker.ui.components.settings.SettingEntry
 import dev.stashy.vmptracker.ui.components.settings.SettingsSection
@@ -53,19 +54,7 @@ fun SettingsScreen(
             }
 
             CameraSettingsSection(vm, cameraController)
-
-            SettingsSection({
-                InlineIcon(Icons.Outlined.Face24Dp)
-                Text(stringResource(Res.string.settings_face_section))
-            }) {
-                SettingEntry(
-                    { Text(stringResource(Res.string.settings_face_section)) },
-                    icon = { Icon(Icons.Outlined.Visibility24Dp, null) },
-                    subtitle = { Text(stringResource(Res.string.settings_face_section)) },
-                    onClick = {},
-                    label = { Switch(false, {}) }
-                )
-            }
+            FaceTrackerSettingsSection(vm)
         }
     }
 }
