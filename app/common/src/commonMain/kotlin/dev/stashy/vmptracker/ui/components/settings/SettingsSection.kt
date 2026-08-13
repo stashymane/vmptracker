@@ -19,11 +19,13 @@ import vmptracker.app.settings_camera_lens_title
 
 @Composable
 fun SettingsSection(
-    header: @Composable RowScope.() -> Unit,
+    header: (@Composable RowScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) = Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-    SettingsSectionHeader(Modifier.padding(horizontal = 16.dp)) {
-        header()
+    header?.let { header ->
+        SettingsSectionHeader(Modifier.padding(horizontal = 16.dp)) {
+            header()
+        }
     }
 
     SettingsSectionContent {

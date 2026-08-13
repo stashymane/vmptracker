@@ -12,40 +12,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.camera.CameraController
 import dev.stashy.vmptracker.camera.NoOpCameraController
 import dev.stashy.vmptracker.icons.Icons
-import dev.stashy.vmptracker.icons.outlined.Camera24Dp
 import dev.stashy.vmptracker.icons.outlined.Face24Dp
-import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
-import dev.stashy.vmptracker.model.Screens
-import dev.stashy.vmptracker.screens.settings.components.CameraFrameRatePicker
-import dev.stashy.vmptracker.ui.LocalBackStack
+import dev.stashy.vmptracker.screens.settings.sections.CameraSettingsSection
 import dev.stashy.vmptracker.ui.components.InlineIcon
-import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
 import dev.stashy.vmptracker.ui.components.settings.SettingEntry
 import dev.stashy.vmptracker.ui.components.settings.SettingsSection
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import vmptracker.app.Res
 import vmptracker.app.screen_title_settings
-import vmptracker.app.settings_camera_lens_subtitle
-import vmptracker.app.settings_camera_lens_title
-import vmptracker.app.settings_camera_section
-import vmptracker.app.settings_capture_framerate_subtitle
-import vmptracker.app.settings_capture_framerate_title
-import vmptracker.app.settings_capture_framerate_value
 import vmptracker.app.settings_face_section
 
 @Composable
@@ -53,15 +38,7 @@ fun SettingsScreen(
     vm: SettingsViewmodel = koinViewModel(),
     cameraController: CameraController = koinInject(),
 ) {
-    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val settings by vm.settings.collectAsStateWithLifecycle()
-    val captureState by cameraController.captureState.collectAsStateWithLifecycle()
-    val lensState by cameraController.lensState.collectAsStateWithLifecycle()
-    val backStack = LocalBackStack.current
-    val selectedLensLabel = selectedCameraLensLabel(lensState)
-    val captureFrameRateOptions = captureState.supportedFrameRates
-        .ifEmpty { listOf(settings.captureFrameRate) }
 
     Scaffold { paddingValues ->
         Column(
@@ -75,38 +52,7 @@ fun SettingsScreen(
                 )
             }
 
-            SettingsSection({
-                InlineIcon(Icons.Outlined.PhotoCamera24Dp)
-                Text(stringResource(Res.string.settings_camera_section))
-            }) {
-                SettingEntry(
-                    title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
-                    subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
-                    icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-                    onClick = if (lensState.lenses.size > 1) {
-                        { backStack.add(Screens.CameraLensPicker) }
-                    } else {
-                        null
-                    },
-                ) {
-                    Text(
-                        selectedLensLabel,
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-
-                SettingEntry(
-                    title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
-                    icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-                    subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
-                    compact = false
-                ) {
-                    CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
-                        scope.launch { vm.setCaptureFrameRate(it) }
-                    })
-                }
-            }
+            CameraSettingsSection(vm, cameraController)
 
             SettingsSection({
                 InlineIcon(Icons.Outlined.Face24Dp)
@@ -124,6 +70,7 @@ fun SettingsScreen(
         }
     }
 }
+
 
 @DevicePreview
 @Composable
