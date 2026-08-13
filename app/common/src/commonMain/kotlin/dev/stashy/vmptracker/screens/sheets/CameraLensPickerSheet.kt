@@ -1,5 +1,7 @@
 package dev.stashy.vmptracker.screens.sheets
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,11 +11,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.camera.LensFacing
@@ -39,7 +41,6 @@ import vmptracker.app.camera_lens_selector
 
 @Composable
 fun CameraLensPickerSheet(vm: CameraViewmodel = koinViewModel()) {
-    val backStack = LocalBackStack.current
     val lensState by vm.lensState.collectAsStateWithLifecycle()
 
     Column(
@@ -51,12 +52,14 @@ fun CameraLensPickerSheet(vm: CameraViewmodel = koinViewModel()) {
         }) {
             lensState.lenses.forEach { lens ->
                 val selected = lens.id == lensState.selectedId
+                val containerColor by animateColorAsState(if (selected) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainer)
+                val weight by animateIntAsState(if (selected) FontWeight.Black.weight else FontWeight.Normal.weight)
 
                 SettingEntry(
                     title = {
                         Text(
                             cameraLensLabel(lens),
-                            fontWeight = if (selected) Bold else Normal,
+                            fontWeight = FontWeight(weight),
                         )
                     },
                     subtitle = {
@@ -85,21 +88,12 @@ fun CameraLensPickerSheet(vm: CameraViewmodel = koinViewModel()) {
                         }
                     },
                     icon = { LensIcon(lens.facing) },
-                    onClick = {
-                        vm.selectLens(lens.id)
-                        backStack.removeLast()
-                    }) {
+                    onClick = { vm.selectLens(lens.id) },
+                    containerColor = containerColor
+                ) {
                     if (selected)
                         Icon(Icons.Outlined.Check24Dp, null)
                 }
-            }
-        }
-
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            TextButton({
-                backStack.removeLast()
-            }) {
-                Text("Cancel")
             }
         }
     }

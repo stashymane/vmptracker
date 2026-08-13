@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,9 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.stashy.vmptracker.icons.Icons
 import dev.stashy.vmptracker.icons.outlined.Camera24Dp
@@ -36,92 +39,130 @@ import vmptracker.app.settings_camera_lens_title
 
 @Composable
 fun SettingEntry(
-    title: @Composable () -> Unit,
+    title: @Composable RowScope.() -> Unit,
     modifier: Modifier = Modifier,
     icon: (@Composable () -> Unit)? = null,
     subtitle: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
+    compact: Boolean = true,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
     control: @Composable () -> Unit = {},
 ) = Surface(
     modifier.fillMaxWidth(),
     shape = MaterialTheme.shapes.small,
-    color = MaterialTheme.colorScheme.surfaceContainer
+    color = containerColor
 ) {
-    Row(
+    Column(
         Modifier.let { onClick?.let { onClick -> it.clickable(onClick = onClick) } ?: it }
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        icon?.let { icon ->
-            Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primaryFixed) {
-                val lineHeight = LocalTextStyle.current.lineHeight.inDp()
-                Box(Modifier.size(lineHeight * 1.5f), contentAlignment = Alignment.Center) {
-                    icon()
-                }
-            }
-        }
-
-        Column(
-            Modifier.defaultMinSize(minHeight = ButtonDefaults.MinHeight)
-                .width(IntrinsicSize.Min)
-                .weight(1f)
-                .padding(vertical = 4.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            ProvideTextStyle(MaterialTheme.typography.titleMedium) {
-                title()
-            }
-
-            subtitle?.let {
-                ProvideTextStyle(
-                    MaterialTheme.typography.bodySmall.merge(
-                        color = LocalContentColor.current.copy(
-                            alpha = 0.8f
-                        )
-                    )
-                ) {
-                    subtitle()
-                }
-            }
-        }
-
         Row(
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            control()
+            icon?.let { icon ->
+                Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primaryFixed) {
+                    val lineHeight = LocalTextStyle.current.lineHeight.inDp()
+                    Box(Modifier.size(lineHeight * 1.5f), contentAlignment = Alignment.Center) {
+                        icon()
+                    }
+                }
+            }
+
+            Column(
+                Modifier.defaultMinSize(minHeight = ButtonDefaults.MinHeight)
+                    .width(IntrinsicSize.Min)
+                    .weight(1f)
+                    .padding(vertical = 4.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    ProvideTextStyle(MaterialTheme.typography.titleMedium) {
+                        title()
+                    }
+                }
+
+                subtitle?.let {
+                    ProvideTextStyle(
+                        MaterialTheme.typography.bodySmall.merge(
+                            color = LocalContentColor.current.copy(
+                                alpha = 0.8f
+                            )
+                        )
+                    ) {
+                        subtitle()
+                    }
+                }
+            }
+
+            if (compact) {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    control()
+                }
+            }
         }
+
+        if (!compact) {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                control()
+            }
+        }
+    }
+}
+
+@Composable
+private fun PreviewControl() {
+    TextButton({}) {
+        Text(
+            "Rear Wide (1x)",
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 
 @ComponentPreview
 @Composable
-private fun SettingEntryPreview() = PreviewHost {
+private fun SettingEntryCompactPreview() = PreviewHost {
     SettingEntry(
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
         subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
         icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-    ) {
-        Text(
-            "Rear Wide (1x)",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
+    ) { PreviewControl() }
 }
 
 @ComponentPreview
 @Composable
-private fun SettingEntrySingleLinePreview() = PreviewHost {
+private fun SettingEntryFullPreview() = PreviewHost {
+    SettingEntry(
+        title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
+        subtitle = { Text(stringResource(Res.string.settings_camera_lens_subtitle)) },
+        icon = { Icon(Icons.Outlined.Camera24Dp, null) },
+        compact = true
+    ) { PreviewControl() }
+}
+
+@ComponentPreview
+@Composable
+private fun SettingEntryWithoutSubtitleCompactPreview() = PreviewHost {
     SettingEntry(
         title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
         icon = { Icon(Icons.Outlined.Camera24Dp, null) },
-    ) {
-        Text(
-            "Rear Wide (1x)",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-        )
-    }
+    ) { PreviewControl() }
+}
+
+@ComponentPreview
+@Composable
+private fun SettingEntryWithoutSubtitleFullPreview() = PreviewHost {
+    SettingEntry(
+        title = { Text(stringResource(Res.string.settings_camera_lens_title)) },
+        icon = { Icon(Icons.Outlined.Camera24Dp, null) },
+        compact = true
+    ) { PreviewControl() }
 }

@@ -13,6 +13,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,6 +26,7 @@ import dev.stashy.vmptracker.icons.outlined.Face24Dp
 import dev.stashy.vmptracker.icons.outlined.PhotoCamera24Dp
 import dev.stashy.vmptracker.icons.outlined.Visibility24Dp
 import dev.stashy.vmptracker.model.Screens
+import dev.stashy.vmptracker.screens.settings.components.CameraFrameRatePicker
 import dev.stashy.vmptracker.ui.LocalBackStack
 import dev.stashy.vmptracker.ui.components.InlineIcon
 import dev.stashy.vmptracker.ui.components.selectedCameraLensLabel
@@ -32,6 +34,7 @@ import dev.stashy.vmptracker.ui.components.settings.SettingEntry
 import dev.stashy.vmptracker.ui.components.settings.SettingsSection
 import dev.stashy.vmptracker.ui.theme.DevicePreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -50,6 +53,7 @@ fun SettingsScreen(
     vm: SettingsViewmodel = koinViewModel(),
     cameraController: CameraController = koinInject(),
 ) {
+    val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
     val settings by vm.settings.collectAsStateWithLifecycle()
     val captureState by cameraController.captureState.collectAsStateWithLifecycle()
@@ -96,20 +100,11 @@ fun SettingsScreen(
                     title = { Text(stringResource(Res.string.settings_capture_framerate_title)) },
                     icon = { Icon(Icons.Outlined.Camera24Dp, null) },
                     subtitle = { Text(stringResource(Res.string.settings_capture_framerate_subtitle)) },
-                    onClick = if (captureFrameRateOptions.size > 1) {
-                        { backStack.add(Screens.CameraFrameRatePicker) }
-                    } else {
-                        null
-                    },
+                    compact = false
                 ) {
-                    Text(
-                        stringResource(
-                            Res.string.settings_capture_framerate_value,
-                            settings.captureFrameRate,
-                        ),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
+                    CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
+                        scope.launch { vm.setCaptureFrameRate(it) }
+                    })
                 }
             }
 
