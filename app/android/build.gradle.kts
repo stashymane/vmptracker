@@ -1,10 +1,7 @@
-import de.undercouch.gradle.tasks.download.Download
-
 plugins {
     alias(androidLibs.plugins.application)
     alias(composeLibs.plugins.compose)
     alias(kotlinLibs.plugins.composeCompiler)
-    alias(libs.plugins.downloadTask)
 }
 
 android {
@@ -17,8 +14,6 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -53,25 +48,4 @@ dependencies {
 
     implementation(androidLibs.bundles.androidx)
     implementation(androidLibs.bundles.camerax)
-    implementation(libs.mediapipe.vision)
-}
-
-val assetDir = projectDir.resolve("src/main/assets/tasks")
-
-tasks.register("downloadFaceLandmarker", Download::class) {
-    description = "Download face landmarker task"
-    src("https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task")
-    dest(assetDir.resolve("face_landmarker.task"))
-    overwrite(false)
-}
-
-tasks.register("downloadHandLandmarker", Download::class) {
-    description = "Download hand landmarker task"
-    src("https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task")
-    dest(assetDir.resolve("hand_landmarker.task"))
-    overwrite(false)
-}
-
-tasks.preBuild {
-    dependsOn("downloadFaceLandmarker", "downloadHandLandmarker")
 }

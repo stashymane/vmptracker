@@ -42,7 +42,6 @@ kotlin {
 
         androidMain.dependencies {
             implementation(libs.slf4j.android)
-            implementation(libs.mediapipe.vision)
 
             implementation(androidLibs.bundles.camerax)
             implementation(androidLibs.accompanist.permissions)

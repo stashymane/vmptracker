@@ -8,15 +8,12 @@ datastore = "1.2.1"
 koin = "4.2.2"
 
 junit = "4.13.2"
-downloadTask = "5.7.0"
-mediapipe = "0.10.35"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-mediapipe-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-androidx-startup = { module = "io.insert-koin:koin-androidx-startup", version.ref = "koin" }
@@ -24,9 +21,6 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 slf4j-android = { module = "org.slf4j:slf4j-android", version.ref = "slf4j-android" }
-
-[plugins]
-downloadTask = { id = "de.undercouch.download", version.ref = "downloadTask" }
 
 [bundles]
 koin = ["koin-core", "koin-androidx-compose", "koin-androidx-startup"]
