@@ -30,10 +30,14 @@ actual fun CameraPreviewEffect() {
         cameraPermission.status.isGranted,
         settings.displayPreview,
         settings.captureFrameRate,
+        settings.selectedLensId,
+        settings.zoomRatio,
     ) {
         if (!cameraPermission.status.isGranted) return@LaunchedEffect
 
+        settings.selectedLensId?.let(controller::selectLens)
         controller.setPreferredFrameRate(settings.captureFrameRate)
+        controller.setPreferredZoomRatio(settings.zoomRatio)
         if (settings.displayPreview) {
             controller.startPreview(lifecycleOwner)
         } else {

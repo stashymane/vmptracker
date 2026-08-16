@@ -48,6 +48,7 @@ class CameraControllerImpl(
     private var onTrackingStopped: (() -> Unit)? = null
     private var selectedLensId: String? = null
     private var preferredFrameRate: Int = 60
+    private var preferredZoomRatio: Float? = null
     private var pendingZoomRatio: Float? = null
 
     init {
@@ -118,6 +119,11 @@ class CameraControllerImpl(
         }
     }
 
+    override fun setPreferredZoomRatio(ratio: Float?) {
+        preferredZoomRatio = ratio
+        ratio?.let { setZoomRatio(it) }
+    }
+
     override fun selectLens(lensId: String) {
         if (lensState.value.lenses.none { it.id == lensId }) return
         if (selectedLensId == lensId) return
@@ -169,7 +175,7 @@ class CameraControllerImpl(
             )
             boundCamera = camera
 
-            val pendingZoom = pendingZoomRatio
+            val pendingZoom = pendingZoomRatio ?: preferredZoomRatio
             pendingZoomRatio = null
             if (pendingZoom != null) {
                 setZoomRatio(pendingZoom)

@@ -11,18 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.camera.CameraController
 import dev.stashy.vmptracker.camera.NoOpCameraController
+import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import dev.stashy.vmptracker.screens.settings.components.CameraFrameRatePicker
 import dev.stashy.vmptracker.ui.components.settings.SettingsSection
 import dev.stashy.vmptracker.ui.theme.ComponentPreview
 import dev.stashy.vmptracker.ui.theme.PreviewHost
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -31,11 +30,11 @@ import vmptracker.app.settings_capture_framerate_title
 
 @Composable
 fun CameraFrameRatePickerSheet(
-    vm: SettingsViewmodel = koinViewModel(),
+    settingsVm: SettingsViewmodel = koinViewModel(),
+    cameraVm: CameraViewmodel = koinViewModel(),
     cameraController: CameraController = koinInject(),
 ) {
-    val scope = rememberCoroutineScope()
-    val settings by vm.cameraSettings.collectAsStateWithLifecycle()
+    val settings by settingsVm.cameraSettings.collectAsStateWithLifecycle()
     val captureState by cameraController.captureState.collectAsStateWithLifecycle()
     val frameRateOptions by remember {
         derivedStateOf { captureState.supportedFrameRates.ifEmpty { listOf(settings.captureFrameRate) } }
@@ -52,11 +51,7 @@ fun CameraFrameRatePickerSheet(
                 horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
-                CameraFrameRatePicker(frameRateOptions, settings.captureFrameRate, {
-                    scope.launch {
-                        vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
-                    }
-                })
+                CameraFrameRatePicker(frameRateOptions, settings.captureFrameRate, cameraVm::setCaptureFrameRate)
             }
         }
     }
@@ -65,6 +60,7 @@ fun CameraFrameRatePickerSheet(
 @ComponentPreview
 @Composable
 private fun CameraFrameRatePickerSheetPreview() = PreviewHost {
-    val vm = remember { SettingsViewmodel() }
-    CameraFrameRatePickerSheet(vm, NoOpCameraController)
+    val settingsVm = remember { SettingsViewmodel() }
+    val cameraVm = remember { CameraViewmodel() }
+    CameraFrameRatePickerSheet(settingsVm, cameraVm, NoOpCameraController)
 }

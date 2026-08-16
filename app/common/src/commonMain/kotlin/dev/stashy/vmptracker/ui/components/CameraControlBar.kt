@@ -75,7 +75,7 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
     ) {
         FilledIconToggleButton(settings.displayPreview, {
             scope.launch {
-                settingsActions.update(settings.copy(displayPreview = !settings.displayPreview))
+                settingsActions.updateCamera { it.copy(displayPreview = !it.displayPreview) }
             }
         }) {
             AnimatedContent(

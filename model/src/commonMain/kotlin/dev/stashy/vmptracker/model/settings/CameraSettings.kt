@@ -6,5 +6,7 @@ import kotlinx.serialization.Serializable
 data class CameraSettings(
     val displayPreview: Boolean = true,
     val captureFrameRate: Int = 60,
-    val previewPerformance: Boolean = false
+    val previewPerformance: Boolean = false,
+    val selectedLensId: String? = null,
+    val zoomRatio: Float? = null,
 )

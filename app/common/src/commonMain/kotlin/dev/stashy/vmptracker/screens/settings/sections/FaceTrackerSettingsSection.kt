@@ -40,8 +40,8 @@ fun FaceTrackerSettingsSection(
         InlineIcon(Icons.Outlined.Face24Dp)
         Text(stringResource(Res.string.settings_face_section))
     }) {
-        val updateEnabled: (Boolean) -> Unit = {
-            scope.launch { vm.update(settings.copy(enabled = it)) }
+        val updateEnabled: (Boolean) -> Unit = { enabled ->
+            scope.launch { vm.updateFaceTracker { it.copy(enabled = enabled) } }
         }
         SettingEntry(
             { Text(stringResource(Res.string.settings_face_enabled_title)) },
@@ -50,7 +50,7 @@ fun FaceTrackerSettingsSection(
             onClick = { updateEnabled(!settings.enabled) },
             label = { Switch(settings.enabled, updateEnabled) }
         )
-        
+
         SettingEntry(
             { Text("Runner") },
             icon = { Icon(Icons.Outlined.Speed24Dp, null) },
@@ -60,7 +60,7 @@ fun FaceTrackerSettingsSection(
             RadioButtonRow(
                 Runner.entries,
                 settings.runner,
-                { scope.launch { vm.update(settings.copy(runner = it)) } }) {
+                { runner -> scope.launch { vm.updateFaceTracker { it.copy(runner = runner) } } }) {
                 Text(stringResource(settings.runner.toResource()))
             }
         }

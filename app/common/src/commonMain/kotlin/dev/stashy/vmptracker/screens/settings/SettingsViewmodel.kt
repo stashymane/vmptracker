@@ -35,15 +35,15 @@ class SettingsViewmodel(
         FaceTrackerSettings()
     )
 
-    override suspend fun update(settings: AppSettings) {
-        appSettingsStore.updateData { settings }
+    override suspend fun updateGeneral(transform: (AppSettings) -> AppSettings) {
+        appSettingsStore.updateData(transform)
     }
 
-    override suspend fun update(settings: CameraSettings) {
-        cameraSettingsStore.updateData { settings }
+    override suspend fun updateCamera(transform: (CameraSettings) -> CameraSettings) {
+        cameraSettingsStore.updateData(transform)
     }
 
-    override suspend fun update(settings: FaceTrackerSettings) {
-        faceTrackerSettingsStore.updateData { settings }
+    override suspend fun updateFaceTracker(transform: (FaceTrackerSettings) -> FaceTrackerSettings) {
+        faceTrackerSettingsStore.updateData(transform)
     }
 }

@@ -5,9 +5,9 @@ import dev.stashy.vmptracker.model.settings.CameraSettings
 import dev.stashy.vmptracker.model.settings.FaceTrackerSettings
 
 interface SettingsActions {
-    suspend fun update(settings: AppSettings)
+    suspend fun updateGeneral(transform: (AppSettings) -> AppSettings)
 
-    suspend fun update(settings: CameraSettings)
+    suspend fun updateCamera(transform: (CameraSettings) -> CameraSettings)
 
-    suspend fun update(settings: FaceTrackerSettings)
+    suspend fun updateFaceTracker(transform: (FaceTrackerSettings) -> FaceTrackerSettings)
 }

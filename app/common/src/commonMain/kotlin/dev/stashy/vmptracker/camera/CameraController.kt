@@ -9,6 +9,7 @@ interface CameraController {
     val captureState: StateFlow<CameraCaptureState>
 
     fun setZoomRatio(ratio: Float)
+    fun setPreferredZoomRatio(ratio: Float?)
     fun selectLens(lensId: String)
     fun setPreferredFrameRate(fps: Int)
     fun startTracking()
@@ -32,6 +33,8 @@ object NoOpCameraController : CameraController {
     )
 
     override fun setZoomRatio(ratio: Float) {}
+
+    override fun setPreferredZoomRatio(ratio: Float?) {}
 
     override fun selectLens(lensId: String) {}
 

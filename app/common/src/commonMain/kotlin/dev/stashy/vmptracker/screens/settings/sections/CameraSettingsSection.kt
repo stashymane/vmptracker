@@ -21,6 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.stashy.vmptracker.camera.CameraController
 import dev.stashy.vmptracker.camera.CameraLensState
+import dev.stashy.vmptracker.camera.LensFacing
 import dev.stashy.vmptracker.camera.NoOpCameraController
 import dev.stashy.vmptracker.icons.Icons
 import dev.stashy.vmptracker.icons.outlined.BatteryAndroidFrameShield24Dp
@@ -91,9 +92,9 @@ fun CameraSettingsSection(
                     )
                 }
             ) {
-                CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, {
+                CameraFrameRatePicker(captureFrameRateOptions, settings.captureFrameRate, { fps ->
                     scope.launch {
-                        vm.update(settings.copy(captureFrameRate = it.coerceIn(1, 240)))
+                        vm.updateCamera { it.copy(captureFrameRate = fps.coerceIn(1, 240)) }
                     }
                 })
             }
@@ -101,7 +102,7 @@ fun CameraSettingsSection(
 
         SettingsSection {
             val togglePreviewPerformance: (Boolean) -> Unit =
-                { scope.launch { vm.update(settings.copy(previewPerformance = it)) } }
+                { enabled -> scope.launch { vm.updateCamera { it.copy(previewPerformance = enabled) } } }
             SettingEntry(
                 title = { Text(stringResource(Res.string.settings_viewfinder_performance_title)) },
                 icon = { Icon(Icons.Outlined.BatteryAndroidFrameShield24Dp, null) },
@@ -116,8 +117,20 @@ fun CameraSettingsSection(
 
     if (showDialog) {
         Dialog({ showDialog = false }) {
-            CameraLensDialog(lensState) {
-                cameraController.selectLens(it)
+            CameraLensDialog(lensState) { lensId ->
+                cameraController.selectLens(lensId)
+                scope.launch {
+                    vm.updateCamera { settings ->
+                        val lens = lensState.lenses.find { it.id == lensId }
+                        val zoom = lens?.let {
+                            if (it.facing == LensFacing.Back) it.intrinsicZoomRatio else 1f
+                        }
+                        settings.copy(
+                            selectedLensId = lensId,
+                            zoomRatio = zoom ?: settings.zoomRatio,
+                        )
+                    }
+                }
                 showDialog = false
             }
         }

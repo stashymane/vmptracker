@@ -7,12 +7,16 @@ import dev.stashy.vmptracker.screens.camera.CameraViewmodel
 import dev.stashy.vmptracker.screens.settings.SettingsViewmodel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 fun viewmodelModule(): Module = module {
-    viewModelOf(::CameraViewmodel)
+    viewModel {
+        CameraViewmodel(
+            cameraController = get(),
+            cameraSettingsStore = get(named<CameraSettings>()),
+        )
+    }
     viewModel {
         SettingsViewmodel(
             appSettingsStore = get<DataStore<AppSettings>>(named<AppSettings>()),
