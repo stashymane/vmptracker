@@ -109,7 +109,7 @@ fun CameraSettingsSection(
                 subtitle = { Text(stringResource(Res.string.settings_viewfinder_performance_subtitle)) },
                 onClick = { togglePreviewPerformance(!settings.previewPerformance) },
                 label = {
-                    Switch(settings.previewPerformance, togglePreviewPerformance)
+                    Switch(settings.previewPerformance, togglePreviewPerformance, interactionSource = it)
                 }
             )
         }

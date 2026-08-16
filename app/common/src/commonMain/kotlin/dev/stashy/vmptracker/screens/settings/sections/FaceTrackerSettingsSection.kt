@@ -28,6 +28,8 @@ import vmptracker.app.settings_face_enabled_title
 import vmptracker.app.settings_face_section
 import vmptracker.app.settings_model_runner_cpu
 import vmptracker.app.settings_model_runner_gpu
+import vmptracker.app.settings_model_runner_subtitle
+import vmptracker.app.settings_model_runner_title
 
 @Composable
 fun FaceTrackerSettingsSection(
@@ -48,20 +50,20 @@ fun FaceTrackerSettingsSection(
             icon = { Icon(Icons.Outlined.Visibility24Dp, null) },
             subtitle = { Text(stringResource(Res.string.settings_face_enabled_subtitle)) },
             onClick = { updateEnabled(!settings.enabled) },
-            label = { Switch(settings.enabled, updateEnabled) }
+            label = { Switch(settings.enabled, updateEnabled, interactionSource = it) }
         )
 
         SettingEntry(
-            { Text("Runner") },
+            { Text(stringResource(Res.string.settings_model_runner_title)) },
             icon = { Icon(Icons.Outlined.Speed24Dp, null) },
-            subtitle = { Text("What processor to run the detection model on.") },
+            subtitle = { Text(stringResource(Res.string.settings_model_runner_subtitle)) },
             label = { Text(stringResource(settings.runner.toResource())) }
         ) {
             RadioButtonRow(
                 Runner.entries,
                 settings.runner,
                 { runner -> scope.launch { vm.updateFaceTracker { it.copy(runner = runner) } } }) {
-                Text(stringResource(settings.runner.toResource()))
+                Text(stringResource(it.toResource()))
             }
         }
     }

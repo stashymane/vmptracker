@@ -1,6 +1,7 @@
 package dev.stashy.vmptracker.ui.components.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,15 +47,21 @@ fun SettingEntry(
     subtitle: (@Composable () -> Unit)? = null,
     onClick: (() -> Unit)? = null,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainer,
-    label: @Composable () -> Unit = {},
-    control: (@Composable () -> Unit)? = null
+    label: @Composable (MutableInteractionSource) -> Unit = {},
+    control: (@Composable (MutableInteractionSource) -> Unit)? = null
 ) = Surface(
     modifier.fillMaxWidth(),
     shape = MaterialTheme.shapes.small,
     color = containerColor
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Column(
-        Modifier.let { onClick?.let { onClick -> it.clickable(onClick = onClick) } ?: it }
+        Modifier.let {
+            onClick?.let { onClick ->
+                it.clickable(onClick = onClick, interactionSource = interactionSource)
+            } ?: it
+        }
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -101,7 +109,7 @@ fun SettingEntry(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ProvideTextStyle(MaterialTheme.typography.labelLarge.copy(color = MaterialTheme.colorScheme.primary)) {
-                    label()
+                    label(interactionSource)
                 }
             }
         }
@@ -112,7 +120,7 @@ fun SettingEntry(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                control()
+                control(interactionSource)
             }
         }
     }
