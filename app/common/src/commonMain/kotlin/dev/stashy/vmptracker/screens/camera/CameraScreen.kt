@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -11,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.stashy.vmptracker.camera.ui.CameraPreviewEffect
 import dev.stashy.vmptracker.camera.ui.CameraViewport
+import dev.stashy.vmptracker.model.TrackingState.Loading
 import dev.stashy.vmptracker.ui.LocalBottomSheetPeekOffset
 import dev.stashy.vmptracker.ui.components.CameraControls
 import dev.stashy.vmptracker.ui.components.NotificationBar
@@ -26,6 +28,10 @@ fun CameraScreen(
 
     val peekOffset = LocalBottomSheetPeekOffset.current
     val trackingState by vm.trackingState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(trackingState) { //TODO proper init across app instead of this screen
+        if (trackingState == Loading) vm.initialize()
+    }
 
     Box(Modifier.fillMaxSize()) {
         Scaffold(

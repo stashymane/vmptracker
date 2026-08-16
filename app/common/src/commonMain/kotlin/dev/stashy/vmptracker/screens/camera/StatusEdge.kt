@@ -26,10 +26,10 @@ import dev.stashy.vmptracker.ui.LocalDeviceCorners
 fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp = 8.dp) {
     val color by animateColorAsState(
         when (state) {
-            is TrackingState.NotRunning -> Color.Transparent
-            is TrackingState.Starting -> MaterialTheme.colorScheme.primary
-            is TrackingState.Running -> Color.Green
-            is TrackingState.Failed -> Color.Red
+            Loading, NotRunning -> Color.Transparent
+            Starting -> MaterialTheme.colorScheme.primary
+            Running -> Color.Green
+            is Failed -> Color.Red
         }
     )
 
@@ -39,24 +39,24 @@ fun StatusEdge(state: TrackingState, modifier: Modifier = Modifier, radius: Dp =
     LaunchedEffect(state) {
         opacityAnimator.stop()
         when (state) {
-            is TrackingState.NotRunning -> opacityAnimator.animateTo(
+            Loading, NotRunning -> opacityAnimator.animateTo(
                 0f,
                 tween(500, easing = EaseInOut)
             )
 
-            is TrackingState.Starting -> {
+            Starting -> {
                 opacityAnimator.snapTo(0f)
                 opacityAnimator.animateTo(0.5f, tween(500, easing = EaseInOut))
                 opacityAnimator.animateTo(0f, tween(500, easing = EaseInOut))
             }
 
-            is TrackingState.Running -> {
+            Running -> {
                 opacityAnimator.snapTo(0.5f)
                 opacityAnimator.animateTo(1f, tween(200, easing = EaseOut))
                 opacityAnimator.animateTo(0.5f, tween(2000, easing = EaseInOut))
             }
 
-            is TrackingState.Failed -> {
+            is Failed -> {
                 opacityAnimator.snapTo(0.5f)
                 while (true) {
                     opacityAnimator.animateTo(1f, tween(200, easing = EaseOut))

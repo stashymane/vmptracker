@@ -102,7 +102,7 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
         Button(
             vm::toggleTracking,
             Modifier.widthIn(min = 160.dp),
-            enabled = state !is TrackingState.Starting && state !is TrackingState.Failed
+            enabled = state.isReady
         ) {
             AnimatedContent(
                 state,
@@ -112,16 +112,16 @@ fun CameraControlBar(vm: CameraViewmodel, modifier: Modifier = Modifier) {
                 contentAlignment = Alignment.Center
             ) {
                 when (it) {
-                    TrackingState.NotRunning, is TrackingState.Failed -> StartButtonContent(
+                    NotRunning, is Failed -> StartButtonContent(
                         Icons.Filled.PlayArrow24Dp,
                         stringResource(Res.string.tracking_button_start)
                     )
 
-                    TrackingState.Starting -> Box(Modifier.wrapContentSize()) {
+                    Loading, Starting -> Box(Modifier.wrapContentSize()) {
                         LinearProgressIndicator(Modifier.width(80.dp))
                     }
 
-                    TrackingState.Running -> StartButtonContent(
+                    Running -> StartButtonContent(
                         Icons.Filled.Stop24Dp,
                         stringResource(Res.string.tracking_button_stop)
                     )

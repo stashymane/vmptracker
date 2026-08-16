@@ -1,8 +1,9 @@
 package dev.stashy.vmptracker.model
 
-sealed class TrackingState {
-    object NotRunning : TrackingState()
-    object Starting : TrackingState()
-    object Running : TrackingState()
-    class Failed(val reason: String) : TrackingState()
+sealed class TrackingState(val isReady: Boolean) {
+    object Loading : TrackingState(false)
+    object NotRunning : TrackingState(true)
+    object Starting : TrackingState(false)
+    object Running : TrackingState(true)
+    class Failed(val reason: String) : TrackingState(false)
 }

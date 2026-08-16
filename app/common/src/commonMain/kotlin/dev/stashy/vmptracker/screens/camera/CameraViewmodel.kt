@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
 class CameraViewmodel(
     private val cameraController: CameraController = NoOpCameraController,
 ) : ViewModel() {
-    val trackingState: MutableStateFlow<TrackingState> = MutableStateFlow(TrackingState.NotRunning)
+    val trackingState: MutableStateFlow<TrackingState> = MutableStateFlow(Loading)
     val zoomState: StateFlow<CameraZoomState> = cameraController.zoomState
     val lensState: StateFlow<CameraLensState> = cameraController.lensState
 
@@ -24,30 +24,31 @@ class CameraViewmodel(
 
     fun selectLens(lensId: String) = cameraController.selectLens(lensId)
 
+    fun initialize() = viewModelScope.launch {
+        delay(1.seconds)
+        trackingState.emit(NotRunning)
+    }
+
     fun toggleTracking() {
         when (trackingState.value) {
-            is TrackingState.Running -> stopTracking()
+            Running -> stopTracking()
             is TrackingState.Failed -> viewModelScope.launch {
-                trackingState.emit(TrackingState.NotRunning)
+                trackingState.emit(NotRunning)
             }
 
             else -> startTracking()
         }
     }
 
-    fun startTracking() {
-        viewModelScope.launch {
-            trackingState.emit(TrackingState.Starting)
-            delay(1.seconds)
-            cameraController.startTracking()
-            trackingState.emit(TrackingState.Running)
-        }
+    fun startTracking() = viewModelScope.launch {
+        trackingState.emit(Starting)
+        delay(1.seconds)
+        cameraController.startTracking()
+        trackingState.emit(Running)
     }
 
-    fun stopTracking() {
-        viewModelScope.launch {
-            cameraController.stopTracking()
-            trackingState.emit(TrackingState.NotRunning)
-        }
+    fun stopTracking() = viewModelScope.launch {
+        cameraController.stopTracking()
+        trackingState.emit(NotRunning)
     }
 }
