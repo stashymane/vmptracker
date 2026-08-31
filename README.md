@@ -1,6 +1,6 @@
 # vmptracker
 
-Face tracker for Android based on MediaPipe.  
+Face tracker for Android based on `infe.rs`.  
 **Very work-in-progress.**
 
 ## Download
@@ -11,5 +11,11 @@ none available yet, please wait
 
 * Face tracking
 * ~~Hand tracking~~ (soon)
-* ~~Full body tracking~~ (later)
-* Background tracking
+
+## Development
+
+Before running the app, you need to build the models. They are not checked into the repository.
+
+```nix
+nix build .#all-models -o assets/models
+```

@@ -1,0 +1,21 @@
+model: yolo26n-face
+task: detect
+license: AGPL-3.0
+imgsz: 192
+weights:
+  # path: /path/to/custom.pt
+  url: https://huggingface.co/Shubham12864/YOLO26n-face/resolve/main/yolo26_widerdataset.pt
+  filename: yolo26_widerdataset.pt
+  sha256: 429066d7481ff45bed8769f22ec1732c795712d4881a6d2e9267906681eea572
+  nix_hash: sha256-QpBm10gf9Fvth2nyLsFzLHlXEtSIGm0ukmeQZoHupXI=
+  source: huggingface
+  repo: Shubham12864/YOLO26n-face
+artifacts:
+  xnnpack:
+    path: xnnpack/model.pte
+    delegate: xnnpack
+  vulkan:
+    path: vulkan/model.pte
+    delegate: vulkan
+    compile_options:
+      force_fp16: true
