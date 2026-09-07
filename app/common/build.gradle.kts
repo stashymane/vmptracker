@@ -8,6 +8,7 @@ plugins {
 
     id("multiplatform.target.androidLibrary")
     id("multiplatform.plugin.compose")
+    id("plugins.mergeResources")
 }
 
 kotlin {
@@ -53,4 +54,21 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(composeLibs.jb.uiTooling)
+}
+
+val prepareAppResources = mergeResources("prepareAppResources") {
+    from(layout.projectDirectory.dir("src/commonMain/composeResources"))
+    from(layout.projectDirectory.dir("../../assets/models")) {
+        into = "files/models"
+    }
+
+    group = "compose resources"
+    description = "Merge compose resource directories."
+}
+
+compose.resources {
+    customDirectory(
+        sourceSetName = "commonMain",
+        directoryProvider = prepareAppResources.flatMap { it.destinationDir },
+    )
 }
